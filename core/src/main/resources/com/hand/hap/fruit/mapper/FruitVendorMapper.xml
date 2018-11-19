@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hand.hap.fruit.mapper.FruitVendorMapper">
+
+    <resultMap id="BaseResultMap" type="com.hand.hap.fruit.dto.FruitVendor" extends="com.hand.hap.mapper.StdMapper.STD">
+        <result column="id" property="id" jdbcType="DECIMAL"/>
+        <result column="fruitid" property="fruitid" jdbcType="DECIMAL"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="location" property="location" jdbcType="VARCHAR"/>
+        <result column="is_felsh" property="isFelsh" jdbcType="VARCHAR"/>
+        <result column="object_version_number" property="objectVersionNumber" jdbcType="DECIMAL"/>
+    </resultMap>
+
+
+    <select id="myQuery" parameterType="com.hand.hap.fruit.dto.FruitVendor" resultMap="BaseResultMap">
+        SELECT
+        mv.id,
+        mv.fruitid,
+        mv.name,
+        mv.location,
+        mv.is_felsh,
+        mv.object_version_number
+        FROM fruit_vendor mv
+        <where>
+            1 = 1
+            <if test="fruitid != null">
+                and mv.fruitid = #{fruitid,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

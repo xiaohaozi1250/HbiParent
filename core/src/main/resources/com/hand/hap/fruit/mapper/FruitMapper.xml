@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hand.hap.fruit.mapper.FruitMapper">
+
+    <resultMap id="BaseResultMap" type="com.hand.hap.fruit.dto.Fruit" extends="com.hand.hap.mapper.StdMapper.STD">
+        <result column="id" property="id" jdbcType="DECIMAL"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="producing_area" property="producingArea" jdbcType="VARCHAR"/>
+        <result column="region_id" property="regionId" jdbcType="DECIMAL"/>
+        <result column="region_name" property="regionName" jdbcType="VARCHAR"/>
+        <result column="active_date" property="activeDate" jdbcType="TIMESTAMP"/>
+        <result column="color" property="color" jdbcType="VARCHAR"/>
+        <result column="object_version_number" property="objectVersionNumber" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <resultMap id="LovResultMap" type="com.hand.hap.fruit.dto.Fruit" extends="com.hand.hap.mapper.StdMapper.STD">
+        <result column="id" property="id" jdbcType="DECIMAL"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+
+    <update id="myUpdate" parameterType="com.hand.hap.fruit.dto.Fruit">
+        UPDATE fruit
+        <set>
+        <if test="name != null"> name = #{name},</if>
+        <if test="price != null"> price = #{price},</if>
+        <if test="producingArea != null"> producing_area = #{producingArea},</if>
+        <if test="regionId != null"> region_id = #{regionId},</if>
+        <if test="activeDate != null"> active_date = #{activeDate},</if>
+        <if test="color != null"> color = #{color},</if>
+         object_version_number = object_version_number + 3
+        </set>
+        WHERE id = #{id} AND object_version_number = #{objectVersionNumber}
+    </update>
+
+
+
+    <delete id="myDelete" parameterType="com.hand.hap.fruit.dto.Fruit">
+        delete  from  fruit
+        where id= #{id,jdbcType=DECIMAL}
+    </delete>
+
+    <select id="myQuery" parameterType="com.hand.hap.fruit.dto.Fruit" resultMap="BaseResultMap">
+        SELECT
+        m.id,
+        m.name,
+        m.price,
+        m.producing_area,
+        m.region_id,
+        r.region_name,
+        date_format(m.active_date, '%Y-%m-%d') active_date,
+        m.color,
+        m.object_version_number
+        FROM fruit m left OUTER  join region r
+          on  m.region_id = r.region_id
+        <where>
+            1 = 1
+            <if test="id != null">
+                and m.id = #{id,jdbcType=DECIMAL}
+            </if>
+            <if test="name != null">
+                and m.name like #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="price != null">
+                and m.price like #{price,jdbcType=DECIMAL}
+            </if>
+            <if test="producingArea != null">
+                and m.producing_area = #{producingArea,jdbcType=VARCHAR}
+            </if>
+            <if test="regionId != 0">
+                and m.region_id = #{regionId,jdbcType=DECIMAL}
+            </if>
+
+        </where>
+    </select>
+
+
+    <select id="lovQuery" parameterType="com.hand.hap.fruit.dto.Fruit" resultMap="LovResultMap">
+        SELECT
+        m.id,
+        m.name
+        FROM fruit m left OUTER  join region r
+        on  m.region_id = r.region_id
+    </select>
+
+
+</mapper>

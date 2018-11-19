@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hand.hap.relink.mapper.LinkMapper">
+
+    <resultMap id="BaseResultMap" type="com.hand.hap.relink.dto.Link" extends="com.hand.hap.mapper.StdMapper.STD">
+        <result column="region_id" property="regionId" jdbcType="DECIMAL"/>
+        <result column="region_name" property="regionName" jdbcType="VARCHAR"/>
+        <result column="parent_id" property="parentId" jdbcType="DECIMAL"/>
+        <result column="region_level" property="regionLevel" jdbcType="DECIMAL"/>
+    </resultMap>
+
+
+    <select id="myQuery" parameterType="com.hand.hap.relink.dto.Link" resultMap="BaseResultMap">
+        SELECT
+        m.region_id,
+        m.region_name,
+        m.parent_id,
+        m.region_level
+        FROM region m
+        <where>
+            <if test="regionId != null">
+                and m.region_id = #{regionId,jdbcType=DECIMAL}
+            </if>
+            <if test="regionName != null">
+                and m.region_name like #{regionName,jdbcType=VARCHAR}
+            </if>
+            <if test="parentId != null">
+                and m.parent_id like #{parentId,jdbcType=DECIMAL}
+            </if>
+            <if test="regionLevel != null">
+                and m.region_level = #{regionLevel,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

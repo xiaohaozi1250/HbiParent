@@ -1,0 +1,723 @@
+<#include "../include/header.html"/>
+<body>
+<script>
+    viewModel = new kendo.observable({
+        projectPath: '',
+        parentPackagePath: '',
+        packagePath: '',
+        headerTargetName: '',
+        lineTargetName: '',
+        headerHtmlName: '',
+        headerDtoName: '',
+        headerControllerName: '',
+        headerMapperName: '',
+        headerMapperXmlName: '',
+        headerServiceName: '',
+        headerImplName: '',
+        headerHtmlStatus: "Create",
+        headerDtoStatus: "Create",
+        headerControllerStatus: 'Create',
+        headerMapperStatus: "Create",
+        headerMapperXmlStatus: "Create",
+        headerServiceStatus: "Create",
+        headerImplStatus: "Create",
+        lineHtmlName: '',
+        lineDtoName: '',
+        lineMapperName: '',
+        lineMapperXmlName: '',
+        lineServiceName: '',
+        lineImplName: '',
+        lineHtmlStatus: "Create",
+        lineDtoStatus: "Create",
+        lineMapperStatus: "Create",
+        lineMapperXmlStatus: "Create",
+        lineServiceStatus: "Create",
+        lineImplStatus: "Create",
+        headerHtmlModelName: "htmlheadermodel.ftl",
+        lineHtmlModelName: "htmllinemodel.ftl",
+    });
+</script>
+
+
+<div style="padding:15px 15px 0">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel">
+                <form class="form-horizontal" id="form-query" style="width:100%">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"><@spring.message "generator.projectpath"/>:</label>
+                            <div class="col-sm-8">
+                                <input id="projectPath" type=text data-bind="value:projectPath" style="width:50%"
+                                       class="k-textbox" placeholder="D:/JetBrains/workspaces/hap-parent/hap" required
+                                       validationMessage="{0}不能为空！"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"><@spring.message
+                                "generator.parentpackagepath"/>
+                                :</label>
+                            <div class="col-sm-4">
+                                <input id="parentPackagePath" type="text" data-bind="value:parentPackagePath"
+                                       style="width:50%" class="k-textbox" placeholder="com/hand/hap" required
+                                       validationMessage="{0}不能为空！"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"><@spring.message
+                                "generator.packagepath"/>:</label>
+                            <div class="col-sm-4">
+                                <input id="packagePath" type="text" data-bind="value:packagePath"
+                                       style="width:50%"
+                                       class="k-textbox" placeholder="newpackage" required
+                                       validationMessage="{0}不能为空！"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">选择头表:</label>
+                            <div class="col-sm-4">
+                                <input id="autoHeaderComplete" style="width:100%"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">选择行表:</label>
+                            <div class="col-sm-4">
+                                <input id="autoLineComplete" style="width:100%"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-6" style="padding-left:40px">
+                                <label class="col-sm-8 control-label">是否全部创建:</label>
+                                <td style="margin-left:10px"><input id="AllCreateCheck" checked
+                                                                    onclick="onallChoose(0)"/></td>
+                                <script>
+                                    $("#AllCreateCheck").kendoCheckbox({
+                                        checkedValue: 'Y',
+                                        uncheckedValue: 'N',
+                                        change: function (e) {
+                                            if (e.values == 'Y') {
+                                                /*$("input[id^='Header'][id$='CreateCheck']").data('kendoCheckbox').value('Y');*/
+                                                $('#HeaderDtoCreateCheck').data('kendoCheckbox').value('Y');
+                                                $('#HeaderControllerCreateCheck').data('kendoCheckbox').value('Y');
+                                                $('#HeaderMapperCreateCheck').data('kendoCheckbox').value('Y');
+                                                $('#HeaderMapperXmlCreateCheck').data('kendoCheckbox').value('Y');
+                                                $('#HeaderServiceCreateCheck').data('kendoCheckbox').value('Y');
+                                                $('#HeaderImplCreateCheck').data('kendoCheckbox').value('Y');
+                                                $('#HeaderHtmlCreateCheck').data('kendoCheckbox').value('Y');
+                                                $('#LineDtoCreateCheck').data('kendoCheckbox').value('Y');
+                                                $('#LineMapperCreateCheck').data('kendoCheckbox').value('Y');
+                                                $('#LineMapperXmlCreateCheck').data('kendoCheckbox').value('Y');
+                                                $('#LineServiceCreateCheck').data('kendoCheckbox').value('Y');
+                                                $('#LineImplCreateCheck').data('kendoCheckbox').value('Y');
+                                                $('#LineHtmlCreateCheck').data('kendoCheckbox').value('Y');
+                                            } else {
+                                                $('#HeaderDtoCreateCheck').data('kendoCheckbox').value('N');
+                                                $('#HeaderControllerCreateCheck').data('kendoCheckbox').value('N');
+                                                $('#HeaderMapperCreateCheck').data('kendoCheckbox').value('N');
+                                                $('#HeaderMapperXmlCreateCheck').data('kendoCheckbox').value('N');
+                                                $('#HeaderServiceCreateCheck').data('kendoCheckbox').value('N');
+                                                $('#HeaderImplCreateCheck').data('kendoCheckbox').value('N');
+                                                $('#HeaderHtmlCreateCheck').data('kendoCheckbox').value('N');
+                                                $('#LineDtoCreateCheck').data('kendoCheckbox').value('N');
+                                                $('#LineMapperCreateCheck').data('kendoCheckbox').value('N');
+                                                $('#LineMapperXmlCreateCheck').data('kendoCheckbox').value('N');
+                                                $('#LineServiceCreateCheck').data('kendoCheckbox').value('N');
+                                                $('#LineImplCreateCheck').data('kendoCheckbox').value('N');
+                                                $('#LineHtmlCreateCheck').data('kendoCheckbox').value('N');
+                                            }
+                                        }
+                                    });
+                                </script>
+                                <label class="control-label" style="margin-left:10px">是否全部覆盖:</label>
+                                <td><input id="AllCoverCheck"/>
+                                    <script>
+                                        $("#AllCoverCheck").kendoCheckbox({
+                                            checkedValue: 'Y',
+                                            uncheckedValue: 'N',
+                                            change: function (e) {
+                                                if (e.values == 'Y') {
+                                                    $('#HeaderDtoCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#HeaderControllerCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#HeaderMapperCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#HeaderMapperXmlCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#HeaderServiceCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#HeaderImplCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#HeaderHtmlCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#LineDtoCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#LineMapperCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#LineMapperXmlCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#LineServiceCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#LineImplCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#LineHtmlCoverCheck').data('kendoCheckbox').value('Y');
+                                                } else {
+                                                    $('#HeaderDtoCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#HeaderControllerCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#HeaderMapperCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#HeaderMapperXmlCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#HeaderServiceCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#HeaderImplCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#HeaderHtmlCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#LineDtoCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#LineMapperCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#LineMapperXmlCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#LineServiceCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#LineImplCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#LineHtmlCoverCheck').data('kendoCheckbox').value('N');
+                                                }
+                                            }
+                                        });
+                                    </script>
+                                </td>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-8">
+                            <table class="table table-bordered" style="text-align:center">
+                                <thead>
+                                <tr>
+                                    <th style="text-align:center"><@spring.message "generator.filetype"/></th>
+                                    <th style="text-align:center">头结构文件名</th>
+                                    <th style="text-align:center"><@spring.message "generator.iscreate"/></th>
+                                    <th style="text-align:center"><@spring.message "generator.iscover"/></th>
+                                    <th style="text-align:center">选则ftl模板</th>
+                                    <th style="text-align:center">行结构文件名</th>
+                                    <th style="text-align:center"><@spring.message "generator.iscreate"/></th>
+                                    <th style="text-align:center"><@spring.message "generator.iscover"/></th>
+                                    <th style="text-align:center">选则ftl模板</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Dto</td>
+                                    <td><input id="HeaderDtoName" onchange="dtochange(0)" type="text"
+                                               data-bind="value:headerDtoName"
+                                               style="width:100%" class="k-textbox"/>
+                                    </td>
+                                    <td><input id="HeaderDtoCreateCheck" checked name="checkbox"/></td>
+                                    <td><input id="HeaderDtoCoverCheck" name="checkbox"/></td>
+                                    <td>...</td>
+                                    <td><input id="LineDtoName" onchange="dtochange(1)" type="text"
+                                               data-bind="value:lineDtoName"
+                                               style="width:100%" class="k-textbox"/>
+                                    </td>
+                                    <td><input id="LineDtoCreateCheck" checked name="checkbox"/></td>
+                                    <td><input id="LineDtoCoverCheck" name="checkbox"/></td>
+                                    <td>...</td>
+                                </tr>
+                                <tr>
+                                    <td>Mapper</td>
+                                    <td><input id="headerMapperName" type="text" data-bind="value:headerMapperName"
+                                               style="width:100%" class="k-textbox"/></td>
+                                    <td><input id="HeaderMapperCreateCheck" checked name="checkbox"/></td>
+                                    <td><input id="HeaderMapperCoverCheck" name="checkbox"/></td>
+                                    <td>...</td>
+                                    <td><input id="lineMapperName" type="text" data-bind="value:lineMapperName"
+                                               style="width:100%" class="k-textbox"/></td>
+                                    <td><input id="LineMapperCreateCheck" checked name="checkbox"/></td>
+                                    <td><input id="LineMapperCoverCheck" name="checkbox"/></td>
+                                    <td>...</td>
+                                </tr>
+                                <tr>
+                                    <td>MapperXml</td>
+                                    <td><input id="headerMapperXmlName" type="text"
+                                               data-bind="value:headerMapperXmlName"
+                                               style="width:100%" class="k-textbox"/></td>
+                                    <td><input id="HeaderMapperXmlCreateCheck" checked name="checkbox"/></td>
+                                    <td><input id="HeaderMapperXmlCoverCheck" name="checkbox"/></td>
+                                    <td>...</td>
+                                    <td><input id="lineMapperXmlName" type="text" data-bind="value:lineMapperXmlName"
+                                               style="width:100%" class="k-textbox"/></td>
+                                    <td><input id="LineMapperXmlCreateCheck" checked name="checkbox"/></td>
+                                    <td><input id="LineMapperXmlCoverCheck" name="checkbox"/></td>
+                                    <td>...</td>
+                                </tr>
+                                <tr>
+                                    <td>Service</td>
+                                    <td><input id="headerServiceName" type="text" data-bind="value:headerServiceName"
+                                               style="width:100%" class="k-textbox"/></td>
+                                    <td><input id="HeaderServiceCreateCheck" checked name="checkbox"/></td>
+                                    <td><input id="HeaderServiceCoverCheck" name="checkbox"/></td>
+                                    <td>...</td>
+                                    <td><input id="lineServiceName" type="text" data-bind="value:lineServiceName"
+                                               style="width:100%" class="k-textbox"/></td>
+                                    <td><input id="LineServiceCreateCheck" checked name="checkbox"/></td>
+                                    <td><input id="LineServiceCoverCheck" name="checkbox"/></td>
+                                    <td>...</td>
+                                </tr>
+                                <tr>
+                                    <td>Impl</td>
+                                    <td><input id="headerImplName" type="text" data-bind="value:headerImplName"
+                                               style="width:100%" class="k-textbox"/></td>
+                                    <td><input id="HeaderImplCreateCheck" checked name="checkbox"/></td>
+                                    <td><input id="HeaderImplCoverCheck" name="checkbox"/></td>
+                                    <td>...</td>
+                                    <td><input id="lineImplName" type="text" data-bind="value:lineImplName"
+                                               style="width:100%" class="k-textbox"/></td>
+                                    <td><input id="LineImplCreateCheck" checked name="checkbox"/></td>
+                                    <td><input id="LineImplCoverCheck" name="checkbox"/></td>
+                                    <td>...</td>
+                                </tr>
+                                <tr>
+                                    <td>Controller</td>
+                                    <td><input id="headerControllerName" type="text"
+                                               data-bind="value:headerControllerName"
+                                               style="width:100%" class="k-textbox"/></td>
+                                    <td><input id="HeaderControllerCreateCheck" checked name="checkbox"/></td>
+                                    <td><input id="HeaderControllerCoverCheck" name="checkbox"/></td>
+                                    <td>...</td>
+                                    <td>...</td>
+                                    <td>...</td>
+                                    <td>...</td>
+                                    <td>...</td>
+                                </tr>
+                                <tr>
+                                    <td>Html</td>
+                                    <td><input id="headerHtmlName" type="text" data-bind="value:headerHtmlName"
+                                               style="width:100%" class="k-textbox"/></td>
+                                    <td><input id="HeaderHtmlCreateCheck" checked name="checkbox"/></td>
+                                    <td><input id="HeaderHtmlCoverCheck" name="checkbox"/></td>
+                                    <td><input id="headerHtmlmodel" style="width:100%" class="k-textbox"/></td>
+                                    <td><input id="lineHtmlName" type="text" data-bind="value:lineHtmlName"
+                                               style="width:100%" class="k-textbox"/></td>
+                                    <td><input id="LineHtmlCreateCheck" checked name="checkbox"/></td>
+                                    <td><input id="LineHtmlCoverCheck" name="checkbox"/></td>
+                                    <td><input id="lineHtmlmodel" style="width:100%" class="k-textbox"/></td>
+                                </tr>
+
+                                </tbody>
+                                <script>
+                                    $("input[name='checkbox']").kendoCheckbox({
+                                        checkedValue: 'Y',
+                                        uncheckedValue: 'N'
+                                    });
+                                </script>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="panel-footer text-center" id="toolbar">
+                <span class="btn btn-success"
+                      onclick="submitform()"><@spring.message "generator.submit"/></span>
+                    </div>
+                </form>
+                <script>kendo.bind($('#form-query'), viewModel);</script>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<script type="text/javascript">
+    var BaseUrl = _basePath;
+    if (window.localStorage) {
+        if (localStorage.projectPath) {
+            viewModel.set("projectPath", localStorage.projectPath);
+        }
+        if (localStorage.parentPackagePath) {
+            viewModel.set("parentPackagePath", localStorage.parentPackagePath);
+        }
+        if (localStorage.packagePath) {
+            viewModel.set("packagePath", localStorage.packagePath);
+        }
+    }
+
+    var dataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: BaseUrl + "/genstrong/alltables",
+                dataType: "json"
+            }
+        },
+        schema: {
+            model: {
+                expanded: true
+            },
+            parse: function (response) {
+                var products = [];
+                for (var i = 0; i < response.total; i++) {
+                    var le = response.rows[i];
+                    if (le.substring(le.length - 3, le.length) != "_TL" && le.substring(le.length - 3, le.length) != "_tl") {
+                        var product = {
+                            text: response.rows[i],
+                            value: response.rows[i],
+                        };
+                        products.push(product);
+                    }
+                }
+                return products;
+            }
+        }
+    });
+    var projectPath = viewModel.get("projectPath")
+    var ftlDataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: BaseUrl + "/genstrong/getmodels?projectPath=" + projectPath,
+                dataType: "json",
+                contentType: "application/json"
+            },
+        },
+        schema: {
+            model: {
+                expanded: true
+            },
+            parse: function (response) {
+                var products = [];
+                for (var i = 0; i < response.total; i++) {
+                    var le = response.rows[i];
+                    var product = {
+                        text: response.rows[i],
+                        value: response.rows[i],
+                    };
+                    products.push(product);
+                }
+                console.log(products);
+                return products;
+            }
+        }
+    });
+
+    $("#autoHeaderComplete").kendoAutoComplete({
+        dataSource: dataSource,
+        dataTextField: "text",
+        select: function (e) {
+            getTableName(e.item.text(), "header");
+        }
+    });
+    $("#autoLineComplete").kendoAutoComplete({
+        dataSource: dataSource,
+        dataTextField: "text",
+        select: function (e) {
+            getTableName(e.item.text(), "line");
+        }
+    });
+
+    $("#headerHtmlmodel").kendoDropDownList({
+        dataSource: ftlDataSource,
+        dataTextField: "text",
+        change: function (e) {
+            console.log(e);
+            console.log(e.sender);
+            console.log(e.sender.dataSource);
+            console.log(e.sender.dataSource._data);
+            console.log(e.item.text());
+            var value = this.value();
+            console.log(value);
+            getHtmlModel(value, "header");
+        },
+        animation: {
+            close: {
+                effects: "fadeOut zoom:out",
+                duration: 300
+            },
+            open: {
+                effects: "fadeIn zoom:in",
+                duration: 300
+            }
+        }
+    });
+    $("#lineHtmlmodel").kendoDropDownList({
+        //dataSource: [{text: "htmllinemodel.ftl"}],
+        dataSource: ftlDataSource,
+        dataTextField: "text",
+        change: function (e) {
+            getHtmlModel(e.value().text, "line");
+        },
+        animation: {
+            close: {
+                effects: "fadeOut zoom:out",
+                duration: 300
+            },
+            open: {
+                effects: "fadeIn zoom:in",
+                duration: 300
+            }
+        }
+    });
+
+    function getTableName(text, source) {
+        if (source == 'header') {
+            viewModel.set("headerTargetName", text);
+            var name = text.substring(text.indexOf("_") + 1);
+            if (ifEnds(text, "_b") || ifEnds(text, "_B")) {
+                name = name.substring(0, name.length - 2)
+            }
+            name = name.toLowerCase();
+            var htmlName = name;
+            name = name.substring(0, 1).toUpperCase() + name.substring(1);
+            name = tocalme(name);
+
+            viewModel.set("headerDtoName", name + ".java");
+            viewModel.set("headerControllerName", name + "Controller.java");
+            viewModel.set("headerMapperName", name + "Mapper.java");
+            viewModel.set("headerMapperXmlName", name + "Mapper.xml");
+            viewModel.set("headerServiceName", "I" + name + "Service.java");
+            viewModel.set("headerImplName", name + "ServiceImpl.java");
+            viewModel.set("headerHtmlName", htmlName + ".html");
+        } else {
+            viewModel.set("lineTargetName", text);
+            var name = text.substring(text.indexOf("_") + 1);
+            if (ifEnds(text, "_b") || ifEnds(text, "_B")) {
+                name = name.substring(0, name.length - 2)
+            }
+            name = name.toLowerCase();
+            var htmlName = name;
+            name = name.substring(0, 1).toUpperCase() + name.substring(1);
+            name = tocalme(name);
+            viewModel.set("lineDtoName", name + ".java");
+            viewModel.set("lineMapperName", name + "Mapper.java");
+            viewModel.set("lineMapperXmlName", name + "Mapper.xml");
+            viewModel.set("lineServiceName", "I" + name + "Service.java");
+            viewModel.set("lineImplName", name + "ServiceImpl.java");
+            viewModel.set("lineHtmlName", htmlName + ".html");
+        }
+        ;
+    }
+    function getHtmlModel(value, source) {
+        if (source == "header") {
+            viewModel.set("headerHtmlModelName", value);
+            console.log(viewModel.get("headerHtmlModelName"));
+        }
+        else {
+            viewModel.set("lineHtmlModelName", value);
+        }
+    }
+
+    function tocalme(str) {
+        var re = /_(\w)/g;
+        return str.replace(re, function ($0, $1) {
+            return $1.toUpperCase();
+        });
+    }
+
+    function dtochange(source) {
+        kendo.ui.showConfirmDialog({
+            title: '提示',
+            message: '是否对其余文件名做相应修改?'
+        }).done(function (e) {
+            console.log("e.button=" + e.button);
+            if (e.button == 'OK') {
+                if (source == 0) {
+                    var name = $('#HeaderDtoName').val();
+                    console.log("name=" + name);
+                    if (ifEnds(name, ".java")) {
+                        name = name.substring(0, name.length - 5);
+                    }
+                    var htmlName = name.replace(/([A-Z])/g, "_$1").toLowerCase();
+                    if (htmlName.startsWith("_")) {
+                        htmlName = htmlName.substring(1);
+                    }
+                    viewModel.set("headerDtoName", name + ".java");
+                    viewModel.set("headerControllerName", name + "Controller.java");
+                    viewModel.set("headerMapperName", name + "Mapper.java");
+                    viewModel.set("headerMapperXmlName", name + "Mapper.xml");
+                    viewModel.set("headerServiceName", "I" + name + "Service.java");
+                    viewModel.set("headerImplName", name + "ServiceImpl.java");
+                    viewModel.set("headerHtmlName", htmlName + ".html");
+                } else {
+                    var name = $('#LineDtoName').val();
+                    console.log("name=" + name);
+                    if (ifEnds(name, ".java")) {
+                        name = name.substring(0, name.length - 5);
+                    }
+                    var htmlName = name.replace(/([A-Z])/g, "_$1").toLowerCase();
+                    if (htmlName.startsWith("_")) {
+                        htmlName = htmlName.substring(1);
+                    }
+                    viewModel.set("lineDtoName", name + ".java");
+                    viewModel.set("lineMapperName", name + "Mapper.java");
+                    viewModel.set("lineMapperXmlName", name + "Mapper.xml");
+                    viewModel.set("lineServiceName", "I" + name + "Service.java");
+                    viewModel.set("lineImplName", name + "ServiceImpl.java");
+                    viewModel.set("lineHtmlName", htmlName + ".html");
+                }
+            }
+        })
+    }
+
+    function ifEnds(str, rule) {
+        if (str.endsWith(rule))
+            return true;
+        return false;
+    }
+    function submitform() {
+        if (viewModel.get("headerTargetName") === '') {
+            kendo.ui.showInfoDialog({
+                message: "请选择一个头表"
+            })
+        } else {
+            if (viewModel.get("lineTargetName") === '') {
+                kendo.ui.showInfoDialog({
+                    message: "请选择一个行表"
+                })
+            }
+            else {
+                if ($('#LineHtmlCreateCheck').val() === 'Y') {
+                    if ($('#LineHtmlCoverCheck').val() === 'Y') {
+                        viewModel.set("lineHtmlStatus", "Cover");
+                    } else {
+                        viewModel.set("lineHtmlStatus", "Create");
+                    }
+                } else {
+                    viewModel.set("lineHtmlStatus", "NotOperation");
+                }
+                if ($('#LineDtoCreateCheck').val() === 'Y') {
+                    if ($('#LineDtoCoverCheck').val() === 'Y') {
+                        viewModel.set("lineDtoStatus", "Cover");
+                    } else {
+                        viewModel.set("lineDtoStatus", "Create");
+                    }
+                } else {
+                    viewModel.set("lineDtoStatus", "NotOperation");
+                }
+                if ($('#LineMapperCreateCheck').val() === 'Y') {
+                    if ($('#LineMapperCoverCheck').val() === 'Y') {
+                        viewModel.set("lineMapperStatus", "Cover");
+                    } else {
+                        viewModel.set("lineMapperStatus", "Create");
+                    }
+                } else {
+                    viewModel.set("lineMapperStatus", "NotOperation");
+                }
+                if ($('#LineMapperXmlCreateCheck').val() === 'Y') {
+                    if ($('#LineMapperXmlCoverCheck').val() === 'Y') {
+                        viewModel.set("lineMapperXmlStatus", "Cover");
+                    } else {
+                        viewModel.set("lineMapperXmlStatus", "Create");
+                    }
+                } else {
+                    viewModel.set("lineMapperXmlStatus", "NotOperation");
+                }
+                if ($('#LineServiceCreateCheck').val() === 'Y') {
+                    if ($('#LineServiceCoverCheck').val() === 'Y') {
+                        viewModel.set("lineServiceStatus", "Cover");
+                    } else {
+                        viewModel.set("lineServiceStatus", "Create");
+                    }
+                } else {
+                    viewModel.set("lineServiceStatus", "NotOperation");
+                }
+                if ($('#LineImplCreateCheck').val() === 'Y') {
+                    if ($('#LineImplCoverCheck').val() === 'Y') {
+                        viewModel.set("lineImplStatus", "Cover");
+                    } else {
+                        viewModel.set("lineImplStatus", "Create");
+                    }
+                } else {
+                    viewModel.set("lineImplStatus", "NotOperation");
+                }
+            }
+        }
+        if ($('#HeaderHtmlCreateCheck').val() === 'Y') {
+            if ($('#HeaderHtmlCoverCheck').val() === 'Y') {
+                viewModel.set("headerHtmlStatus", "Cover");
+            } else {
+                viewModel.set("headerHtmlStatus", "Create");
+            }
+        } else {
+            viewModel.set("headerHtmlStatus", "NotOperation");
+        }
+        if ($('#HeaderDtoCreateCheck').val() === 'Y') {
+            if ($('#HeaderDtoCoverCheck').val() === 'Y') {
+                viewModel.set("headerDtoStatus", "Cover");
+            } else {
+                viewModel.set("headerDtoStatus", "Create");
+            }
+        } else {
+            viewModel.set("headerDtoStatus", "NotOperation");
+        }
+        if ($('#HeaderControllerCreateCheck').val() === 'Y') {
+            if ($('#HeaderControllerCoverCheck').val() === 'Y') {
+                viewModel.set("headerControllerStatus", "Cover");
+            } else {
+                viewModel.set("headerControllerStatus", "Create");
+            }
+        } else {
+            viewModel.set("headerControllerStatus", "NotOperation");
+        }
+        if ($('#HeaderMapperCreateCheck').val() === 'Y') {
+            if ($('#HeaderControllerCoverCheck').val() === 'Y') {
+                viewModel.set("headerMapperStatus", "Cover");
+            } else {
+                viewModel.set("headerMapperStatus", "Create");
+            }
+        } else {
+            viewModel.set("headerMapperStatus", "NotOperation");
+        }
+        if ($('#HeaderMapperXmlCreateCheck').val() === 'Y') {
+            if ($('#HeaderMapperXmlCoverCheck').val() === 'Y') {
+                viewModel.set("headerMapperXmlStatus", "Cover");
+            } else {
+                viewModel.set("headerMapperXmlStatus", "Create");
+            }
+        } else {
+            viewModel.set("headerMapperXmlStatus", "NotOperation");
+        }
+        if ($('#HeaderServiceCreateCheck').val() === 'Y') {
+            if ($('#HeaderServiceCoverCheck').val() === 'Y') {
+                viewModel.set("headerServiceStatus", "Cover");
+            } else {
+                viewModel.set("headerServiceStatus", "Create");
+            }
+        } else {
+            viewModel.set("headerServiceStatus", "NotOperation");
+        }
+        if ($('#HeaderImplCreateCheck').val() === 'Y') {
+            if ($('#HeaderImplCoverCheck').val() === 'Y') {
+                viewModel.set("headerImplStatus", "Cover");
+            } else {
+                viewModel.set("headerImplStatus", "Create");
+            }
+        } else {
+            viewModel.set("headerImplStatus", "NotOperation");
+        }
+        if (window.localStorage) {
+            if (!localStorage.projectPath) {
+                localStorage.projectPath = viewModel.get("projectPath");
+            }
+            if (!localStorage.parentPackagePath) {
+                localStorage.parentPackagePath = viewModel.get("parentPackagePath");
+            }
+            if (!localStorage.packagePath) {
+                localStorage.packagePath = viewModel.get("packagePath");
+            }
+        }
+
+        $.post(BaseUrl + "/genstrong/newtables", viewModel.toJSON(), function (data, status) {
+            if (status == "success") {
+                var mess;
+                if (data == 0) {
+                    mess = "文件创建成功";
+                } else if (data == 1) {
+                    mess = "项目中已存在同名Dto";
+                } else if (data == 2) {
+                    mess = "项目中已存在同名Service";
+                } else if (data == 3) {
+                    mess = "项目中已存在同名Impl";
+                } else if (data == 4) {
+                    mess = "项目中已存在同名Controller";
+                } else if (data == 5) {
+                    mess = "项目中已存在同名Mapper";
+                } else if (data == 6) {
+                    mess = "项目中已存在同名Xml";
+                } else if (data == 7) {
+                    mess = "项目中已存在同名Html";
+                } else if (data == -1) {
+                    mess = "文件创建失败";
+                }
+                kendo.ui.showInfoDialog({
+                    message: mess
+                });
+
+            }
+        });
+    }
+
+    $("#projectPath").kendoValidator();
+    $("#parentPackagePath").kendoValidator();
+    $("#PackagePath").kendoValidator();
+</script>
+</body>
+</html>

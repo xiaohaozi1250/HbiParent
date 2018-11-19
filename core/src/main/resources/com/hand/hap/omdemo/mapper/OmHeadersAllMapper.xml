@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hand.hap.omdemo.mapper.OmHeadersAllMapper">
+    <resultMap id="BaseResultMap" type="com.hand.hap.omdemo.dto.OmHeadersAll">
+            <result column="OM_HEADER_ID" property="omHeaderId"
+                    jdbcType="DECIMAL"/>
+            <result column="ORDER_NUMBER" property="orderNumber"
+                    jdbcType="VARCHAR"/>
+    </resultMap>
+</mapper>

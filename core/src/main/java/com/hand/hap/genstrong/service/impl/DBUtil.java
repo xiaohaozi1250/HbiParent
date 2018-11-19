@@ -28,7 +28,7 @@ public class DBUtil {
         ArrayList tables = new ArrayList();
         DatabaseMetaData dbmd = conn.getMetaData();
         String database = conn.getCatalog();
-        ResultSet rs = dbmd.getTables(database, (String)null, (String)null, new String[]{"TABLE"});
+        ResultSet rs = dbmd.getTables(database, null, null, new String[]{"TABLE"});
 
         while(rs.next()) {
             tables.add(rs.getString("TABLE_NAME"));
@@ -38,7 +38,7 @@ public class DBUtil {
     }
 
     public static ResultSet getTableColumnInfo(String table, DatabaseMetaData dbmd) throws SQLException {
-        return dbmd.getColumns((String)null, (String)null, table, (String)null);
+        return dbmd.getColumns(null, null, table, null);
     }
 
     public static boolean isMultiLanguageTable(String table) throws SQLException {
@@ -52,7 +52,7 @@ public class DBUtil {
 
     public static List<String> getNotNullColumn(String table, DatabaseMetaData dbmd) throws SQLException {
         ArrayList result = new ArrayList();
-        ResultSet rs = dbmd.getColumns((String)null, (String)null, table, (String)null);
+        ResultSet rs = dbmd.getColumns(null, null, table, null);
 
         while(rs.next()) {
             if("NO".equalsIgnoreCase(rs.getString("IS_NULLABLE"))) {
@@ -88,8 +88,7 @@ public class DBUtil {
     public static String getPrimaryKey(String table, DatabaseMetaData dbmd) throws SQLException {
         String columnPK = null;
 
-        for(ResultSet rs = dbmd.getPrimaryKeys((String)null, (String)null, table); rs.next(); columnPK = rs.getString("COLUMN_NAME")) {
-            ;
+        for(ResultSet rs = dbmd.getPrimaryKeys(null, null, table); rs.next(); columnPK = rs.getString("COLUMN_NAME")) {
         }
 
         return columnPK;

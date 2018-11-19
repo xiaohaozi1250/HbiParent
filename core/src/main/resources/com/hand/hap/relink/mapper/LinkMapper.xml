@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hand.hap.relink.mapper.LinkMapper">
 
-    <resultMap id="BaseResultMap" type="com.hand.hap.relink.dto.Link" extends="com.hand.hap.mapper.StdMapper.STD">
+    <resultMap id="BaseResultMap" type="com.hand.hap.relink.dto.Link" >
         <result column="region_id" property="regionId" jdbcType="DECIMAL"/>
         <result column="region_name" property="regionName" jdbcType="VARCHAR"/>
         <result column="parent_id" property="parentId" jdbcType="DECIMAL"/>

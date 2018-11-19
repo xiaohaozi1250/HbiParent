@@ -731,7 +731,7 @@ public class FileUtil {
         return allModelFiles;
     }
 
-    public static enum pType {
+    public enum pType {
         Controller,
         MapperXml,
         Mapper,
@@ -739,7 +739,7 @@ public class FileUtil {
         Impl,
         Html;
 
-        private pType() {
+        pType() {
         }
     }
 }

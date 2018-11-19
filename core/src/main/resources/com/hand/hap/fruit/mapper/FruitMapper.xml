@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hand.hap.fruit.mapper.FruitMapper">
 
-    <resultMap id="BaseResultMap" type="com.hand.hap.fruit.dto.Fruit" extends="com.hand.hap.mapper.StdMapper.STD">
+    <resultMap id="BaseResultMap" type="com.hand.hap.fruit.dto.Fruit" >
         <result column="id" property="id" jdbcType="DECIMAL"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="price" property="price" jdbcType="DECIMAL"/>
@@ -14,7 +14,7 @@
         <result column="object_version_number" property="objectVersionNumber" jdbcType="DECIMAL"/>
     </resultMap>
 
-    <resultMap id="LovResultMap" type="com.hand.hap.fruit.dto.Fruit" extends="com.hand.hap.mapper.StdMapper.STD">
+    <resultMap id="LovResultMap" type="com.hand.hap.fruit.dto.Fruit" >
         <result column="id" property="id" jdbcType="DECIMAL"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
     </resultMap>

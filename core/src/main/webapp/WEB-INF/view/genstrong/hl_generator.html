@@ -35,6 +35,8 @@
         lineImplStatus: "Create",
         headerHtmlModelName: "htmlheadermodel.ftl",
         lineHtmlModelName: "htmllinemodel.ftl",
+        headerRelationColumn: '',
+        lineRelationColumn: ''
     });
 </script>
 
@@ -83,6 +85,15 @@
                             <label class="col-sm-4 control-label">选择行表:</label>
                             <div class="col-sm-4">
                                 <input id="autoLineComplete" style="width:100%"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">头行关联:</label>
+                            <div class="col-sm-2">
+                                <input id="autoHeaderRelation" onclick="getTable(1)" style="width:100%"/>
+                            </div>
+                            <div class="col-sm-2">
+                                <input id="autoLineRelation" style="width:100%"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -350,7 +361,7 @@
             }
         }
     });
-    var projectPath = viewModel.get("projectPath");;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    var projectPath = viewModel.get("projectPath");;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     var ftlDataSource = new kendo.data.DataSource({
         transport: {
             read: {
@@ -373,12 +384,56 @@
                     };
                     products.push(product);
                 }
-                console.log(products);
                 return products;
             }
         }
     });
+    var tableName;
+    function getTable(source) {
+        if (source == 1) {
+            tableName = viewModel.get("headerTargetName");
+        } else {
+            tableName = viewModel.get("lineTargetName");
+        }
+    }
 
+
+    var columnDataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: BaseUrl + "/genstrong/allcolumns",
+                type: "POST",
+                dataType: "json"
+            }, parameterMap: function (options, type) {
+                if (type === "read") {
+                    var parameter = {
+                        tableName: tableName
+                    };;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    $.each(parameter, function (i, item) {
+                        console.log("item=" + item);
+                    });
+                    return kendo.stringify(parameter);
+                }
+            }
+        }
+    });
+
+    $("#autoHeaderRelation").kendoAutoComplete({
+        dataSource: columnDataSource,
+        dataTextField: "text",
+        select: function (e) {
+            console.log("autoHeaderRelation=" + tableName);
+            getColumnName(e.item.text(), "header");
+        }
+    });
+
+    $("#autoLineRelation").kendoAutoComplete({
+        dataSource: columnDataSource,
+        dataTextField: "text",
+        select: function (e) {
+            getColumnName(e.item.text(), "line");
+        }
+    });
     $("#autoHeaderComplete").kendoAutoComplete({
         dataSource: dataSource,
         dataTextField: "text",
@@ -398,14 +453,8 @@
         dataSource: ftlDataSource,
         dataTextField: "text",
         change: function (e) {
-            console.log(e);
-            console.log(e.sender);
-            console.log(e.sender.dataSource);
-            console.log(e.sender.dataSource._data);
-            console.log(e.item.text());
-            var value = this.value();
-            console.log(value);
-            getHtmlModel(value, "header");
+            ftlData = ftlDataSource.data();
+            getHtmlModel(ftlData[e.sender.selectedIndex].text, "header");
         },
         animation: {
             close: {
@@ -423,8 +472,10 @@
         dataSource: ftlDataSource,
         dataTextField: "text",
         change: function (e) {
-            getHtmlModel(e.value().text, "line");
+            ftlData = ftlDataSource.data();
+            getHtmlModel(ftlData[e.sender.selectedIndex].text, "line");
         },
+
         animation: {
             close: {
                 effects: "fadeOut zoom:out",
@@ -436,7 +487,13 @@
             }
         }
     });
-
+    function getColumnName(text, source) {
+        if (source == "header") {
+            viewModel.set("headerRelationColumn", text);
+        } else {
+            viewModel.set("lineRelationColumn", text);
+        }
+    }
     function getTableName(text, source) {
         if (source == 'header') {
             viewModel.set("headerTargetName", text);
@@ -477,7 +534,6 @@
     function getHtmlModel(value, source) {
         if (source == "header") {
             viewModel.set("headerHtmlModelName", value);
-            console.log(viewModel.get("headerHtmlModelName"));
         }
         else {
             viewModel.set("lineHtmlModelName", value);
@@ -496,11 +552,9 @@
             title: '提示',
             message: '是否对其余文件名做相应修改?'
         }).done(function (e) {
-            console.log("e.button=" + e.button);
             if (e.button == 'OK') {
                 if (source == 0) {
                     var name = $('#HeaderDtoName').val();
-                    console.log("name=" + name);
                     if (ifEnds(name, ".java")) {
                         name = name.substring(0, name.length - 5);
                     }
@@ -517,7 +571,6 @@
                     viewModel.set("headerHtmlName", htmlName + ".html");
                 } else {
                     var name = $('#LineDtoName').val();
-                    console.log("name=" + name);
                     if (ifEnds(name, ".java")) {
                         name = name.substring(0, name.length - 5);
                     }
@@ -683,7 +736,7 @@
                 localStorage.packagePath = viewModel.get("packagePath");
             }
         }
-
+        console.log("headerRelationColumn" + viewModel.get("headerRelationColumn"));
         $.post(BaseUrl + "/genstrong/newtables", viewModel.toJSON(), function (data, status) {
             if (status == "success") {
                 var mess;

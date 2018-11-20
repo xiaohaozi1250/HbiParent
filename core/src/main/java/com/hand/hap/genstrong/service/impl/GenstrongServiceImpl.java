@@ -210,4 +210,18 @@ public class GenstrongServiceImpl implements IGenstrongService {
 
         return rs;
     }
+
+    //获取表字段
+    public List<String> showColumns(String tableName) {
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            List<String> columns;
+            Connection conn = DBUtil.getConnectionBySqlSession(sqlSession);
+            columns = DBUtil.showAllColumns(conn, tableName);
+            conn.close();
+            return columns;
+        } catch (SQLException e) {
+            logger.error("数据库查询出错");
+        }
+        return new ArrayList<String>();
+    }
 }

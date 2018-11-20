@@ -6,9 +6,12 @@ import com.hand.hap.genstrong.dto.GenStrongInfo;
 import com.hand.hap.genstrong.service.IGenstrongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by La on 2018/11/12.
@@ -45,9 +48,14 @@ public class GenstrongController extends BaseController {
     )
     @ResponseBody
     public ResponseData getModels(GenStrongInfo genStrongInfo) {
-        System.out.println("genStrongInfo.getPackagePath=" + genStrongInfo.getPackagePath());
-        System.out.println("genStrongInfo.getProjectPath=" + genStrongInfo.getProjectPath());
         return new ResponseData(this.service.getModels(genStrongInfo));
+    }
+
+    @RequestMapping(value = {"/allcolumns"}, method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData showColumns(HttpServletRequest request, @PathVariable String tableName) {
+        System.out.println("tableName=" + tableName);
+        return new ResponseData(this.service.showColumns(tableName));
     }
 
 }

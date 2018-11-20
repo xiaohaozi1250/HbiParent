@@ -14,4 +14,7 @@ public interface IGenstrongService {
     int generatorFile(GenStrongInfo info);
 
     List<String> getModels(GenStrongInfo generatorInfo);
+
+    //获取表字段
+    List<String> showColumns(String tableName);
 }

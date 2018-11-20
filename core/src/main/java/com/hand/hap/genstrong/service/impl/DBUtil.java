@@ -133,4 +133,23 @@ public class DBUtil {
             return "";
         }
     }
+
+    public static List<String> showAllColumns(Connection conn, String tableName) throws SQLException {
+        ArrayList columns = new ArrayList();
+        DatabaseMetaData dbmd = conn.getMetaData();
+
+        ResultSet rs = DBUtil.getTableColumnInfo(tableName, dbmd);
+        while (rs.next()) {
+            String columnName = rs.getString("COLUMN_NAME");
+            //System.out.println("columnName: " + columnName);
+            if ("OBJECT_VERSION_NUMBER".equalsIgnoreCase(columnName) || "REQUEST_ID".equalsIgnoreCase(columnName)
+                    || "PROGRAM_ID".equalsIgnoreCase(columnName) || "CREATED_BY".equalsIgnoreCase(columnName)
+                    || "CREATION_DATE".equalsIgnoreCase(columnName) || "LAST_UPDATED_BY".equalsIgnoreCase(columnName)
+                    || "LAST_UPDATE_DATE".equalsIgnoreCase(columnName) || "LAST_UPDATE_LOGIN".equalsIgnoreCase(columnName)) {
+                continue;
+            }
+            columns.add(rs.getString("COLUMN_NAME"));
+        }
+        return columns;
+    }
 }

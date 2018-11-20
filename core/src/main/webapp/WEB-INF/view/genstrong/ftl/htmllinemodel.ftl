@@ -80,7 +80,7 @@ ${'<#include "../include/header.html"/>'}
 <script type="text/javascript">
     Hap.initEnterQuery('#lineQuery', viewModel_line.query);
     var BaseUrl = _basePath;
-    var ${columnsInfoHeader[0].tableColumnsName} =
+    var ${columnsInfoHeader[0].tableColumnsName} =;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     '${'$'}{RequestParameters.${columnsInfoHeader[0].tableColumnsName}!""}';
     if (!$.isEmpty(${columnsInfoHeader[0].tableColumnsName})) {
         $.ajax({
@@ -146,7 +146,6 @@ ${'<#include "../include/header.html"/>'}
         }
     });
 
-    var unitPrice;
     var linegrid = $("#lineGrid").kendoGrid({
         dataSource: lineDataSource,
         resizable: true,
@@ -197,7 +196,7 @@ ${'<#include "../include/header.html"/>'}
                 "lines": $("#lineGrid"),
             },
             success: function (datas) {
-                window.parent.viewModel.refresh();
+                //window.parent.viewModel.refresh();
                 closeLineWindow();
             }
         });

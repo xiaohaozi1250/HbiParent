@@ -424,14 +424,14 @@ ${'<#include "../include/header.html"/>'}
     function openWindow(param) {
         var url = BaseUrl + '${lineUrl}';
         if (param) {
-            url = url + '?${columnsInfoHeader[0].tableColumnsName}=' + param;
+            url = url + '?${headerRelationColumn}=' + param;
         }
         var editWin = Hap.createWindow('#openWindow', {
             width: '85%',
             height: '75%',
             title: '明细',
             url: url
-        });;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        });
         if (parent.autoResizeIframe) {
             parent.autoResizeIframe('${'$'}{RequestParameters.functionCode!}', 870, function () {
                 editWin.center().open();

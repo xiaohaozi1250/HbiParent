@@ -148,7 +148,7 @@ public class DBUtil {
                     || "LAST_UPDATE_DATE".equalsIgnoreCase(columnName) || "LAST_UPDATE_LOGIN".equalsIgnoreCase(columnName)) {
                 continue;
             }
-            columns.add(rs.getString("COLUMN_NAME"));
+            columns.add(rs.getString("COLUMN_NAME").toLowerCase());
         }
         return columns;
     }

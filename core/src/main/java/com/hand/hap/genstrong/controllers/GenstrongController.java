@@ -6,12 +6,12 @@ import com.hand.hap.genstrong.dto.GenStrongInfo;
 import com.hand.hap.genstrong.service.IGenstrongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by La on 2018/11/12.
@@ -37,8 +37,8 @@ public class GenstrongController extends BaseController {
 
     @RequestMapping({"/newtables"})
     @ResponseBody
-    public int generatorTables(GenStrongInfo genStrongInfo) {
-        int rs = this.service.generatorFile(genStrongInfo);
+    public int generatorTables(GenStrongInfo genDemoInfo) {
+        int rs = this.service.generatorFile(genDemoInfo);
         return rs;
     }
 
@@ -47,15 +47,23 @@ public class GenstrongController extends BaseController {
             method = {RequestMethod.GET}
     )
     @ResponseBody
-    public ResponseData getModels(GenStrongInfo genStrongInfo) {
-        return new ResponseData(this.service.getModels(genStrongInfo));
+    public ResponseData getModels(GenStrongInfo genDemoInfo) {
+        return new ResponseData(this.service.getModels(genDemoInfo));
+    }
+
+
+    @RequestMapping(value = {"/allcolumn"}, method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData showColumns(HttpServletRequest request, @RequestBody String tableName) {
+        System.out.println("tableName=" + tableName);
+        System.out.println("tableName2+"+this.service.getName(tableName));
+        return new ResponseData(this.service.showColumns(tableName));
     }
 
     @RequestMapping(value = {"/allcolumns"}, method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData showColumns(HttpServletRequest request, @PathVariable String tableName) {
-        System.out.println("tableName=" + tableName);
-        return new ResponseData(this.service.showColumns(tableName));
+    public int showColumns(GenStrongInfo genDemoInfo) {
+        int rs = this.service.showColumns(genDemoInfo);
+        return rs;
     }
-
 }

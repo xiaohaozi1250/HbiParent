@@ -40,9 +40,6 @@ public class GenstrongServiceImpl implements IGenstrongService {
     public List<String> getModels(GenStrongInfo generatorInfo) {
         List<String> models = new ArrayList<>();
         models = FileUtil.getModelList(generatorInfo);
-        for (String model : models) {
-            System.out.println("modelText=>" + model);
-        }
         return models;
     }
 
@@ -60,6 +57,19 @@ public class GenstrongServiceImpl implements IGenstrongService {
         return new ArrayList<String>();
     }
 
+    //获取表字段
+    public List<String> showColumns(String tableName) {
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            List<String> columns;
+            Connection conn = DBUtil.getConnectionBySqlSession(sqlSession);
+            columns = DBUtil.showAllColumns(conn, tableName);
+            conn.close();
+            return columns;
+        } catch (SQLException e) {
+            logger.error("数据库查询出错");
+        }
+        return new ArrayList<String>();
+    }
 
     public int generatorFile(GenStrongInfo info) {
         int rs = 0;
@@ -79,6 +89,10 @@ public class GenstrongServiceImpl implements IGenstrongService {
         }
 
         return rs;
+    }
+
+    public String getName(String name) {
+        return FileUtil.changeToJavaFiled(name);
     }
 
     // 获取table信息
@@ -211,17 +225,37 @@ public class GenstrongServiceImpl implements IGenstrongService {
         return rs;
     }
 
-    //获取表字段
-    public List<String> showColumns(String tableName) {
-        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            List<String> columns;
-            Connection conn = DBUtil.getConnectionBySqlSession(sqlSession);
-            columns = DBUtil.showAllColumns(conn, tableName);
-            conn.close();
-            return columns;
-        } catch (SQLException e) {
-            logger.error("数据库查询出错");
+    //验证关联字段是否在表中
+    public int showColumns(GenStrongInfo genDemoInfo) {
+        int rh=0;
+        int rl=0;
+        List<String> columns = new ArrayList<>();
+        if((genDemoInfo.getHeaderTargetName() != null && genDemoInfo.getHeaderTargetName().length() != 0)&&(genDemoInfo.getHeaderRelationColumn() != null && genDemoInfo.getHeaderRelationColumn().length() != 0)) {
+            columns = showColumns(genDemoInfo.getHeaderTargetName());
+            for (String column : columns) {
+                if (!(column.toLowerCase()).equals((genDemoInfo.getHeaderRelationColumn()).toLowerCase())) {
+                    rh = 1;
+                } else {
+                    return 0;
+                }
+            }
         }
-        return new ArrayList<String>();
+        if((genDemoInfo.getLineTargetName() != null && genDemoInfo.getLineTargetName().length() != 0) &&(genDemoInfo.getLineRelationColumn() != null && genDemoInfo.getLineRelationColumn().length() != 0)){
+            columns.clear();
+            columns =showColumns(genDemoInfo.getLineTargetName());
+            for (String column:columns){
+                if(!(column.toLowerCase()).equals((genDemoInfo.getLineRelationColumn()).toLowerCase())){
+                    rh = 1;
+                }else{
+                   return 0;
+                }
+            }
+        }
+        if(rh>0||rl>0){
+            return 1;
+        }else{
+            return 0;
+        }
+
     }
 }

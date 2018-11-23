@@ -37,6 +37,8 @@ public class GenStrongInfo {
     String lineImplName;
     String lineServiceStatus;
     String lineImplStatus;
+    String headerRelationColumn;
+    String lineRelationColumn;
 
     public GenStrongInfo() {
     }
@@ -304,5 +306,21 @@ public class GenStrongInfo {
 
     public void setLineImplName(String lineImplName) {
         this.lineImplName = lineImplName;
+    }
+
+    public String getHeaderRelationColumn() {
+        return headerRelationColumn;
+    }
+
+    public void setHeaderRelationColumn(String headerRelationColumn) {
+        this.headerRelationColumn = headerRelationColumn;
+    }
+
+    public String getLineRelationColumn() {
+        return lineRelationColumn;
+    }
+
+    public void setLineRelationColumn(String lineRelationColumn) {
+        this.lineRelationColumn = lineRelationColumn;
     }
 }

@@ -76,24 +76,24 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">选择头表:</label>
+                            <label class="col-sm-4 control-label" >选择头表:</label>
                             <div class="col-sm-4">
-                                <input id="autoHeaderComplete" style="width:100%"/>
+                                <input id="autoHeaderComplete" style="width:100%" onblur="getTable(0)"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">选择行表:</label>
                             <div class="col-sm-4">
-                                <input id="autoLineComplete" style="width:100%"/>
+                                <input id="autoLineComplete" style="width:100%" onblur="getTable(1)"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">头行关联:</label>
                             <div class="col-sm-2">
-                                <input id="autoHeaderRelation" onclick="getTable(1)" style="width:100%"/>
+                                <input id="autoHeaderRelation" style="width:100%" onblur="getColumn(0)"/>
                             </div>
                             <div class="col-sm-2">
-                                <input id="autoLineRelation" style="width:100%"/>
+                                <input id="autoLineRelation" style="width:100%" onblur="getColumn(1)"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -361,7 +361,7 @@
             }
         }
     });
-    var projectPath = viewModel.get("projectPath");;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    var projectPath = viewModel.get("projectPath")
     var ftlDataSource = new kendo.data.DataSource({
         transport: {
             read: {
@@ -388,64 +388,137 @@
             }
         }
     });
-    var tableName;
-    function getTable(source) {
-        if (source == 1) {
-            tableName = viewModel.get("headerTargetName");
-        } else {
-            tableName = viewModel.get("lineTargetName");
-        }
+    var headerTableName;
+    var lineTableName;
+    var headerColumnName;
+    var lineColumnName;
+
+
+    $(function header() {
+        $("#autoHeaderComplete").kendoAutoComplete({
+            dataSource: dataSource,
+            dataTextField: "text",
+            select: function (e) {
+                getTableName(e.item.text(), "header");
+            },
+            change:onChange
+        });
+    });
+
+    function onChange() {
+        $("#autoHeaderRelation").kendoAutoComplete({
+            dataTextField: "text",
+            select: function (e) {
+                getColumnName(e.item.text(), "header");
+            },
+            dataSource: {      transport: {
+                read: {
+                    url: BaseUrl + "/genstrong/allcolumn",
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json;charset=UTF-8"
+                },
+                parameterMap: function (options, type) {
+                    return kendo.stringify(headerTableName);
+                }
+            },
+                schema: {
+                    model: {
+                        expanded: true
+                    },
+                    parse: function (response) {
+                        var products = [];
+                        for (var i = 0; i < response.total; i++) {
+                            var le = response.rows[i];
+                            var product = {
+                                text: response.rows[i],
+                                value: response.rows[i],
+                            };
+                            products.push(product);
+                        }
+                        return products;
+                    }
+                }}
+        });
     }
 
-
+    $(function line() {
+        $("#autoLineComplete").kendoAutoComplete({
+            dataSource: dataSource,
+            dataTextField: "text",
+            select: function (e) {
+                getTableName(e.item.text(), "line");
+            },
+            change:onChange1
+        });
+    });
+    function onChange1() {
+        $("#autoLineRelation").kendoAutoComplete({
+            dataTextField: "text",
+            select: function (e) {
+                getColumnName(e.item.text(), "line");
+            },
+            dataSource: {      transport: {
+                read: {
+                    url: BaseUrl + "/genstrong/allcolumn",
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json;charset=UTF-8"
+                },
+                parameterMap: function (options, type) {
+                    return kendo.stringify(headerTableName);
+                }
+            },
+                schema: {
+                    model: {
+                        expanded: true
+                    },
+                    parse: function (response) {
+                        var products = [];
+                        for (var i = 0; i < response.total; i++) {
+                            var le = response.rows[i];
+                            var product = {
+                                text: response.rows[i],
+                                value: response.rows[i],
+                            };
+                            products.push(product);
+                        }
+                        return products;
+                    }
+                }}
+        });
+    }
     var columnDataSource = new kendo.data.DataSource({
         transport: {
             read: {
-                url: BaseUrl + "/genstrong/allcolumns",
+                url: BaseUrl + "/genstrong/allcolumn",
                 type: "POST",
-                dataType: "json"
-            }, parameterMap: function (options, type) {
-                if (type === "read") {
-                    var parameter = {
-                        tableName: tableName
-                    };;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                    $.each(parameter, function (i, item) {
-                        console.log("item=" + item);
-                    });
-                    return kendo.stringify(parameter);
-                }
+                dataType: "json",
+                contentType: "application/json;charset=UTF-8"
+            },
+            parameterMap: function (options, type) {
+                console.log("type-" + type);
+                //if (type === "read") {
+                return kendo.stringify(tableName);
+                // }
             }
-        }
-    });
-
-    $("#autoHeaderRelation").kendoAutoComplete({
-        dataSource: columnDataSource,
-        dataTextField: "text",
-        select: function (e) {
-            console.log("autoHeaderRelation=" + tableName);
-            getColumnName(e.item.text(), "header");
-        }
-    });
-
-    $("#autoLineRelation").kendoAutoComplete({
-        dataSource: columnDataSource,
-        dataTextField: "text",
-        select: function (e) {
-            getColumnName(e.item.text(), "line");
-        }
-    });
-    $("#autoHeaderComplete").kendoAutoComplete({
-        dataSource: dataSource,
-        dataTextField: "text",
-        select: function (e) {
-            getTableName(e.item.text(), "header");
-        }
-    });
-    $("#autoLineComplete").kendoAutoComplete({
-        dataSource: dataSource,
-        dataTextField: "text",
-        select: function (e) {
-            getTableName(e.item.text(), "line");
+        },
+        schema: {
+            model: {
+                expanded: true
+            },
+            parse: function (response) {
+                var products = [];
+                for (var i = 0; i < response.total; i++) {
+                    var le = response.rows[i];
+                    var product = {
+                        text: response.rows[i],
+                        value: response.rows[i],
+                    };
+                    products.push(product);
+                }
+                return products;
+            }
         }
     });
 
@@ -468,7 +541,6 @@
         }
     });
     $("#lineHtmlmodel").kendoDropDownList({
-        //dataSource: [{text: "htmllinemodel.ftl"}],
         dataSource: ftlDataSource,
         dataTextField: "text",
         change: function (e) {
@@ -487,8 +559,27 @@
             }
         }
     });
+
+    function getTable(source) {
+        if (source == 0) {
+            headerTableName = viewModel.get("headerTargetName");
+
+        } else {
+            lineTableName = viewModel.get("lineTargetName");
+        }
+    }
+
+    function getColumn(source) {
+        if (source == 0) {
+            headerColumnName = viewModel.get("headerRelationColumn");
+
+        } else {
+            lineColumnName = viewModel.get("lineRelationColumn");
+        }
+    }
+
     function getColumnName(text, source) {
-        if (source == "header") {
+        if (source == 'header') {
             viewModel.set("headerRelationColumn", text);
         } else {
             viewModel.set("lineRelationColumn", text);
@@ -530,6 +621,7 @@
             viewModel.set("lineImplName", name + "ServiceImpl.java");
             viewModel.set("lineHtmlName", htmlName + ".html");
         }
+        ;
     }
     function getHtmlModel(value, source) {
         if (source == "header") {

@@ -80,11 +80,10 @@ ${'<#include "../include/header.html"/>'}
 <script type="text/javascript">
     Hap.initEnterQuery('#lineQuery', viewModel_line.query);
     var BaseUrl = _basePath;
-    var ${columnsInfoHeader[0].tableColumnsName} =;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    '${'$'}{RequestParameters.${columnsInfoHeader[0].tableColumnsName}!""}';
-    if (!$.isEmpty(${columnsInfoHeader[0].tableColumnsName})) {
+    var ${lineRelationColumn} = '${'$'}{RequestParameters.${headerRelationColumn}!""}';
+    if (!$.isEmpty(${lineRelationColumn})) {
         $.ajax({
-            url: BaseUrl + '${headerQueryUrl}?${columnsInfoHeader[0].tableColumnsName}=' + ${columnsInfoHeader[0].tableColumnsName},
+            url: BaseUrl + '${headerQueryUrl}?${headerRelationColumn}=' + ${lineRelationColumn},
             type: "POST",
             dataType: "json",
             contentType: "application/json",
@@ -101,7 +100,7 @@ ${'<#include "../include/header.html"/>'}
     lineDataSource = new kendo.data.DataSource({
         transport: {
             read: {
-                url: BaseUrl + "${lineQueryUrl}?${columnsInfoHeader[0].tableColumnsName}=" + ${columnsInfoHeader[0].tableColumnsName},
+                url: BaseUrl + "${lineQueryUrl}?${lineRelationColumn}=" + ${lineRelationColumn},
                 type: "POST",
                 dataType: "json"
             },
@@ -146,6 +145,7 @@ ${'<#include "../include/header.html"/>'}
         }
     });
 
+    var unitPrice;
     var linegrid = $("#lineGrid").kendoGrid({
         dataSource: lineDataSource,
         resizable: true,
@@ -175,7 +175,7 @@ ${'<#include "../include/header.html"/>'}
         editable: true
     }).data('kendoGrid');
 
-    if (!$.isEmpty(${columnsInfoHeader[0].tableColumnsName})) {
+    if (!$.isEmpty(${lineRelationColumn})) {
         lineDataSource.page(1);
     }
     function closeLineWindow() {
@@ -183,7 +183,7 @@ ${'<#include "../include/header.html"/>'}
     }
 
     function saveHeader() {
-        if ($.isEmpty(${columnsInfoHeader[0].tableColumnsName})) {
+        if ($.isEmpty(${lineRelationColumn})) {
             viewModel.model.__status = "add";
         } else {
             viewModel.model.__status = "update";
@@ -196,7 +196,7 @@ ${'<#include "../include/header.html"/>'}
                 "lines": $("#lineGrid"),
             },
             success: function (datas) {
-                //window.parent.viewModel.refresh();
+                window.parent.viewModel.refresh();
                 closeLineWindow();
             }
         });

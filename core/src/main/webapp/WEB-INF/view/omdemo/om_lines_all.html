@@ -68,8 +68,7 @@
 <script type="text/javascript">
     Hap.initEnterQuery('#lineQuery', viewModel_line.query);
     var BaseUrl = _basePath;
-    var omHeaderId =
-    '${RequestParameters.omHeaderId!""}';
+    var omHeaderId = '${RequestParameters.omHeaderId!""}';
     if (!$.isEmpty(omHeaderId)) {
         $.ajax({
             url: BaseUrl + '/cux/om/headers/all/query?omHeaderId=' + omHeaderId,
@@ -134,6 +133,7 @@
         }
     });
 
+    var unitPrice;
     var linegrid = $("#lineGrid").kendoGrid({
         dataSource: lineDataSource,
         resizable: true,
@@ -198,7 +198,7 @@
                 "lines": $("#lineGrid"),
             },
             success: function (datas) {
-                //window.parent.viewModel.refresh();
+                window.parent.viewModel.refresh();
                 closeLineWindow();
             }
         });

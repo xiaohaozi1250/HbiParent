@@ -317,26 +317,27 @@ public class FileUtil {
         FtlInfo info = new FtlInfo();
         String directory = null;
         ArrayList importPackages = new ArrayList();
-        if (type == pType.Controller && source.equals("header")) {
+
+        if (type.equals(pType.Controller) && source.equals("header")) {
             directory = projectPath + "/src/main/java/" + pac + "/controllers/" + generatorInfo.getHeaderControllerName();
             importPackages.add("org.springframework.stereotype.Controller");
             importPackages.add(BaseController.class.getName());
             importPackages.add(IRequest.class.getName());
             importPackages.add(ResponseData.class.getName());
-        } else if (type == pType.Mapper) {
+        } else if (type.equals(pType.Mapper)) {
             if (source.equals("header")) {
                 directory = projectPath + "/src/main/java/" + pac + "/mapper/" + generatorInfo.getHeaderMapperName();
             } else {
                 directory = projectPath + "/src/main/java/" + pac + "/mapper/" + generatorInfo.getLineMapperName();
             }
             importPackages.add("com.hand.hap.mybatis.common.Mapper");
-        } else if (type == pType.MapperXml) {
+        } else if (type.equals(pType.MapperXml)) {
             if (source.equals("header")) {
                 directory = projectPath + "/src/main/resources/" + pac + "/mapper/" + generatorInfo.getHeaderMapperXmlName();
             } else {
                 directory = projectPath + "/src/main/resources/" + pac + "/mapper/" + generatorInfo.getLineMapperXmlName();
             }
-        } else if (type == pType.Service) {
+        } else if (type.equals(pType.Service)) {
             if (source.equals("header")) {
                 directory = projectPath + "/src/main/java/" + pac + "/service/" + generatorInfo.getHeaderServiceName();
             } else {
@@ -344,7 +345,7 @@ public class FileUtil {
             }
             importPackages.add(ProxySelf.class.getName());
             importPackages.add(IBaseService.class.getName());
-        } else if (type == pType.Impl) {
+        } else if (type.equals(pType.Impl)) {
             if (source.equals("header")) {
                 directory = projectPath + "/src/main/java/" + pac + "/service/impl/" + generatorInfo.getHeaderImplName();
             } else {
@@ -352,7 +353,7 @@ public class FileUtil {
             }
             importPackages.add(BaseServiceImpl.class.getName());
             importPackages.add("org.springframework.stereotype.Service");
-        } else if (type == pType.Html) {
+        } else if (type.equals(pType.Html)) {
             directory = projectPath + "/src/main/webapp/WEB-INF/view/" + packagePath + "/" + htmlName;
         }
 
@@ -403,17 +404,18 @@ public class FileUtil {
         HashMap map = new HashMap();
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         cfg.setServletContextForTemplateLoading(request.getServletContext(), "WEB-INF/view/genstrong/ftl");
-        if (type == pType.Controller && source.equals("header")) {
+
+        if (type.equals(pType.Controller) && source.equals("header")) {
             template = cfg.getTemplate("controllers.ftl");
-        } else if (type == pType.MapperXml) {
+        } else if (type.equals(pType.MapperXml)) {
             template = cfg.getTemplate("mapperxml.ftl");
-        } else if (type == pType.Mapper) {
+        } else if (type.equals(pType.Mapper)) {
             template = cfg.getTemplate("mapper.ftl");
-        } else if (type == pType.Service) {
+        } else if (type.equals(pType.Service)) {
             template = cfg.getTemplate("service.ftl");
-        } else if (type == pType.Impl) {
+        } else if (type.equals(pType.Impl)) {
             template = cfg.getTemplate("impl.ftl");
-        } else if (type == pType.Html) {
+        } else if (type.equals(pType.Html)) {
             template = cfg.getTemplate(ftlInfo.getHtmlModelName());
         }
 
@@ -439,6 +441,7 @@ public class FileUtil {
             map.put("columnsInfoHeader", ftlInfo.getColumnsInfoHeader());
             map.put("columnsInfoLine", ftlInfo.getColumnsInfoLine());
             map.put("tableName", tableName);
+
             String url = generatorInfo.getHeaderTargetName().toLowerCase();
             String lineUrl = generatorInfo.getLineHtmlName().toLowerCase();
             String packagePath = generatorInfo.getPackagePath().toLowerCase();
@@ -461,16 +464,28 @@ public class FileUtil {
             } else {
                 map.put("source", "line");
             }
+            String headerRelationColumn = changeToJavaFiled(generatorInfo.getHeaderRelationColumn());
+            map.put("headerRelationColumn", headerRelationColumn);
+            String lineRelationColumn = changeToJavaFiled(generatorInfo.getLineRelationColumn());
+            map.put("lineColumn", generatorInfo.getLineRelationColumn());
+            map.put("lineRelationColumn", lineRelationColumn);
 
-            Set<String> keys = map.keySet();
-/*            for (String s : keys) {
-                System.out.println(s + ":" + map.get(s));
-            }*/
             template.process(map, new OutputStreamWriter(out));
             out.flush();
             out.close();
         }
 
+    }
+
+    public static String changeToJavaFiled(String field) {
+        String[] fields = field.split("_");
+        StringBuilder sbuilder = new StringBuilder(fields[0]);
+        for (int i = 1; i < fields.length; i++) {
+            char[] cs = fields[i].toCharArray();
+            cs[0] -= 32;
+            sbuilder.append(String.valueOf(cs));
+        }
+        return sbuilder.toString();
     }
 
     public static void createFileDir(File file) throws IOException {
@@ -731,7 +746,7 @@ public class FileUtil {
         return allModelFiles;
     }
 
-    public enum pType {
+    public static enum pType {
         Controller,
         MapperXml,
         Mapper,
@@ -739,7 +754,7 @@ public class FileUtil {
         Impl,
         Html;
 
-        pType() {
+        private pType() {
         }
     }
 }

@@ -9,7 +9,7 @@ ${'<#include "../include/header.html"/>'}
             class="fa fa-plus-square" style="margin-right:3px;"></i>${'<@spring.message "hap.new"/>'}</span>
         <span data-bind="click:remove" class="btn btn-danger"
               style="float:left;margin-right:5px"><i class="fa fa-trash-o"
-                                     style="margin-right:3px;"></i>${'<@spring.message "hap.delete"/>'}</span>
+                                                     style="margin-right:3px;"></i>${'<@spring.message "hap.delete"/>'}</span>
         <span class="btn btn-primary k-grid-excel" style="float:left;margin-right:5px" data-bind="click:exportExcel"><i
                 class="fa fa-file-excel-o"
                 style="margin-right:3px;"></i>${'<@spring.message "hap.exportexcel"/>'}</span>
@@ -116,7 +116,7 @@ ${'<#include "../include/header.html"/>'}
                 title: '${'<@spring.message "hap.details"/>'}',
                 width: 120,
                 template: function (item) {
-                    return Hap.createAnchor('${'<@spring.message "hap.details"/>'}', openWindow, item.${columnsInfoHeader[0].tableColumnsName});
+                    return Hap.createAnchor('${'<@spring.message "hap.details"/>'}', openWindow, item.${headerRelationColumn});
                 }
             }
         ],
@@ -126,7 +126,7 @@ ${'<#include "../include/header.html"/>'}
     function openWindow(param) {
         var url = BaseUrl + '${lineUrl}';
         if (param) {
-            url = url + '?${columnsInfoHeader[0].tableColumnsName}=' + param;
+            url = url + '?${headerRelationColumn}=' + param;
         }
         var editWin = Hap.createWindow('#openWindow', {
             width: '90%',

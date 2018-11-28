@@ -41,7 +41,7 @@ public class GenstrongController extends BaseController {
         int rs = this.service.generatorFile(genDemoInfo);
         return rs;
     }
-
+//test
     @RequestMapping(
             value = {"/getmodels"},
             method = {RequestMethod.GET}

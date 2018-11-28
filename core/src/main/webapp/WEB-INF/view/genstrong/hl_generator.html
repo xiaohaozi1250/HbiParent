@@ -76,31 +76,34 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label" >选择头表:</label>
+                            <label class="col-sm-4 control-label">选择头表:</label>
                             <div class="col-sm-4">
-                                <input id="autoHeaderComplete" style="width:100%" onblur="getTable(0)"/>
+                                <input id="autoHeaderComplete" style="width:100%" onchange="getTable(0)"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">选择行表:</label>
                             <div class="col-sm-4">
-                                <input id="autoLineComplete" style="width:100%" onblur="getTable(1)"/>
+                                <input id="autoLineComplete" style="width:100%" onchange="getTable(1)"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">头行关联:</label>
                             <div class="col-sm-2">
-                                <input id="autoHeaderRelation" style="width:100%" onblur="getColumn(0)"/>
+                                <input id="autoHeaderRelation" onblur="validateColumn(0)" style="width:100%" type="text"
+                                       class="k-textbox"/>
                             </div>
                             <div class="col-sm-2">
-                                <input id="autoLineRelation" style="width:100%" onblur="getColumn(1)"/>
+                                <input id="autoLineRelation" onblur="validateColumn(1)" style="width:100%" type="text"
+                                       class="k-textbox"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-sm-6" style="padding-left:40px">
+                            <div class="col-sm-6" style="padding-left:40px;overflow:hidden">
                                 <label class="col-sm-8 control-label">是否全部创建:</label>
-                                <td style="margin-left:10px"><input id="AllCreateCheck" checked
-                                                                    onclick="onallChoose(0)"/></td>
+                                <div class="col-sm-2" id="div1">
+                                    <input id="AllCreateCheck" checked/>
+                                </div>
                                 <script>
                                     $("#AllCreateCheck").kendoCheckbox({
                                         checkedValue: 'Y',
@@ -140,44 +143,56 @@
                                     });
                                 </script>
                                 <label class="control-label" style="margin-left:10px">是否全部覆盖:</label>
-                                <td><input id="AllCoverCheck"/>
-                                    <script>
-                                        $("#AllCoverCheck").kendoCheckbox({
-                                            checkedValue: 'Y',
-                                            uncheckedValue: 'N',
-                                            change: function (e) {
-                                                if (e.values == 'Y') {
-                                                    $('#HeaderDtoCoverCheck').data('kendoCheckbox').value('Y');
-                                                    $('#HeaderControllerCoverCheck').data('kendoCheckbox').value('Y');
-                                                    $('#HeaderMapperCoverCheck').data('kendoCheckbox').value('Y');
-                                                    $('#HeaderMapperXmlCoverCheck').data('kendoCheckbox').value('Y');
-                                                    $('#HeaderServiceCoverCheck').data('kendoCheckbox').value('Y');
-                                                    $('#HeaderImplCoverCheck').data('kendoCheckbox').value('Y');
-                                                    $('#HeaderHtmlCoverCheck').data('kendoCheckbox').value('Y');
-                                                    $('#LineDtoCoverCheck').data('kendoCheckbox').value('Y');
-                                                    $('#LineMapperCoverCheck').data('kendoCheckbox').value('Y');
-                                                    $('#LineMapperXmlCoverCheck').data('kendoCheckbox').value('Y');
-                                                    $('#LineServiceCoverCheck').data('kendoCheckbox').value('Y');
-                                                    $('#LineImplCoverCheck').data('kendoCheckbox').value('Y');
-                                                    $('#LineHtmlCoverCheck').data('kendoCheckbox').value('Y');
-                                                } else {
-                                                    $('#HeaderDtoCoverCheck').data('kendoCheckbox').value('N');
-                                                    $('#HeaderControllerCoverCheck').data('kendoCheckbox').value('N');
-                                                    $('#HeaderMapperCoverCheck').data('kendoCheckbox').value('N');
-                                                    $('#HeaderMapperXmlCoverCheck').data('kendoCheckbox').value('N');
-                                                    $('#HeaderServiceCoverCheck').data('kendoCheckbox').value('N');
-                                                    $('#HeaderImplCoverCheck').data('kendoCheckbox').value('N');
-                                                    $('#HeaderHtmlCoverCheck').data('kendoCheckbox').value('N');
-                                                    $('#LineDtoCoverCheck').data('kendoCheckbox').value('N');
-                                                    $('#LineMapperCoverCheck').data('kendoCheckbox').value('N');
-                                                    $('#LineMapperXmlCoverCheck').data('kendoCheckbox').value('N');
-                                                    $('#LineServiceCoverCheck').data('kendoCheckbox').value('N');
-                                                    $('#LineImplCoverCheck').data('kendoCheckbox').value('N');
-                                                    $('#LineHtmlCoverCheck').data('kendoCheckbox').value('N');
-                                                }
+                                <div class="col-sm-2" id="div2">
+                                    <input id="AllCoverCheck"/></div>
+                                <style type="text/css">
+                                    #div1 {
+                                        float: left;
+                                        width: 200px;
+                                    }
+
+                                    #div2 {
+                                        float: left;
+                                        width: 200px;
+                                    }
+                                </style>
+                                <script>
+                                    $("#AllCoverCheck").kendoCheckbox({
+                                        checkedValue: 'Y',
+                                        uncheckedValue: 'N',
+                                        change: function (e) {
+                                            if (e.values == 'Y') {
+                                                $('#HeaderDtoCoverCheck').data('kendoCheckbox').value('Y');
+                                                $('#HeaderControllerCoverCheck').data('kendoCheckbox').value('Y');
+                                                $('#HeaderMapperCoverCheck').data('kendoCheckbox').value('Y');
+                                                $('#HeaderMapperXmlCoverCheck').data('kendoCheckbox').value('Y');
+                                                $('#HeaderServiceCoverCheck').data('kendoCheckbox').value('Y');
+                                                $('#HeaderImplCoverCheck').data('kendoCheckbox').value('Y');
+                                                $('#HeaderHtmlCoverCheck').data('kendoCheckbox').value('Y');
+                                                $('#LineDtoCoverCheck').data('kendoCheckbox').value('Y');
+                                                $('#LineMapperCoverCheck').data('kendoCheckbox').value('Y');
+                                                $('#LineMapperXmlCoverCheck').data('kendoCheckbox').value('Y');
+                                                $('#LineServiceCoverCheck').data('kendoCheckbox').value('Y');
+                                                $('#LineImplCoverCheck').data('kendoCheckbox').value('Y');
+                                                $('#LineHtmlCoverCheck').data('kendoCheckbox').value('Y');
+                                            } else {
+                                                $('#HeaderDtoCoverCheck').data('kendoCheckbox').value('N');
+                                                $('#HeaderControllerCoverCheck').data('kendoCheckbox').value('N');
+                                                $('#HeaderMapperCoverCheck').data('kendoCheckbox').value('N');
+                                                $('#HeaderMapperXmlCoverCheck').data('kendoCheckbox').value('N');
+                                                $('#HeaderServiceCoverCheck').data('kendoCheckbox').value('N');
+                                                $('#HeaderImplCoverCheck').data('kendoCheckbox').value('N');
+                                                $('#HeaderHtmlCoverCheck').data('kendoCheckbox').value('N');
+                                                $('#LineDtoCoverCheck').data('kendoCheckbox').value('N');
+                                                $('#LineMapperCoverCheck').data('kendoCheckbox').value('N');
+                                                $('#LineMapperXmlCoverCheck').data('kendoCheckbox').value('N');
+                                                $('#LineServiceCoverCheck').data('kendoCheckbox').value('N');
+                                                $('#LineImplCoverCheck').data('kendoCheckbox').value('N');
+                                                $('#LineHtmlCoverCheck').data('kendoCheckbox').value('N');
                                             }
-                                        });
-                                    </script>
+                                        }
+                                    });
+                                </script>
                                 </td>
                             </div>
                         </div>
@@ -388,140 +403,20 @@
             }
         }
     });
-    var headerTableName;
-    var lineTableName;
-    var headerColumnName;
-    var lineColumnName;
-
-
-    $(function header() {
-        $("#autoHeaderComplete").kendoAutoComplete({
-            dataSource: dataSource,
-            dataTextField: "text",
-            select: function (e) {
-                getTableName(e.item.text(), "header");
-            },
-            change:onChange
-        });
-    });
-
-    function onChange() {
-        $("#autoHeaderRelation").kendoAutoComplete({
-            dataTextField: "text",
-            select: function (e) {
-                getColumnName(e.item.text(), "header");
-            },
-            dataSource: {      transport: {
-                read: {
-                    url: BaseUrl + "/genstrong/allcolumn",
-                    type: "POST",
-                    dataType: "json",
-                    contentType: "application/json;charset=UTF-8"
-                },
-                parameterMap: function (options, type) {
-                    return kendo.stringify(headerTableName);
-                }
-            },
-                schema: {
-                    model: {
-                        expanded: true
-                    },
-                    parse: function (response) {
-                        var products = [];
-                        for (var i = 0; i < response.total; i++) {
-                            var le = response.rows[i];
-                            var product = {
-                                text: response.rows[i],
-                                value: response.rows[i],
-                            };
-                            products.push(product);
-                        }
-                        return products;
-                    }
-                }}
-        });
-    }
-
-    $(function line() {
-        $("#autoLineComplete").kendoAutoComplete({
-            dataSource: dataSource,
-            dataTextField: "text",
-            select: function (e) {
-                getTableName(e.item.text(), "line");
-            },
-            change:onChange1
-        });
-    });
-    function onChange1() {
-        $("#autoLineRelation").kendoAutoComplete({
-            dataTextField: "text",
-            select: function (e) {
-                getColumnName(e.item.text(), "line");
-            },
-            dataSource: {      transport: {
-                read: {
-                    url: BaseUrl + "/genstrong/allcolumn",
-                    type: "POST",
-                    dataType: "json",
-                    contentType: "application/json;charset=UTF-8"
-                },
-                parameterMap: function (options, type) {
-                    return kendo.stringify(headerTableName);
-                }
-            },
-                schema: {
-                    model: {
-                        expanded: true
-                    },
-                    parse: function (response) {
-                        var products = [];
-                        for (var i = 0; i < response.total; i++) {
-                            var le = response.rows[i];
-                            var product = {
-                                text: response.rows[i],
-                                value: response.rows[i],
-                            };
-                            products.push(product);
-                        }
-                        return products;
-                    }
-                }}
-        });
-    }
-    var columnDataSource = new kendo.data.DataSource({
-        transport: {
-            read: {
-                url: BaseUrl + "/genstrong/allcolumn",
-                type: "POST",
-                dataType: "json",
-                contentType: "application/json;charset=UTF-8"
-            },
-            parameterMap: function (options, type) {
-                console.log("type-" + type);
-                //if (type === "read") {
-                return kendo.stringify(tableName);
-                // }
-            }
-        },
-        schema: {
-            model: {
-                expanded: true
-            },
-            parse: function (response) {
-                var products = [];
-                for (var i = 0; i < response.total; i++) {
-                    var le = response.rows[i];
-                    var product = {
-                        text: response.rows[i],
-                        value: response.rows[i],
-                    };
-                    products.push(product);
-                }
-                return products;
-            }
+    $("#autoHeaderComplete").kendoAutoComplete({
+        dataSource: dataSource,
+        dataTextField: "text",
+        select: function (e) {
+            getTableName(e.item.text(), "header");
         }
     });
-
+    $("#autoLineComplete").kendoAutoComplete({
+        dataSource: dataSource,
+        dataTextField: "text",
+        select: function (e) {
+            getTableName(e.item.text(), "line");
+        }
+    });
     $("#headerHtmlmodel").kendoDropDownList({
         dataSource: ftlDataSource,
         dataTextField: "text",
@@ -547,7 +442,6 @@
             ftlData = ftlDataSource.data();
             getHtmlModel(ftlData[e.sender.selectedIndex].text, "line");
         },
-
         animation: {
             close: {
                 effects: "fadeOut zoom:out",
@@ -559,27 +453,45 @@
             }
         }
     });
-
     function getTable(source) {
         if (source == 0) {
-            headerTableName = viewModel.get("headerTargetName");
-
+            tableName = viewModel.get("headerTargetName");
+            $("#autoHeaderRelation").val("");
         } else {
-            lineTableName = viewModel.get("lineTargetName");
+            tableName = viewModel.get("lineTargetName");
+            $("#autoLineRelation").val("");
         }
     }
-
-    function getColumn(source) {
+    function validateColumn(source) {
+        var text;
         if (source == 0) {
-            headerColumnName = viewModel.get("headerRelationColumn");
-
+            text = $("#autoHeaderRelation").val();
         } else {
-            lineColumnName = viewModel.get("lineRelationColumn");
+            text = $("#autoLineRelation").val();
         }
+        getColumnName(text, source);
+        $.post(BaseUrl + "/genstrong/allcolumns", viewModel.toJSON(), function (data, status) {
+            if (status == "success") {
+                var mess;
+                if (data == 1) {
+                    text = $("#autoHeaderRelation").val();
+                    mess = "该字段不在表内，请重新输入!";
+                    kendo.ui.showInfoDialog({
+                        message: mess
+                    });
+                    $("#autoHeaderRelation").val("");
+                } else if (data == 2) {
+                    mess = "该字段不在表内，请重新输入!";
+                    kendo.ui.showInfoDialog({
+                        message: mess
+                    });
+                    $("#autoLineRelation").val("");
+                }
+            }
+        })
     }
-
     function getColumnName(text, source) {
-        if (source == 'header') {
+        if (source == 0) {
             viewModel.set("headerRelationColumn", text);
         } else {
             viewModel.set("lineRelationColumn", text);
@@ -588,6 +500,7 @@
     function getTableName(text, source) {
         if (source == 'header') {
             viewModel.set("headerTargetName", text);
+            console.log(viewModel.get("headerTargetName"));
             var name = text.substring(text.indexOf("_") + 1);
             if (ifEnds(text, "_b") || ifEnds(text, "_B")) {
                 name = name.substring(0, name.length - 2)
@@ -691,11 +604,13 @@
             kendo.ui.showInfoDialog({
                 message: "请选择一个头表"
             })
+            return;
         } else {
             if (viewModel.get("lineTargetName") === '') {
                 kendo.ui.showInfoDialog({
                     message: "请选择一个行表"
                 })
+                return;
             }
             else {
                 if ($('#LineHtmlCreateCheck').val() === 'Y') {
@@ -753,6 +668,12 @@
                     viewModel.set("lineImplStatus", "NotOperation");
                 }
             }
+        }
+        if (viewModel.get("headerRelationColumn") === '' || viewModel.get("lineRelationColumn") === '') {
+            kendo.ui.showInfoDialog({
+                message: "请输入头行关联字段！"
+            });
+            return;
         }
         if ($('#HeaderHtmlCreateCheck').val() === 'Y') {
             if ($('#HeaderHtmlCoverCheck').val() === 'Y') {
@@ -828,7 +749,7 @@
                 localStorage.packagePath = viewModel.get("packagePath");
             }
         }
-        console.log("headerRelationColumn" + viewModel.get("headerRelationColumn"));
+
         $.post(BaseUrl + "/genstrong/newtables", viewModel.toJSON(), function (data, status) {
             if (status == "success") {
                 var mess;

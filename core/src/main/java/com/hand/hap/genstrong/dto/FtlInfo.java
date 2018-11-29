@@ -5,7 +5,7 @@ import com.hand.hap.genstrong.service.impl.XmlColumnsInfo;
 import java.util.List;
 
 /**
- * Created by La on 2018/11/12.
+ * Created by Val.Zhang on 2018/11/12.
  */
 public class FtlInfo {
     private String fileName;

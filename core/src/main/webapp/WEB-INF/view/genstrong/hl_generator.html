@@ -99,11 +99,10 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-sm-6" style="padding-left:40px;overflow:hidden">
+                            <div class="col-sm-6" style="padding-left:40px">
                                 <label class="col-sm-8 control-label">是否全部创建:</label>
-                                <div class="col-sm-2" id="div1">
-                                    <input id="AllCreateCheck" checked/>
-                                </div>
+                                <td style="margin-left:10px"><input id="AllCreateCheck" checked
+                                                                    onclick="onallChoose(0)"/></td>
                                 <script>
                                     $("#AllCreateCheck").kendoCheckbox({
                                         checkedValue: 'Y',
@@ -143,56 +142,44 @@
                                     });
                                 </script>
                                 <label class="control-label" style="margin-left:10px">是否全部覆盖:</label>
-                                <div class="col-sm-2" id="div2">
-                                    <input id="AllCoverCheck"/></div>
-                                <style type="text/css">
-                                    #div1 {
-                                        float: left;
-                                        width: 200px;
-                                    }
-
-                                    #div2 {
-                                        float: left;
-                                        width: 200px;
-                                    }
-                                </style>
-                                <script>
-                                    $("#AllCoverCheck").kendoCheckbox({
-                                        checkedValue: 'Y',
-                                        uncheckedValue: 'N',
-                                        change: function (e) {
-                                            if (e.values == 'Y') {
-                                                $('#HeaderDtoCoverCheck').data('kendoCheckbox').value('Y');
-                                                $('#HeaderControllerCoverCheck').data('kendoCheckbox').value('Y');
-                                                $('#HeaderMapperCoverCheck').data('kendoCheckbox').value('Y');
-                                                $('#HeaderMapperXmlCoverCheck').data('kendoCheckbox').value('Y');
-                                                $('#HeaderServiceCoverCheck').data('kendoCheckbox').value('Y');
-                                                $('#HeaderImplCoverCheck').data('kendoCheckbox').value('Y');
-                                                $('#HeaderHtmlCoverCheck').data('kendoCheckbox').value('Y');
-                                                $('#LineDtoCoverCheck').data('kendoCheckbox').value('Y');
-                                                $('#LineMapperCoverCheck').data('kendoCheckbox').value('Y');
-                                                $('#LineMapperXmlCoverCheck').data('kendoCheckbox').value('Y');
-                                                $('#LineServiceCoverCheck').data('kendoCheckbox').value('Y');
-                                                $('#LineImplCoverCheck').data('kendoCheckbox').value('Y');
-                                                $('#LineHtmlCoverCheck').data('kendoCheckbox').value('Y');
-                                            } else {
-                                                $('#HeaderDtoCoverCheck').data('kendoCheckbox').value('N');
-                                                $('#HeaderControllerCoverCheck').data('kendoCheckbox').value('N');
-                                                $('#HeaderMapperCoverCheck').data('kendoCheckbox').value('N');
-                                                $('#HeaderMapperXmlCoverCheck').data('kendoCheckbox').value('N');
-                                                $('#HeaderServiceCoverCheck').data('kendoCheckbox').value('N');
-                                                $('#HeaderImplCoverCheck').data('kendoCheckbox').value('N');
-                                                $('#HeaderHtmlCoverCheck').data('kendoCheckbox').value('N');
-                                                $('#LineDtoCoverCheck').data('kendoCheckbox').value('N');
-                                                $('#LineMapperCoverCheck').data('kendoCheckbox').value('N');
-                                                $('#LineMapperXmlCoverCheck').data('kendoCheckbox').value('N');
-                                                $('#LineServiceCoverCheck').data('kendoCheckbox').value('N');
-                                                $('#LineImplCoverCheck').data('kendoCheckbox').value('N');
-                                                $('#LineHtmlCoverCheck').data('kendoCheckbox').value('N');
+                                <td><input id="AllCoverCheck"/>
+                                    <script>
+                                        $("#AllCoverCheck").kendoCheckbox({
+                                            checkedValue: 'Y',
+                                            uncheckedValue: 'N',
+                                            change: function (e) {
+                                                if (e.values == 'Y') {
+                                                    $('#HeaderDtoCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#HeaderControllerCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#HeaderMapperCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#HeaderMapperXmlCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#HeaderServiceCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#HeaderImplCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#HeaderHtmlCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#LineDtoCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#LineMapperCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#LineMapperXmlCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#LineServiceCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#LineImplCoverCheck').data('kendoCheckbox').value('Y');
+                                                    $('#LineHtmlCoverCheck').data('kendoCheckbox').value('Y');
+                                                } else {
+                                                    $('#HeaderDtoCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#HeaderControllerCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#HeaderMapperCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#HeaderMapperXmlCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#HeaderServiceCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#HeaderImplCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#HeaderHtmlCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#LineDtoCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#LineMapperCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#LineMapperXmlCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#LineServiceCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#LineImplCoverCheck').data('kendoCheckbox').value('N');
+                                                    $('#LineHtmlCoverCheck').data('kendoCheckbox').value('N');
+                                                }
                                             }
-                                        }
-                                    });
-                                </script>
+                                        });
+                                    </script>
                                 </td>
                             </div>
                         </div>
@@ -337,10 +324,90 @@
 
 <script type="text/javascript">
     var BaseUrl = _basePath;
-    if (window.localStorage) {
-        if (localStorage.projectPath) {
-            viewModel.set("projectPath", localStorage.projectPath);
+    $.ajax({
+        /*附带参数的请求URL*/
+        url: BaseUrl + '/genstrong/getprojectpath',
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        success: function (result) {
+            // var data = result;
+            console.log(result);
+            viewModel.set("projectPath", result);
+            var projectPath = viewModel.get("projectPath");
+            var ftlDataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        url: BaseUrl + "/genstrong/getmodels?projectPath=" + projectPath,
+                        dataType: "json",
+                        contentType: "application/json"
+                    },
+                },
+                schema: {
+                    model: {
+                        expanded: true
+                    },
+                    parse: function (response) {
+                        var products = [];
+                        for (var i = 0; i < response.total; i++) {
+                            var le = response.rows[i];
+                            var product = {
+                                text: response.rows[i],
+                                value: response.rows[i],
+                            };
+                            products.push(product);
+                        }
+                        return products;
+                    }
+                }
+            });
+
+            $("#headerHtmlmodel").kendoDropDownList({
+                dataSource: ftlDataSource,
+                //autoBind: false,
+                dataTextField: "text",
+                change: function (e) {
+                    ftlData = ftlDataSource.data();
+                    getHtmlModel(ftlData[e.sender.selectedIndex].text, "header");
+                },
+                animation: {
+                    close: {
+                        effects: "fadeOut zoom:out",
+                        duration: 300
+                    },
+                    open: {
+                        effects: "fadeIn zoom:in",
+                        duration: 300
+                    }
+                }
+            });
+            $("#lineHtmlmodel").kendoDropDownList({
+                dataSource: ftlDataSource,
+                dataTextField: "text",
+                // autoBind: false,
+                change: function (e) {
+                    ftlData = ftlDataSource.data();
+                    getHtmlModel(ftlData[e.sender.selectedIndex].text, "line");
+                },
+                animation: {
+                    close: {
+                        effects: "fadeOut zoom:out",
+                        duration: 300
+                    },
+                    open: {
+                        effects: "fadeIn zoom:in",
+                        duration: 300
+                    }
+                }
+            });
         }
+    });
+
+    if (window.localStorage) {
+        //if (localStorage.projectPath) {
+        //viewModel.set("projectPath", localStorage.projectPath);
+        // viewModel.set("projectPath", projectPath);
+        //}
         if (localStorage.parentPackagePath) {
             viewModel.set("parentPackagePath", localStorage.parentPackagePath);
         }
@@ -348,7 +415,7 @@
             viewModel.set("packagePath", localStorage.packagePath);
         }
     }
-
+    console.log(viewModel.get("projectPath"));
     var dataSource = new kendo.data.DataSource({
         transport: {
             read: {
@@ -376,33 +443,7 @@
             }
         }
     });
-    var projectPath = viewModel.get("projectPath")
-    var ftlDataSource = new kendo.data.DataSource({
-        transport: {
-            read: {
-                url: BaseUrl + "/genstrong/getmodels?projectPath=" + projectPath,
-                dataType: "json",
-                contentType: "application/json"
-            },
-        },
-        schema: {
-            model: {
-                expanded: true
-            },
-            parse: function (response) {
-                var products = [];
-                for (var i = 0; i < response.total; i++) {
-                    var le = response.rows[i];
-                    var product = {
-                        text: response.rows[i],
-                        value: response.rows[i],
-                    };
-                    products.push(product);
-                }
-                return products;
-            }
-        }
-    });
+
     $("#autoHeaderComplete").kendoAutoComplete({
         dataSource: dataSource,
         dataTextField: "text",
@@ -417,42 +458,7 @@
             getTableName(e.item.text(), "line");
         }
     });
-    $("#headerHtmlmodel").kendoDropDownList({
-        dataSource: ftlDataSource,
-        dataTextField: "text",
-        change: function (e) {
-            ftlData = ftlDataSource.data();
-            getHtmlModel(ftlData[e.sender.selectedIndex].text, "header");
-        },
-        animation: {
-            close: {
-                effects: "fadeOut zoom:out",
-                duration: 300
-            },
-            open: {
-                effects: "fadeIn zoom:in",
-                duration: 300
-            }
-        }
-    });
-    $("#lineHtmlmodel").kendoDropDownList({
-        dataSource: ftlDataSource,
-        dataTextField: "text",
-        change: function (e) {
-            ftlData = ftlDataSource.data();
-            getHtmlModel(ftlData[e.sender.selectedIndex].text, "line");
-        },
-        animation: {
-            close: {
-                effects: "fadeOut zoom:out",
-                duration: 300
-            },
-            open: {
-                effects: "fadeIn zoom:in",
-                duration: 300
-            }
-        }
-    });
+
     function getTable(source) {
         if (source == 0) {
             tableName = viewModel.get("headerTargetName");

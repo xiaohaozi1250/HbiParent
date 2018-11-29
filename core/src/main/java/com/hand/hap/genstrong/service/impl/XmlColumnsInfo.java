@@ -1,7 +1,7 @@
 package com.hand.hap.genstrong.service.impl;
 
 /**
- * Created by La on 2018/11/12.
+ * Created by Val.Zhang on 2018/11/12.
  */
 public class XmlColumnsInfo {
     private String tableColumnsName;

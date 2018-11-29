@@ -27,7 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by La on 2018/11/12.
+ * Created by Val.Zhang on 2018/11/12.
  */
 public class FileUtil {
     private static List<String> allClassFiles = new ArrayList();
@@ -300,7 +300,7 @@ public class FileUtil {
 
     }
 
-    public static void createFtlInfoByType(pType type, DBTable hTbl, DBTable lTbl, GenStrongInfo generatorInfo, String source) throws IOException, TemplateException {
+    public static void createFtlInfoByType(FileUtil.pType type, DBTable hTbl, DBTable lTbl, GenStrongInfo generatorInfo, String source) throws IOException, TemplateException {
         String projectPath = generatorInfo.getProjectPath();
         String parentPackagePath = generatorInfo.getParentPackagePath();
         String packagePath = generatorInfo.getPackagePath();
@@ -398,24 +398,24 @@ public class FileUtil {
         return columnsInfo;
     }
 
-    public static void createFtl(FtlInfo ftlInfo, pType type, GenStrongInfo generatorInfo, String source, String tableName) throws IOException, TemplateException {
+    public static void createFtl(FtlInfo ftlInfo, FileUtil.pType type, GenStrongInfo generatorInfo, String source, String tableName) throws IOException, TemplateException {
         Configuration cfg = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
         Template template = null;
         HashMap map = new HashMap();
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         cfg.setServletContextForTemplateLoading(request.getServletContext(), "WEB-INF/view/genstrong/ftl");
 
-        if (type.equals(pType.Controller) && source.equals("header")) {
+        if (type.equals(FileUtil.pType.Controller) && source.equals("header")) {
             template = cfg.getTemplate("controllers.ftl");
-        } else if (type.equals(pType.MapperXml)) {
+        } else if (type.equals(FileUtil.pType.MapperXml)) {
             template = cfg.getTemplate("mapperxml.ftl");
-        } else if (type.equals(pType.Mapper)) {
+        } else if (type.equals(FileUtil.pType.Mapper)) {
             template = cfg.getTemplate("mapper.ftl");
-        } else if (type.equals(pType.Service)) {
+        } else if (type.equals(FileUtil.pType.Service)) {
             template = cfg.getTemplate("service.ftl");
-        } else if (type.equals(pType.Impl)) {
+        } else if (type.equals(FileUtil.pType.Impl)) {
             template = cfg.getTemplate("impl.ftl");
-        } else if (type.equals(pType.Html)) {
+        } else if (type.equals(FileUtil.pType.Html)) {
             template = cfg.getTemplate(ftlInfo.getHtmlModelName());
         }
 
@@ -482,7 +482,11 @@ public class FileUtil {
         StringBuilder sbuilder = new StringBuilder(fields[0]);
         for (int i = 1; i < fields.length; i++) {
             char[] cs = fields[i].toCharArray();
+            //if (i == 1) {
             cs[0] -= 32;
+/*            } else {
+
+            }*/
             sbuilder.append(String.valueOf(cs));
         }
         return sbuilder.toString();
@@ -731,7 +735,7 @@ public class FileUtil {
 
     public static List<String> getModelList(GenStrongInfo generatorInfo) {
         List<String> allModelFiles = new ArrayList();
-        String classDir = generatorInfo.getProjectPath() + "/core/src/main/webapp/WEB-INF/view/genstrong/ftl";
+        String classDir = generatorInfo.getProjectPath() + "/src/main/webapp/WEB-INF/view/genstrong/ftl";
         System.out.println("classDir=" + classDir);
         File dir = new File(classDir);
         File[] files = dir.listFiles();
@@ -739,10 +743,12 @@ public class FileUtil {
             for (int i = 0; i < files.length; ++i) {
                 String fileName = files[i].getName();
                 if (fileName.toLowerCase().contains("html")) {
+                    System.out.println("fileName=" + fileName);
                     allModelFiles.add(fileName);
                 }
             }
-        }
+        }else
+        { System.out.println("files is null");}
         return allModelFiles;
     }
 
@@ -758,3 +764,4 @@ public class FileUtil {
         }
     }
 }
+

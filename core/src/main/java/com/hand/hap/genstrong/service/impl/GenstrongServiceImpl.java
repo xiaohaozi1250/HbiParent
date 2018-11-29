@@ -25,7 +25,7 @@ import com.hand.hap.genstrong.service.IGenstrongService;
 import org.springframework.stereotype.Service;
 
 /**
- * Created by La on 2018/11/12.
+ * Created by Val.Zhang on 2018/11/12.
  */
 @Service
 public class GenstrongServiceImpl implements IGenstrongService {
@@ -36,19 +36,17 @@ public class GenstrongServiceImpl implements IGenstrongService {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-
+    //获取模版名称
     public List<String> getModels(GenStrongInfo generatorInfo) {
-        List<String> models = new ArrayList<>();
-        models = FileUtil.getModelList(generatorInfo);
+        List<String> models = FileUtil.getModelList(generatorInfo);
         return models;
     }
 
+    //展示表名
     public List<String> showTables() {
         try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            List<String> tables;
-
             Connection conn = DBUtil.getConnectionBySqlSession(sqlSession);
-            tables = DBUtil.showAllTables(conn);
+            List<String> tables = DBUtil.showAllTables(conn);
             conn.close();
             return tables;
         } catch (SQLException e) {
@@ -60,9 +58,8 @@ public class GenstrongServiceImpl implements IGenstrongService {
     //获取表字段
     public List<String> showColumns(String tableName) {
         try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            List<String> columns;
             Connection conn = DBUtil.getConnectionBySqlSession(sqlSession);
-            columns = DBUtil.showAllColumns(conn, tableName);
+            List<String> columns = DBUtil.showAllColumns(conn, tableName);
             conn.close();
             return columns;
         } catch (SQLException e) {
@@ -87,7 +84,6 @@ public class GenstrongServiceImpl implements IGenstrongService {
             rs = -1;
             logger.error(e.getMessage());
         }
-
         return rs;
     }
 
@@ -227,10 +223,10 @@ public class GenstrongServiceImpl implements IGenstrongService {
 
     //验证关联字段是否在表中
     public int showColumns(GenStrongInfo genDemoInfo) {
-        int rh=0;
-        int rl=0;
+        int rh = 0;
+        int rl = 0;
         List<String> columns = new ArrayList<>();
-        if((genDemoInfo.getHeaderTargetName() != null && genDemoInfo.getHeaderTargetName().length() != 0)&&(genDemoInfo.getHeaderRelationColumn() != null && genDemoInfo.getHeaderRelationColumn().length() != 0)) {
+        if ((genDemoInfo.getHeaderTargetName() != null && genDemoInfo.getHeaderTargetName().length() != 0) && (genDemoInfo.getHeaderRelationColumn() != null && genDemoInfo.getHeaderRelationColumn().length() != 0)) {
             columns = showColumns(genDemoInfo.getHeaderTargetName());
             for (String column : columns) {
                 if (!(column.toLowerCase()).equals((genDemoInfo.getHeaderRelationColumn()).toLowerCase())) {
@@ -240,20 +236,22 @@ public class GenstrongServiceImpl implements IGenstrongService {
                 }
             }
         }
-        if((genDemoInfo.getLineTargetName() != null && genDemoInfo.getLineTargetName().length() != 0) &&(genDemoInfo.getLineRelationColumn() != null && genDemoInfo.getLineRelationColumn().length() != 0)){
+        if ((genDemoInfo.getLineTargetName() != null && genDemoInfo.getLineTargetName().length() != 0) && (genDemoInfo.getLineRelationColumn() != null && genDemoInfo.getLineRelationColumn().length() != 0)) {
             columns.clear();
-            columns =showColumns(genDemoInfo.getLineTargetName());
-            for (String column:columns){
-                if(!(column.toLowerCase()).equals((genDemoInfo.getLineRelationColumn()).toLowerCase())){
-                    rh = 1;
-                }else{
-                   return 0;
+            columns = showColumns(genDemoInfo.getLineTargetName());
+            for (String column : columns) {
+                if (!(column.toLowerCase()).equals((genDemoInfo.getLineRelationColumn()).toLowerCase())) {
+                    rh = 2;
+                } else {
+                    return 0;
                 }
             }
         }
-        if(rh>0||rl>0){
+        if (rh > 0) {
             return 1;
-        }else{
+        } else if (rl > 0) {
+            return 2;
+        } else {
             return 0;
         }
 

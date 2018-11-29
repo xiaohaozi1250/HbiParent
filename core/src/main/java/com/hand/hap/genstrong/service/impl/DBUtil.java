@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by La on 2018/11/12.
+ * Created by Val.Zhang on 2018/11/12.
  */
 public class DBUtil {
     private static final String COLUMN_NAME = "COLUMN_NAME";

@@ -78,7 +78,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">选择头表:</label>
                             <div class="col-sm-4">
-                                <input id="autoHeaderComplete" style="width:100%" onchange="getTable(0)"/>
+                                <input id="autoHeaderComplete" style="width:100%;padding:0px" onchange="getTable(0)"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -87,6 +87,14 @@
                                 <input id="autoLineComplete" style="width:100%" onchange="getTable(1)"/>
                             </div>
                         </div>
+
+                        <!--
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">选择行表:</label>
+                            <div class="col-sm-4">
+                                <input id="autoLineComplete" style="width:100%" onchange="getTable(1)"/>
+                            </div>
+                        </div> -->
                         <div class="form-group">
                             <label class="col-sm-4 control-label">头行关联:</label>
                             <div class="col-sm-2">
@@ -101,7 +109,7 @@
                         <div class="form-group">
                             <div class="col-sm-6" style="padding-left:40px">
                                 <label class="col-sm-8 control-label">是否全部创建:</label>
-                                <td style="margin-left:10px"><input id="AllCreateCheck" checked
+                                <td style="margin-left:10px"><input style="margin-left:13px" id="AllCreateCheck" checked
                                                                     onclick="onallChoose(0)"/></td>
                                 <script>
                                     $("#AllCreateCheck").kendoCheckbox({
@@ -141,8 +149,9 @@
                                         }
                                     });
                                 </script>
-                                <label class="control-label" style="margin-left:10px">是否全部覆盖:</label>
-                                <td><input id="AllCoverCheck"/>
+                                <label class="control-label" style="margin-left:10px"
+                                       style="margin-left:10px">是否全部覆盖:</label>
+                                <td><input style="margin-left:13px" id="AllCoverCheck"/>
                                     <script>
                                         $("#AllCoverCheck").kendoCheckbox({
                                             checkedValue: 'Y',

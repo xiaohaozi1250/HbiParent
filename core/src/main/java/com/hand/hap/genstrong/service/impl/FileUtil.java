@@ -317,7 +317,7 @@ public class FileUtil {
         FtlInfo info = new FtlInfo();
         String directory = null;
         ArrayList importPackages = new ArrayList();
-
+        System.out.println("model:" + generatorInfo.getHeaderHtmlName());
         if (type.equals(pType.Controller) && source.equals("header")) {
             directory = projectPath + "/src/main/java/" + pac + "/controllers/" + generatorInfo.getHeaderControllerName();
             importPackages.add("org.springframework.stereotype.Controller");
@@ -678,6 +678,12 @@ public class FileUtil {
                 }
             }
         }
+        System.out.println("getLineHtmlStatus:" + generatorInfo.getLineHtmlStatus());
+        System.out.println("getHeaderHtmlStatus:" + generatorInfo.getHeaderHtmlStatus());
+        System.out.println("htmlDir:" + htmlDir);
+        System.out.println("getPackagePath:" + generatorInfo.getPackagePath());
+        System.out.println("getHeaderHtmlName:" + generatorInfo.getHeaderHtmlName());
+        System.out.println("getLineHtmlName:" + generatorInfo.getLineHtmlName());
         // 判断有没有重复的html文件
         if (rs == 0) {
             getFileList(htmlDir, htmlDir, generatorInfo);
@@ -747,8 +753,9 @@ public class FileUtil {
                     allModelFiles.add(fileName);
                 }
             }
-        }else
-        { System.out.println("files is null");}
+        } else {
+            System.out.println("files is null");
+        }
         return allModelFiles;
     }
 

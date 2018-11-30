@@ -195,6 +195,7 @@ public class GenstrongServiceImpl implements IGenstrongService {
             if (!"NotOperation".equalsIgnoreCase(info.getHeaderMapperXmlStatus())) {
                 FileUtil.createFtlInfoByType(FileUtil.pType.MapperXml, hTable, lTable, info, "header");
             }
+            System.out.println("getHeaderHtmlStatus:"+info.getHeaderHtmlStatus());
             if (!"NotOperation".equalsIgnoreCase(info.getHeaderHtmlStatus())) {
                 FileUtil.createFtlInfoByType(FileUtil.pType.Html, hTable, lTable, info, "header");
             }

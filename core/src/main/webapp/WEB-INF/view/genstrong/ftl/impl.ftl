@@ -41,9 +41,9 @@ public class ${headerImplName} extends BaseServiceImpl<${headerDtoName}> impleme
     public List<${headerDtoName}> batchUpdate(IRequest request, List<${headerDtoName}> headers) {
         for (${headerDtoName} header : headers) {
             if (header.get${columnsInfoHeader[0].tableColumnsName?cap_first}() == null) {
-                self().createOmHeadersAll(header);
+                self().create<${headerDtoName}>(header);
             } else if (header.get${columnsInfoHeader[0].tableColumnsName?cap_first}() != null) {
-                self().updateOmHeadersAll(header);
+                self().update<${headerDtoName}>(header);
             }
         }
         return headers;

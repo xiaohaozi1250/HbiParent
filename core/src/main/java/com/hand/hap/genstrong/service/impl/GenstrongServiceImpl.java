@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -23,6 +24,8 @@ import java.util.List;
 
 import com.hand.hap.genstrong.service.IGenstrongService;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by Val.Zhang on 2018/11/12.
@@ -45,8 +48,11 @@ public class GenstrongServiceImpl implements IGenstrongService {
     //展示表名
     public List<String> showTables() {
         try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            //连接数据库
             Connection conn = DBUtil.getConnectionBySqlSession(sqlSession);
-            List<String> tables = DBUtil.showAllTables(conn);
+            //获取所有表
+            List<String> tables = DBUtil.getAllTables(conn);
+            //关闭连接
             conn.close();
             return tables;
         } catch (SQLException e) {
@@ -58,8 +64,11 @@ public class GenstrongServiceImpl implements IGenstrongService {
     //获取表字段
     public List<String> showColumns(String tableName) {
         try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            //连接数据库
             Connection conn = DBUtil.getConnectionBySqlSession(sqlSession);
-            List<String> columns = DBUtil.showAllColumns(conn, tableName);
+            //获取指定表内的字段
+            List<String> columns = DBUtil.getllColumns(conn, tableName);
+            //关闭连接
             conn.close();
             return columns;
         } catch (SQLException e) {
@@ -68,6 +77,7 @@ public class GenstrongServiceImpl implements IGenstrongService {
         return new ArrayList<String>();
     }
 
+    //创建输出文件
     public int generatorFile(GenStrongInfo info) {
         int rs = 0;
         String headerTableName = info.getHeaderTargetName();
@@ -174,46 +184,55 @@ public class GenstrongServiceImpl implements IGenstrongService {
     }
 
     public int createFile(DBTable hTable, DBTable lTable, GenStrongInfo info) throws IOException, TemplateException {
-
+        //验证文件名是否存在
         int rs = FileUtil.isFileExist(info);
         if (rs == 0) {
+            //针对不同文件类型进行创建
+            //创建DTO文件
             if (!"NotOperation".equalsIgnoreCase(info.getHeaderDtoStatus())) {
                 FileUtil.createDto(hTable, info, "header");
-            }
-            if (!"NotOperation".equalsIgnoreCase(info.getHeaderControllerStatus())) {
-                FileUtil.createFtlInfoByType(FileUtil.pType.Controller, hTable, lTable, info, "header");
-            }
-            if (!"NotOperation".equalsIgnoreCase(info.getHeaderMapperStatus())) {
-                FileUtil.createFtlInfoByType(FileUtil.pType.Mapper, hTable, lTable, info, "header");
-            }
-            if (!"NotOperation".equalsIgnoreCase(info.getHeaderImplStatus())) {
-                FileUtil.createFtlInfoByType(FileUtil.pType.Impl, hTable, lTable, info, "header");
-            }
-            if (!"NotOperation".equalsIgnoreCase(info.getHeaderServiceStatus())) {
-                FileUtil.createFtlInfoByType(FileUtil.pType.Service, hTable, lTable, info, "header");
-            }
-            if (!"NotOperation".equalsIgnoreCase(info.getHeaderMapperXmlStatus())) {
-                FileUtil.createFtlInfoByType(FileUtil.pType.MapperXml, hTable, lTable, info, "header");
-            }
-            System.out.println("getHeaderHtmlStatus:"+info.getHeaderHtmlStatus());
-            if (!"NotOperation".equalsIgnoreCase(info.getHeaderHtmlStatus())) {
-                FileUtil.createFtlInfoByType(FileUtil.pType.Html, hTable, lTable, info, "header");
             }
             if (!"NotOperation".equalsIgnoreCase(info.getLineDtoStatus())) {
                 FileUtil.createDto(lTable, info, "line");
             }
+            //创建Controller文件
+            if (!"NotOperation".equalsIgnoreCase(info.getHeaderControllerStatus())) {
+                FileUtil.createFtlInfoByType(FileUtil.pType.Controller, hTable, lTable, info, "header");
+            }
+            //创建Mapper文件
+            if (!"NotOperation".equalsIgnoreCase(info.getHeaderMapperStatus())) {
+                FileUtil.createFtlInfoByType(FileUtil.pType.Mapper, hTable, lTable, info, "header");
+            }
             if (!"NotOperation".equalsIgnoreCase(info.getLineMapperStatus())) {
                 FileUtil.createFtlInfoByType(FileUtil.pType.Mapper, hTable, lTable, info, "line");
             }
-            if (!"NotOperation".equalsIgnoreCase(info.getLineMapperXmlStatus())) {
-                FileUtil.createFtlInfoByType(FileUtil.pType.MapperXml, hTable, lTable, info, "line");
+            //创建Impl文件
+            if (!"NotOperation".equalsIgnoreCase(info.getHeaderImplStatus())) {
+                FileUtil.createFtlInfoByType(FileUtil.pType.Impl, hTable, lTable, info, "header");
             }
             if (!"NotOperation".equalsIgnoreCase(info.getLineImplStatus())) {
                 FileUtil.createFtlInfoByType(FileUtil.pType.Impl, hTable, lTable, info, "line");
             }
+            //创建Service文件
+            if (!"NotOperation".equalsIgnoreCase(info.getHeaderServiceStatus())) {
+                FileUtil.createFtlInfoByType(FileUtil.pType.Service, hTable, lTable, info, "header");
+            }
             if (!"NotOperation".equalsIgnoreCase(info.getLineServiceStatus())) {
                 FileUtil.createFtlInfoByType(FileUtil.pType.Service, hTable, lTable, info, "line");
             }
+            //创建MapperXml文件
+            if (!"NotOperation".equalsIgnoreCase(info.getHeaderMapperXmlStatus())) {
+                FileUtil.createFtlInfoByType(FileUtil.pType.MapperXml, hTable, lTable, info, "header");
+            }
+            if (!"NotOperation".equalsIgnoreCase(info.getLineMapperXmlStatus())) {
+                FileUtil.createFtlInfoByType(FileUtil.pType.MapperXml, hTable, lTable, info, "line");
+            }
+            //创建Html文件
+            System.out.println("getHeaderHtmlStatus:" + info.getHeaderHtmlStatus());
+            if (!"NotOperation".equalsIgnoreCase(info.getHeaderHtmlStatus())) {
+                FileUtil.createFtlInfoByType(FileUtil.pType.Html, hTable, lTable, info, "header");
+            }
+
             if (!"NotOperation".equalsIgnoreCase(info.getLineHtmlStatus())) {
                 FileUtil.createFtlInfoByType(FileUtil.pType.Html, hTable, lTable, info, "line");
             }
@@ -227,6 +246,7 @@ public class GenstrongServiceImpl implements IGenstrongService {
         int rh = 0;
         int rl = 0;
         List<String> columns = new ArrayList<>();
+        //排除用户未输入
         if ((genDemoInfo.getHeaderTargetName() != null && genDemoInfo.getHeaderTargetName().length() != 0) && (genDemoInfo.getHeaderRelationColumn() != null && genDemoInfo.getHeaderRelationColumn().length() != 0)) {
             columns = showColumns(genDemoInfo.getHeaderTargetName());
             for (String column : columns) {
@@ -256,5 +276,11 @@ public class GenstrongServiceImpl implements IGenstrongService {
             return 0;
         }
 
+    }
+
+    //获取项目路径
+    public String getPorjectPath(String contextPath) {
+        File root = new File(contextPath);
+        return root.getParentFile().getParent();
     }
 }

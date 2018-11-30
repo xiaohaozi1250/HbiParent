@@ -23,13 +23,13 @@ public class DBUtil {
     public static Connection getConnectionBySqlSession(SqlSession sqlSession) throws SQLException {
         return sqlSession.getConfiguration().getEnvironment().getDataSource().getConnection();
     }
-
-    public static List<String> showAllTables(Connection conn) throws SQLException {
+    //获取所有表
+    public static List<String> getAllTables(Connection conn) throws SQLException {
         ArrayList tables = new ArrayList();
         DatabaseMetaData dbmd = conn.getMetaData();
         String database = conn.getCatalog();
         ResultSet rs = dbmd.getTables(database, null, null, new String[]{"TABLE"});
-
+       //将表存入数组集合中
         while(rs.next()) {
             tables.add(rs.getString("TABLE_NAME"));
         }
@@ -133,21 +133,19 @@ public class DBUtil {
             return "";
         }
     }
-
-    public static List<String> showAllColumns(Connection conn, String tableName) throws SQLException {
+    //获取指定表内的字段
+    public static List<String> getllColumns(Connection conn, String tableName) throws SQLException {
         ArrayList columns = new ArrayList();
         DatabaseMetaData dbmd = conn.getMetaData();
-
         ResultSet rs = DBUtil.getTableColumnInfo(tableName, dbmd);
         while (rs.next()) {
             String columnName = rs.getString("COLUMN_NAME");
-            //System.out.println("columnName: " + columnName);
-            if ("OBJECT_VERSION_NUMBER".equalsIgnoreCase(columnName) || "REQUEST_ID".equalsIgnoreCase(columnName)
+/*            if ("OBJECT_VERSION_NUMBER".equalsIgnoreCase(columnName) || "REQUEST_ID".equalsIgnoreCase(columnName)
                     || "PROGRAM_ID".equalsIgnoreCase(columnName) || "CREATED_BY".equalsIgnoreCase(columnName)
                     || "CREATION_DATE".equalsIgnoreCase(columnName) || "LAST_UPDATED_BY".equalsIgnoreCase(columnName)
                     || "LAST_UPDATE_DATE".equalsIgnoreCase(columnName) || "LAST_UPDATE_LOGIN".equalsIgnoreCase(columnName)) {
                 continue;
-            }
+            }*/
             columns.add(rs.getString("COLUMN_NAME").toLowerCase());
         }
         return columns;

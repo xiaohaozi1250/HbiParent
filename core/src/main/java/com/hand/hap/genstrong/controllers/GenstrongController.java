@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by La on 2018/11/12.
+ * Created by Val.Zhang on 2018/11/12.
  */
 
 @Controller
@@ -28,17 +28,20 @@ public class GenstrongController extends BaseController {
     public GenstrongController() {
     }
 
+
     @RequestMapping(
             value = {"/alltables"},
             method = {RequestMethod.GET}
     )
     @ResponseBody
+    //获取所有表
     public ResponseData showTables() {
         return new ResponseData(this.service.showTables());
     }
 
     @RequestMapping({"/newtables"})
     @ResponseBody
+    //创建输出文件
     public int generatorTables(GenStrongInfo genDemoInfo) {
         int rs = this.service.generatorFile(genDemoInfo);
         return rs;
@@ -49,20 +52,14 @@ public class GenstrongController extends BaseController {
             method = {RequestMethod.GET}
     )
     @ResponseBody
+    //获取html模板名称
     public ResponseData getModels(GenStrongInfo genDemoInfo) {
         return new ResponseData(this.service.getModels(genDemoInfo));
     }
 
-/*    @RequestMapping(value = {"/allcolumn"}, method = {RequestMethod.POST})
+    @RequestMapping(value = {"/validatecolumn"}, method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData showColumns(HttpServletRequest request, @RequestBody String tableName) {
-        System.out.println("tableName=" + tableName);
-        System.out.println("tableName2+"+this.service.getName(tableName));
-        return new ResponseData(this.service.showColumns(tableName));
-    }*/
-
-    @RequestMapping(value = {"/allcolumns"}, method = {RequestMethod.POST})
-    @ResponseBody
+    //验证字段是否在表内
     public int showColumns(GenStrongInfo genDemoInfo) {
         int rs = this.service.showColumns(genDemoInfo);
         return rs;
@@ -70,25 +67,10 @@ public class GenstrongController extends BaseController {
 
     @RequestMapping({"/getprojectpath"})
     @ResponseBody
+    //获取对应的表字段
     public String getProjectPath(HttpServletRequest request) {
-        //取得根目录路径
+        //取得根编译目录路径
         String contextPath = request.getSession().getServletContext().getRealPath("");
-        System.out.println(contextPath);
-        File cat = new File(contextPath);
-        System.out.println(cat.getParent());
-        File root = new File(cat.getParent());
-        System.out.println(root.getParent());
-        String realRath = request.getSession().getServletContext().getRealPath("../");
-        System.out.println(realRath);
-        System.out.println(System.getProperty("user.dir"));
-        System.out.println(getClass().getClassLoader().getResource("/").getPath());
-        System.out.println(getClass().getClassLoader().getResource("../").getPath());
-        String rootPath = getClass().getResource("./").getFile().toString();
-        //当前目录路径
-        String currentPath1 = getClass().getResource(".").getFile().toString();
-        String currentPath2 = getClass().getResource("").getFile().toString();
-        //当前目录的上级目录路径
-        String parentPath = getClass().getResource("../").getFile().toString();
-        return root.getParent();
+        return this.service.getPorjectPath(contextPath);
     }
 }

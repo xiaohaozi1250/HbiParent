@@ -78,23 +78,15 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">选择头表:</label>
                             <div class="col-sm-4">
-                                <input id="autoHeaderComplete" style="width:100%;padding:0px" onchange="getTable(0)"/>
+                                <input id="autoHeaderComplete" style="width:100%;padding:0px" onchange="clearRelationCol(0)"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">选择行表:</label>
                             <div class="col-sm-4">
-                                <input id="autoLineComplete" style="width:100%" onchange="getTable(1)"/>
+                                <input id="autoLineComplete" style="width:100%" onchange="clearRelationCol(1)"/>
                             </div>
                         </div>
-
-                        <!--
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">选择行表:</label>
-                            <div class="col-sm-4">
-                                <input id="autoLineComplete" style="width:100%" onchange="getTable(1)"/>
-                            </div>
-                        </div> -->
                         <div class="form-group">
                             <label class="col-sm-4 control-label">头行关联:</label>
                             <div class="col-sm-2">
@@ -333,8 +325,47 @@
 
 <script type="text/javascript">
     var BaseUrl = _basePath;
+    if (window.localStorage) {
+        //if (localStorage.projectPath) {
+        //viewModel.set("projectPath", localStorage.projectPath);
+        // viewModel.set("projectPath", projectPath);
+        //}
+        if (localStorage.parentPackagePath) {
+            viewModel.set("parentPackagePath", localStorage.parentPackagePath);
+        }
+        if (localStorage.packagePath) {
+            viewModel.set("packagePath", localStorage.packagePath);
+        }
+    }
+    var dataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: BaseUrl + "/genstrong/alltables",
+                dataType: "json"
+            }
+        },
+        schema: {
+            model: {
+                expanded: true
+            },
+            parse: function (response) {
+                var products = [];
+                for (var i = 0; i < response.total; i++) {
+                    var le = response.rows[i];
+                    if (le.substring(le.length - 3, le.length) != "_TL" && le.substring(le.length - 3, le.length) != "_tl") {
+                        var product = {
+                            text: response.rows[i],
+                            value: response.rows[i],
+                        };
+                        products.push(product);
+                    }
+                }
+                return products;
+            }
+        }
+    });
+    //获取Html模板
     $.ajax({
-        /*附带参数的请求URL*/
         url: BaseUrl + '/genstrong/getprojectpath',
         type: "POST",
         dataType: "json",
@@ -370,7 +401,7 @@
                     }
                 }
             });
-
+            //选择模板
             $("#headerHtmlmodel").kendoDropDownList({
                 dataSource: ftlDataSource,
                 //autoBind: false,
@@ -411,48 +442,6 @@
             });
         }
     });
-
-    if (window.localStorage) {
-        //if (localStorage.projectPath) {
-        //viewModel.set("projectPath", localStorage.projectPath);
-        // viewModel.set("projectPath", projectPath);
-        //}
-        if (localStorage.parentPackagePath) {
-            viewModel.set("parentPackagePath", localStorage.parentPackagePath);
-        }
-        if (localStorage.packagePath) {
-            viewModel.set("packagePath", localStorage.packagePath);
-        }
-    }
-    console.log(viewModel.get("projectPath"));
-    var dataSource = new kendo.data.DataSource({
-        transport: {
-            read: {
-                url: BaseUrl + "/genstrong/alltables",
-                dataType: "json"
-            }
-        },
-        schema: {
-            model: {
-                expanded: true
-            },
-            parse: function (response) {
-                var products = [];
-                for (var i = 0; i < response.total; i++) {
-                    var le = response.rows[i];
-                    if (le.substring(le.length - 3, le.length) != "_TL" && le.substring(le.length - 3, le.length) != "_tl") {
-                        var product = {
-                            text: response.rows[i],
-                            value: response.rows[i],
-                        };
-                        products.push(product);
-                    }
-                }
-                return products;
-            }
-        }
-    });
-
     $("#autoHeaderComplete").kendoAutoComplete({
         dataSource: dataSource,
         dataTextField: "text",
@@ -467,13 +456,11 @@
             getTableName(e.item.text(), "line");
         }
     });
-
-    function getTable(source) {
+    //重新获取表名
+    function clearRelationCol(source) {
         if (source == 0) {
-            tableName = viewModel.get("headerTargetName");
             $("#autoHeaderRelation").val("");
         } else {
-            tableName = viewModel.get("lineTargetName");
             $("#autoLineRelation").val("");
         }
     }
@@ -485,11 +472,10 @@
             text = $("#autoLineRelation").val();
         }
         getColumnName(text, source);
-        $.post(BaseUrl + "/genstrong/allcolumns", viewModel.toJSON(), function (data, status) {
+        $.post(BaseUrl + "/genstrong/validatecolumn", viewModel.toJSON(), function (data, status) {
             if (status == "success") {
                 var mess;
                 if (data == 1) {
-                    text = $("#autoHeaderRelation").val();
                     mess = "该字段不在表内，请重新输入!";
                     kendo.ui.showInfoDialog({
                         message: mess
@@ -505,6 +491,7 @@
             }
         })
     }
+
     function getColumnName(text, source) {
         if (source == 0) {
             viewModel.set("headerRelationColumn", text);

@@ -63,8 +63,9 @@ public class FileUtil {
         String projectPath = generatorInfo.getProjectPath();
         String parentPackagePath = generatorInfo.getParentPackagePath();
         String packagePath = generatorInfo.getPackagePath();
-        String directory = new String();
-        String name = new String();
+        String directory;
+        String name;
+        //获取目录和文件名
         if (source.equals("header")) {
             name = generatorInfo.getHeaderDtoName().substring(0, generatorInfo.getHeaderDtoName().indexOf("."));
             directory = projectPath + "/src/main/java/" + parentPackagePath + "/" + packagePath + "/dto/" + generatorInfo.getHeaderDtoName();
@@ -73,11 +74,13 @@ public class FileUtil {
             directory = projectPath + "/src/main/java/" + parentPackagePath + "/" + packagePath + "/dto/" + generatorInfo.getLineDtoName();
         }
         File file = new File(directory);
+        //创建文件
         createFileDir(file);
         file.createNewFile();
+        //获取表字段
         List columns = table.getColumns();
         Iterator sb = columns.iterator();
-
+        //分析表字段
         String d;
         while (sb.hasNext()) {
             DBColumn dir1 = (DBColumn) sb.next();
@@ -182,7 +185,7 @@ public class FileUtil {
                 needNotEmpty = true;
             }
         }
-
+        //拼接导入包和字段方法
         StringBuilder sb1 = new StringBuilder();
         String dir11 = parentPackagePath + "/" + packagePath + "/dto";
         dir11 = dir11.replaceAll("/", ".");
@@ -295,17 +298,19 @@ public class FileUtil {
         }
         sb1.append("     }\r\n\r\n");
         PrintWriter p3 = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), "utf-8"));
+        //写入到刚创建的DTO文件中
         p3.write(sb1.toString());
         p3.close();
-
     }
 
     public static void createFtlInfoByType(FileUtil.pType type, DBTable hTbl, DBTable lTbl, GenStrongInfo generatorInfo, String source) throws IOException, TemplateException {
         String projectPath = generatorInfo.getProjectPath();
         String parentPackagePath = generatorInfo.getParentPackagePath();
         String packagePath = generatorInfo.getPackagePath();
-        String htmlModelName = new String();
-        String htmlName = new String();
+        String htmlModelName;
+        String htmlName;
+
+        //获取HTML模板名称和html名称
         if (source.equals("header")) {
             htmlModelName = generatorInfo.getHeaderHtmlModelName();
             htmlName = generatorInfo.getHeaderHtmlName();
@@ -317,7 +322,7 @@ public class FileUtil {
         FtlInfo info = new FtlInfo();
         String directory = null;
         ArrayList importPackages = new ArrayList();
-        System.out.println("model:" + generatorInfo.getHeaderHtmlName());
+        //根据不同文件类型拼接对应的导入包
         if (type.equals(pType.Controller) && source.equals("header")) {
             directory = projectPath + "/src/main/java/" + pac + "/controllers/" + generatorInfo.getHeaderControllerName();
             importPackages.add("org.springframework.stereotype.Controller");
@@ -367,7 +372,7 @@ public class FileUtil {
         ArrayList columnsInfos = new ArrayList();
 
         Iterator var13 = columns.iterator();
-        XmlColumnsInfo columnsInfo = new XmlColumnsInfo();
+        XmlColumnsInfo columnsInfo;
 
         while (var13.hasNext()) {
             columnsInfo = getColumnsinfo(var13);
@@ -386,6 +391,7 @@ public class FileUtil {
         }
 
         info.setColumnsInfoLine(columnsInfosLine);
+        //创建文件
         createFtl(info, type, generatorInfo, source, lTbl.getName());
     }
 
@@ -403,8 +409,9 @@ public class FileUtil {
         Template template = null;
         HashMap map = new HashMap();
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        //模板路径
         cfg.setServletContextForTemplateLoading(request.getServletContext(), "WEB-INF/view/genstrong/ftl");
-
+        //选择模板
         if (type.equals(FileUtil.pType.Controller) && source.equals("header")) {
             template = cfg.getTemplate("controllers.ftl");
         } else if (type.equals(FileUtil.pType.MapperXml)) {
@@ -422,8 +429,10 @@ public class FileUtil {
         if (null != template) {
             template.setEncoding("UTF-8");
             File file = new File(ftlInfo.getDir());
+            //创建文件
             createFileDir(file);
             FileOutputStream out = new FileOutputStream(file);
+            //获取模板对象数据
             map.put("package", ftlInfo.getPackageName());
             map.put("import", ftlInfo.getImportName());
             map.put("name", ftlInfo.getFileName());
@@ -469,7 +478,7 @@ public class FileUtil {
             String lineRelationColumn = changeToJavaFiled(generatorInfo.getLineRelationColumn());
             map.put("lineColumn", generatorInfo.getLineRelationColumn());
             map.put("lineRelationColumn", lineRelationColumn);
-
+            //创建模板输出
             template.process(map, new OutputStreamWriter(out));
             out.flush();
             out.close();
@@ -499,118 +508,80 @@ public class FileUtil {
 
     }
 
+    //验证文件名是否存在
     public static int isFileExist(GenStrongInfo generatorInfo) {
         byte rs = 0;
+        //检索指定路径，去针对不同类型文件去一一对比
         String classDir = generatorInfo.getProjectPath() + "/src/main/java/" + generatorInfo.getParentPackagePath();
         String htmlDir = generatorInfo.getProjectPath() + "/src/main/webapp/WEB-INF/view";
         String xmlDir = generatorInfo.getProjectPath() + "/src/main/resources/" + generatorInfo.getParentPackagePath();
-        getFileList(classDir, classDir, generatorInfo);
-        // 判断有没有重复的java文件
 
+        //判断有没有重复的Dto文件
+        //获取项目文件列表
+        getFileList(classDir, classDir, generatorInfo);
         for (String name : allClassFiles) {
             if (name.equals(generatorInfo.getHeaderDtoName())) {
                 if ("Create".equalsIgnoreCase(generatorInfo.getHeaderDtoStatus())) {
                     rs = 1;
                     break;
-                } else if ("Cover".equalsIgnoreCase(generatorInfo.getHeaderDtoStatus())) {
+                } /*else if ("Cover".equalsIgnoreCase(generatorInfo.getHeaderDtoStatus())) {
+                    //状态是“Cover”则判断文件是否存在
                     File file1 = new File(
                             classDir + "/" + generatorInfo.getPackagePath() + "/dto/" + generatorInfo.getHeaderDtoName());
                     if (!file1.exists()) {
                         rs = 1;
                         break;
                     }
-                }
+                }*/
             }
             if (name.equals(generatorInfo.getLineDtoName())) {
                 if ("Create".equalsIgnoreCase(generatorInfo.getLineDtoStatus())) {
                     rs = 1;
                     break;
-                } else if ("Cover".equalsIgnoreCase(generatorInfo.getLineDtoStatus())) {
-                    File file1 = new File(
-                            classDir + "/" + generatorInfo.getPackagePath() + "/dto/" + generatorInfo.getLineDtoName());
-                    if (!file1.exists()) {
-                        rs = 1;
-                        break;
-                    }
                 }
             }
         }
-
+        //判断有没有重复的Service文件
         if (rs == 0) {
             for (String name : allClassFiles) {
                 if (name.equals(generatorInfo.getHeaderServiceName())) {
                     if ("Create".equalsIgnoreCase(generatorInfo.getHeaderServiceStatus())) {
                         rs = 2;
                         break;
-                    } else if ("Cover".equalsIgnoreCase(generatorInfo.getHeaderServiceStatus())) {
-                        File file1 = new File(classDir + "/" + generatorInfo.getPackagePath() + "/service/"
-                                + generatorInfo.getHeaderServiceName());
-                        if (!file1.exists()) {
-                            rs = 2;
-                            break;
-                        }
                     }
                 }
                 if (name.equals(generatorInfo.getLineServiceName())) {
                     if ("Create".equalsIgnoreCase(generatorInfo.getLineServiceStatus())) {
                         rs = 2;
                         break;
-                    } else if ("Cover".equalsIgnoreCase(generatorInfo.getLineServiceStatus())) {
-                        File file1 = new File(classDir + "/" + generatorInfo.getPackagePath() + "/service/"
-                                + generatorInfo.getLineServiceName());
-                        if (!file1.exists()) {
-                            rs = 2;
-                            break;
-                        }
                     }
                 }
             }
         }
-
+        //判断有没有重复的Impl文件
         if (rs == 0) {
             for (String name : allClassFiles) {
                 if (name.equals(generatorInfo.getHeaderImplName())) {
                     if ("Create".equalsIgnoreCase(generatorInfo.getHeaderImplStatus())) {
                         rs = 3;
                         break;
-                    } else if ("Cover".equalsIgnoreCase(generatorInfo.getHeaderImplStatus())) {
-                        File file1 = new File(classDir + "/" + generatorInfo.getPackagePath() + "/service/impl/"
-                                + generatorInfo.getHeaderImplName());
-                        if (!file1.exists()) {
-                            rs = 3;
-                            break;
-                        }
                     }
                 }
                 if (name.equals(generatorInfo.getLineImplName())) {
                     if ("Create".equalsIgnoreCase(generatorInfo.getLineImplStatus())) {
                         rs = 3;
                         break;
-                    } else if ("Cover".equalsIgnoreCase(generatorInfo.getLineImplStatus())) {
-                        File file1 = new File(classDir + "/" + generatorInfo.getPackagePath() + "/service/impl/"
-                                + generatorInfo.getLineImplName());
-                        if (!file1.exists()) {
-                            rs = 3;
-                            break;
-                        }
                     }
                 }
             }
         }
-
+        //判断有没有重复的Controller文件
         if (rs == 0) {
             for (String name : allClassFiles) {
                 if (name.equals(generatorInfo.getHeaderControllerName())) {
                     if ("Create".equalsIgnoreCase(generatorInfo.getHeaderControllerStatus())) {
                         rs = 4;
                         break;
-                    } else if ("Cover".equalsIgnoreCase(generatorInfo.getHeaderControllerStatus())) {
-                        File file1 = new File(classDir + "/" + generatorInfo.getPackagePath() + "/controllers/"
-                                + generatorInfo.getHeaderControllerName());
-                        if (!file1.exists()) {
-                            rs = 4;
-                            break;
-                        }
                     }
                 }
             }
@@ -621,26 +592,12 @@ public class FileUtil {
                     if ("Create".equalsIgnoreCase(generatorInfo.getHeaderMapperStatus())) {
                         rs = 5;
                         break;
-                    } else if ("Cover".equalsIgnoreCase(generatorInfo.getHeaderMapperStatus())) {
-                        File file1 = new File(classDir + "/" + generatorInfo.getPackagePath() + "/mapper/"
-                                + generatorInfo.getHeaderMapperName());
-                        if (!file1.exists()) {
-                            rs = 5;
-                            break;
-                        }
                     }
                 }
                 if (name.equals(generatorInfo.getLineMapperName())) {
                     if ("Create".equalsIgnoreCase(generatorInfo.getLineMapperStatus())) {
                         rs = 5;
                         break;
-                    } else if ("Cover".equalsIgnoreCase(generatorInfo.getLineMapperStatus())) {
-                        File file1 = new File(classDir + "/" + generatorInfo.getPackagePath() + "/mapper/"
-                                + generatorInfo.getLineMapperName());
-                        if (!file1.exists()) {
-                            rs = 5;
-                            break;
-                        }
                     }
                 }
             }
@@ -654,36 +611,16 @@ public class FileUtil {
                     if ("Create".equalsIgnoreCase(generatorInfo.getHeaderMapperXmlStatus())) {
                         rs = 6;
                         break;
-                    } else if ("Cover".equalsIgnoreCase(generatorInfo.getHeaderMapperXmlStatus())) {
-                        File file1 = new File(xmlDir + "/" + generatorInfo.getPackagePath() + "/mapper/"
-                                + generatorInfo.getHeaderMapperXmlName());
-                        if (!file1.exists()) {
-                            rs = 6;
-                            break;
-                        }
                     }
                 }
                 if (name.equals(generatorInfo.getLineMapperXmlName())) {
                     if ("Create".equalsIgnoreCase(generatorInfo.getLineMapperXmlStatus())) {
                         rs = 6;
                         break;
-                    } else if ("Cover".equalsIgnoreCase(generatorInfo.getLineMapperXmlStatus())) {
-                        File file1 = new File(xmlDir + "/" + generatorInfo.getPackagePath() + "/mapper/"
-                                + generatorInfo.getLineMapperXmlName());
-                        if (!file1.exists()) {
-                            rs = 6;
-                            break;
-                        }
                     }
                 }
             }
         }
-        System.out.println("getLineHtmlStatus:" + generatorInfo.getLineHtmlStatus());
-        System.out.println("getHeaderHtmlStatus:" + generatorInfo.getHeaderHtmlStatus());
-        System.out.println("htmlDir:" + htmlDir);
-        System.out.println("getPackagePath:" + generatorInfo.getPackagePath());
-        System.out.println("getHeaderHtmlName:" + generatorInfo.getHeaderHtmlName());
-        System.out.println("getLineHtmlName:" + generatorInfo.getLineHtmlName());
         // 判断有没有重复的html文件
         if (rs == 0) {
             getFileList(htmlDir, htmlDir, generatorInfo);
@@ -692,26 +629,12 @@ public class FileUtil {
                     if ("Create".equalsIgnoreCase(generatorInfo.getHeaderHtmlStatus())) {
                         rs = 7;
                         break;
-                    } else if ("Cover".equalsIgnoreCase(generatorInfo.getHeaderHtmlStatus())) {
-                        File file1 = new File(
-                                htmlDir + "/" + generatorInfo.getPackagePath() + "/" + generatorInfo.getHeaderHtmlName());
-                        if (!file1.exists()) {
-                            rs = 7;
-                            break;
-                        }
                     }
                 }
                 if (name.equals(generatorInfo.getLineHtmlName())) {
                     if ("Create".equalsIgnoreCase(generatorInfo.getLineHtmlStatus())) {
                         rs = 7;
                         break;
-                    } else if ("Cover".equalsIgnoreCase(generatorInfo.getLineHtmlStatus())) {
-                        File file1 = new File(
-                                htmlDir + "/" + generatorInfo.getPackagePath() + "/" + generatorInfo.getLineHtmlName());
-                        if (!file1.exists()) {
-                            rs = 7;
-                            break;
-                        }
                     }
                 }
             }
@@ -719,6 +642,7 @@ public class FileUtil {
         return rs;
     }
 
+    //获取项目文件列表
     public static void getFileList(String basePath, String directory, GenStrongInfo generatorInfo) {
         File dir = new File(basePath);
         File[] files = dir.listFiles();
@@ -736,9 +660,9 @@ public class FileUtil {
                 }
             }
         }
-
     }
 
+    //获取HTML模板列表
     public static List<String> getModelList(GenStrongInfo generatorInfo) {
         List<String> allModelFiles = new ArrayList();
         String classDir = generatorInfo.getProjectPath() + "/src/main/webapp/WEB-INF/view/genstrong/ftl";

@@ -2,8 +2,7 @@ ${'<#include "../include/header.html"/>'}
 <!-- 绑定事件 -->
 <script type="text/javascript">
     var viewModel = kendo.observable({
-        model: {
-        },
+        model: {},
         refreshMain: function (e) {
             this.set("lastSelectedRow", null);
             dsBrowseUp.page(1);
@@ -35,20 +34,20 @@ ${'<#include "../include/header.html"/>'}
             for (var key in data) {
                 this.model.set(key, "");
             }
-        },removeheader : function(e) {
+        }, removeheader: function (e) {
             var bMainGrid = $("#Grid").data('kendoGrid');
             var checked = bMainGrid.selectedDataItems();
             var BaseUrl = _basePath;
             AjaxJson(BaseUrl + "${headerRemoveUrl}",
                     JSON.stringify(checked), function (data) {
-                        if(!data.success) {
+                        if (!data.success) {
                             kendo.ui.showErrorDialog({message: data.message});
 
-                        }else{
+                        } else {
                             dsBrowseUp.page(1);
                         }
 
-                    }, false, 'POST',"application/json");
+                    }, false, 'POST', "application/json");
         }
     });
 
@@ -104,11 +103,11 @@ ${'<#include "../include/header.html"/>'}
 <!--进入编辑窗口的div-->
 <div id="dialog"></div>
 <!--高级查询布局【每行最多放3列,class:不能随便定义】-->
-<div id = "div_query" style="display: none;" >
+<div id="div_query" style="display: none;">
     <div style="margin-top: 5px;">
         <form id="searchform" class="form-horizontal" method="post" enctype="application/json;charset=UTF-8">
-           <!--高级查询 开始日期-->
-            <#list columnsInfoHeader as infos>
+            <!--高级查询 开始日期-->
+        <#list columnsInfoHeader as infos>
             <#if (infos_index+1)%3 == 0>
             <div class="row">
             </#if>
@@ -121,7 +120,7 @@ ${'<#include "../include/header.html"/>'}
                                data-label='${'<@spring.message'} "${headerDtoName?lower_case}.${infos.tableColumnsName?lower_case}"/>'
                                data-role="maskedtextbox"
                                type="text" style="width: 100%" data-bind="value:model.${infos.tableColumnsName}"
-                               class="k-textbox" >
+                               class="k-textbox">
                     </div>
                 </div>
             </div>
@@ -130,13 +129,19 @@ ${'<#include "../include/header.html"/>'}
             </#if>
         </#list>
 
-        <div style="text-align:right; line-height: 50px;height: 50px; position: fixed;bottom: 0px; background-color: #ededed; width: 100%; margin-left:-0.58em;">
-            <div style="padding-right: 10px;">
-                <span class="btn btn-primary" data-bind="click:querySearch" type="submit" style="padding:4px 10px; margin-right:5px;"><i class="fa fa-search" style="margin-right:3px;"></i>${'<@spring.message "hap.query"'}/></span>
-                <span class="btn btn-default" data-bind="click:resetSearch" type="submit" style="padding:4.5px 10px; margin-right:5px;"><i class="fa fa-eraser" style="margin-right:3px;"></i>${'<@spring.message "hap.reset"'}/></span>
-                <span class="btn btn-danger" data-bind="click:closeWinSearch" type="button" style="padding:4px 10px; margin-right:5px;"><i class="fa fa-undo" style="margin-right:3px;"></i>${'<@spring.message "hap.cancel"'}/></span>
+            <div style="text-align:right; line-height: 50px;height: 50px; position: fixed;bottom: 0px; background-color: #ededed; width: 100%; margin-left:-0.58em;">
+                <div style="padding-right: 10px;">
+                    <span class="btn btn-primary" data-bind="click:querySearch" type="submit"
+                          style="padding:4px 10px; margin-right:5px;"><i class="fa fa-search"
+                                                                         style="margin-right:3px;"></i>${'<@spring.message "hap.query"'}/></span>
+                    <span class="btn btn-default" data-bind="click:resetSearch" type="submit"
+                          style="padding:4.5px 10px; margin-right:5px;"><i class="fa fa-eraser"
+                                                                           style="margin-right:3px;"></i>${'<@spring.message "hap.reset"'}/></span>
+                    <span class="btn btn-danger" data-bind="click:closeWinSearch" type="button"
+                          style="padding:4px 10px; margin-right:5px;"><i class="fa fa-undo"
+                                                                         style="margin-right:3px;"></i>${'<@spring.message "hap.cancel"'}/></span>
+                </div>
             </div>
-        </div>
 
         </form>
     </div>
@@ -148,14 +153,16 @@ ${'<#include "../include/header.html"/>'}
 <div id="page-content">
     <div class="pull-right" id="toolbar-btn" style="padding-left:10px;padding-bottom:10px">
         <span class="btn btn-success" style="float:left;margin-right:3px;"
-              data-bind="click:refreshMain" type="submit"><i class="fa fa-refresh" style="margin-right:3px;"></i><${'@spring.message "hap.refresh"'}/></span>
+              data-bind="click:refreshMain" type="submit"><i class="fa fa-refresh"
+                                                             style="margin-right:3px;"></i><${'@spring.message "hap.refresh"'}/></span>
         <span class="btn btn-primary" style="float:left;margin-right:3px;"
-              data-bind="click:moreQueryFunction" type="submit"><i class="fa fa-search" style="margin-right:3px;"></i>${'<@spring.message "hap.query"'}/></span>
+              data-bind="click:moreQueryFunction" type="submit"><i class="fa fa-search"
+                                                                   style="margin-right:3px;"></i>${'<@spring.message "hap.query"'}/></span>
         <span class="btn btn-primary" style="float:left;margin-right:5px;" onclick="openWindow()"><i
                 class="fa fa-plus-square" style="margin-right:3px;"></i>${'<@spring.message "hap.new"/>'}</span>
-        <span data-bind="click:removeheader"  type="submit" class="btn btn-danger"
+        <span data-bind="click:removeheader" type="submit" class="btn btn-danger"
               style="float:left;margin-right:5px"><i class="fa fa-trash-o"
-        style="margin-right:3px;"></i>${'<@spring.message "hap.delete"/>'}</span>
+                                                     style="margin-right:3px;"></i>${'<@spring.message "hap.delete"/>'}</span>
 
     </div>
     <script>kendo.bind($('#toolbar-btn'), viewModel);</script>
@@ -220,7 +227,7 @@ ${'<#include "../include/header.html"/>'}
             },
             parameterMap: function (options, type) {
                 if (type !== "read" && options.models) {
-                    var datas = Hap.prepareSubmitParameter(options, type);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    var datas = Hap.prepareSubmitParameter(options, type);
                     return kendo.stringify(datas);
                 } else if (type === "read") {
                     return Hap.prepareQueryParameter(viewModel.model.toJSON(), options)
@@ -311,7 +318,6 @@ ${'<#include "../include/header.html"/>'}
     };
 
 
-
     /*行数据源*/
     dsBrowseDown = new kendo.data.DataSource({
         transport: {
@@ -389,8 +395,7 @@ ${'<#include "../include/header.html"/>'}
                 title: '${'<@spring.message'} "${lineDtoName?lower_case}.${infos.tableColumnsName?lower_case}"/>',
                 width: 120
             },
-        </#list>
-        ],
+        </#list>],
         editable: true,
         edit: function (e) {
             $(e.container).find("input").attr("readonly", "readonly");
@@ -420,7 +425,6 @@ ${'<#include "../include/header.html"/>'}
     };
 
 
-
     function openWindow(param) {
         var url = BaseUrl + '${lineUrl}';
         if (param) {
@@ -440,7 +444,6 @@ ${'<#include "../include/header.html"/>'}
             editWin.center().open();
         }
     }
-
 
 
 </script>

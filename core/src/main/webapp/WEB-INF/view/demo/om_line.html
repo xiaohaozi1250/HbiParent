@@ -12,19 +12,6 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <label class="col-md-3 control-label"><@spring.message
-                        "omheaders.omheaderid"/></label>
-                    <div class="col-md-7">
-                        <input name="omHeaderId" id="omHeaderId"
-                               data-label='<@spring.message "omheaders.omheaderid"/>'
-                               data-role="maskedtextbox"
-                               type="text" style="width: 100%" data-bind="value:model.omHeaderId"
-                               class="k-textbox" required>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <label class="col-md-3 control-label"><@spring.message
                         "omheaders.ordernumber"/></label>
                     <div class="col-md-7">
                         <input name="orderNumber" id="orderNumber"
@@ -153,22 +140,12 @@
             buttonCount: 5
         },
         columns: [
-            {
-                field: "omLineId",
-                title: '<@spring.message "omline.omlineid"/>',
-                width: 120
-            },
-            {
-                field: "omHeaderId",
-                title: '<@spring.message "omline.omheaderid"/>',
-                width: 120
-            },
-            {
+                    {
                 field: "inventoryItemId",
                 title: '<@spring.message "omline.inventoryitemid"/>',
                 width: 120
             },
-            {
+                    {
                 field: "orderQuantity",
                 title: '<@spring.message "omline.orderquantity"/>',
                 width: 120
@@ -198,7 +175,7 @@
                 "lines": $("#lineGrid"),
             },
             success: function (datas) {
-                window.parent.viewModel.refresh();
+                //window.parent.viewModel.refresh();
                 closeLineWindow();
             }
         });

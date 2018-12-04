@@ -39,15 +39,15 @@
             var checked = bMainGrid.selectedDataItems();
             var BaseUrl = _basePath;
             AjaxJson(BaseUrl + "/cux/om/headers/all/remove",
-                JSON.stringify(checked), function (data) {
-                    if (!data.success) {
-                        kendo.ui.showErrorDialog({message: data.message});
+                    JSON.stringify(checked), function (data) {
+                        if (!data.success) {
+                            kendo.ui.showErrorDialog({message: data.message});
 
-                    } else {
-                        dsBrowseUp.page(1);
-                    }
+                        } else {
+                            dsBrowseUp.page(1);
+                        }
 
-                }, false, 'POST', "application/json");
+                    }, false, 'POST', "application/json");
         }
     });
 
@@ -110,19 +110,6 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <label class="col-md-3 control-label"><@spring.message
-                        "omheaders.omheaderid"/></label>
-                    <div class="col-md-7">
-                        <input name="omHeaderId" id="omHeaderId"
-                               data-label='<@spring.message "omheaders.omheaderid"/>'
-                               data-role="maskedtextbox"
-                               type="text" style="width: 100%" data-bind="value:model.omHeaderId"
-                               class="k-textbox">
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <label class="col-md-3 control-label"><@spring.message
                         "omheaders.ordernumber"/></label>
                     <div class="col-md-7">
                         <input name="orderNumber" id="orderNumber"
@@ -158,9 +145,11 @@
 <div id="page-content">
     <div class="pull-right" id="toolbar-btn" style="padding-left:10px;padding-bottom:10px">
         <span class="btn btn-success" style="float:left;margin-right:3px;"
-              data-bind="click:refreshMain" type="submit"><i class="fa fa-refresh" style="margin-right:3px;"></i><@spring.message "hap.refresh"/></span>
+              data-bind="click:refreshMain" type="submit"><i class="fa fa-refresh"
+                                                             style="margin-right:3px;"></i><@spring.message "hap.refresh"/></span>
         <span class="btn btn-primary" style="float:left;margin-right:3px;"
-              data-bind="click:moreQueryFunction" type="submit"><i class="fa fa-search" style="margin-right:3px;"></i><@spring.message "hap.query"/></span>
+              data-bind="click:moreQueryFunction" type="submit"><i class="fa fa-search"
+                                                                   style="margin-right:3px;"></i><@spring.message "hap.query"/></span>
         <span class="btn btn-primary" style="float:left;margin-right:5px;" onclick="openWindow()"><i
                 class="fa fa-plus-square" style="margin-right:3px;"></i><@spring.message "hap.new"/></span>
         <span data-bind="click:removeheader" type="submit" class="btn btn-danger"
@@ -264,11 +253,6 @@
             buttonCount: 5
         },
         columns: [
-            {
-                field: "omHeaderId",
-                title: '<@spring.message "omheaders.omheaderid"/>',
-                width: 120
-            },
             {
                 field: "orderNumber",
                 title: '<@spring.message "omheaders.ordernumber"/>',
@@ -395,22 +379,12 @@
             buttonCount: 5
         },
         columns: [
-            {
-                field: "omLineId",
-                title: '<@spring.message "omline.omlineid"/>',
-                width: 120
-            },
-            {
-                field: "omHeaderId",
-                title: '<@spring.message "omline.omheaderid"/>',
-                width: 120
-            },
-            {
+                    {
                 field: "inventoryItemId",
                 title: '<@spring.message "omline.inventoryitemid"/>',
                 width: 120
             },
-            {
+                    {
                 field: "orderQuantity",
                 title: '<@spring.message "omline.orderquantity"/>',
                 width: 120

@@ -3,6 +3,9 @@ ${'<#include "../include/header.html"/>'}
 <script type="text/javascript">
     var viewModel = kendo.observable({
         model: {},
+        refresh: function () {
+            $('#Grid').data('kendoGrid').dataSource.read();
+        },
         refreshMain: function (e) {
             this.set("lastSelectedRow", null);
             dsBrowseUp.page(1);

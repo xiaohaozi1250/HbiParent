@@ -140,12 +140,12 @@
             buttonCount: 5
         },
         columns: [
-                    {
+            {
                 field: "inventoryItemId",
                 title: '<@spring.message "omline.inventoryitemid"/>',
                 width: 120
             },
-                    {
+            {
                 field: "orderQuantity",
                 title: '<@spring.message "omline.orderquantity"/>',
                 width: 120
@@ -175,7 +175,7 @@
                 "lines": $("#lineGrid"),
             },
             success: function (datas) {
-                //window.parent.viewModel.refresh();
+                window.parent.viewModel.refresh();
                 closeLineWindow();
             }
         });

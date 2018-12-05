@@ -3,6 +3,9 @@
 <script type="text/javascript">
     var viewModel = kendo.observable({
         model: {},
+        refresh: function () {
+            $('#Grid').data('kendoGrid').dataSource.read();
+        },
         refreshMain: function (e) {
             this.set("lastSelectedRow", null);
             dsBrowseUp.page(1);
@@ -39,15 +42,15 @@
             var checked = bMainGrid.selectedDataItems();
             var BaseUrl = _basePath;
             AjaxJson(BaseUrl + "/cux/om/headers/all/remove",
-                    JSON.stringify(checked), function (data) {
-                        if (!data.success) {
-                            kendo.ui.showErrorDialog({message: data.message});
+                JSON.stringify(checked), function (data) {
+                    if (!data.success) {
+                        kendo.ui.showErrorDialog({message: data.message});
 
-                        } else {
-                            dsBrowseUp.page(1);
-                        }
+                    } else {
+                        dsBrowseUp.page(1);
+                    }
 
-                    }, false, 'POST', "application/json");
+                }, false, 'POST', "application/json");
         }
     });
 
@@ -379,12 +382,12 @@
             buttonCount: 5
         },
         columns: [
-                    {
+            {
                 field: "inventoryItemId",
                 title: '<@spring.message "omline.inventoryitemid"/>',
                 width: 120
             },
-                    {
+            {
                 field: "orderQuantity",
                 title: '<@spring.message "omline.orderquantity"/>',
                 width: 120

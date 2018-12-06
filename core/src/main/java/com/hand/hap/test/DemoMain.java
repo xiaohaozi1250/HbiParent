@@ -27,7 +27,6 @@ import java.util.Map;
 public class DemoMain {
 
     public static void main(String agrs[]) {
-
         try {
             createFtl();
         } catch (IOException e) {

@@ -1,4 +1,4 @@
-package com.hand.hap.demo;
+package hbi.core.test;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -8,7 +8,16 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+
+
+import freemarker.template.Configuration;
+import freemarker.template.DefaultObjectWrapper;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+
+import java.io.*;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @autor by Val.Zhang
@@ -16,16 +25,17 @@ import java.util.HashMap;
  * @date 2018/12/6
  */
 public class DemoMain {
-    public static void main(String agrs[])throws Exception {
 
-        DemoMain demo = new DemoMain();
+    public static void main(String agrs[])throws Exception {
+        DemoMain demoMain = new DemoMain();
         try {
-            demo.createFtl();
+            createFtl();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         } catch (TemplateException e) {
             System.out.println(e.getMessage());
         }
+
 
  /* 一般在应用的整个生命周期中你仅需要执行一下代码一次*/
         /* 创建一个合适的configuration */
@@ -81,19 +91,20 @@ public class DemoMain {
 
         Configuration cfg = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
         Template template = null;
-        File file = new File("D:\\soft\\HAP\\Project\\HbiParent\\core\\src\\main\\java\\com\\hand\\hap\\demo\\ftl");
 
-        cfg.setDirectoryForTemplateLoading(file);
+
+        cfg.setDirectoryForTemplateLoading(new File("D:/soft/HAP/Project/HbiParent/core/src/main/java/com/hand/hap/test/ftl"));
         template = cfg.getTemplate("htmldemo.ftl");
 
         template.setEncoding("UTF-8");
+        File file = new File("D:/soft/HAP/Project/HbiParent/core/src/main/java/com/hand/hap/test/ftl/index.html");
         createFileDir(file);
         FileOutputStream out = new FileOutputStream(file);
 
         HashMap root = new HashMap();
         root.put("user", "Big Joe");
         HashMap latest = new HashMap();
-        root.put("latestProduct", latest);
+        root.put("lastestProduct", latest);
         latest.put("url", "products/greenmouse.html");
         latest.put("name", "green mouse");
 

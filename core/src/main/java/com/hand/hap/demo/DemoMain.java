@@ -26,6 +26,7 @@ public class DemoMain {
         } catch (TemplateException e) {
             System.out.println(e.getMessage());
         }
+
  /* 一般在应用的整个生命周期中你仅需要执行一下代码一次*/
         /* 创建一个合适的configuration */
      /*   Configuration cfg = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);

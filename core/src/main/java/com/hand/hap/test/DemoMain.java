@@ -26,7 +26,7 @@ import java.util.Map;
  */
 public class DemoMain {
 
-    public static void main(String agrs[]) throws Exception {
+    public static void main(String agrs[]) {
 
         try {
             createFtl();
@@ -36,55 +36,6 @@ public class DemoMain {
             System.out.println(e.getMessage());
         }
 
-
- /* 一般在应用的整个生命周期中你仅需要执行一下代码一次*/
-        /* 创建一个合适的configuration */
-     /*   Configuration cfg = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
-
-        // 设置模板加载的方式
-        cfg.setDirectoryForTemplateLoading(
-                new File("D:\\soft\\HAP\\Project\\HbiDemo\\core\\src\\main\\java\\hbi\\core\\demo\\ftl"));
-        // 方式二（从Web上下文获取)
-        // void setServletContextForTemplateLoading(Object servletContext, String path);
-
-        // 设置模板共享变量，所有的模板都可以访问设置的共享变量
-        cfg.setSharedVariable("to_upper", new UpperCaseTransform());
-        cfg.setSharedVariable("company","FooInc.");
-
-        // 指定模板如何查看数据模型
-        cfg.setObjectWrapper(new DefaultObjectWrapper());
-
-        // 如果从多个位置加载模板，可采用以下方式
-        *//**
-         FileTemplateLoader ftl1 = new FileTemplateLoader(new File("/tmp/templates"));
-         FileTemplateLoader ftl2 = new FileTemplateLoader(new File("/usr/data/templates"));
-         ClassTemplateLoader ctl = new ClassTemplateLoader(getClass(),"");
-         TemplateLoader[] loaders = new TemplateLoader[] { ftl1, ftl2,ctl };
-         MultiTemplateLoader mtl = new MultiTemplateLoader(loaders);
-         cfg.setTemplateLoader(mtl);**//*
-
-        *//* 而以下代码你通常会在一个应用生命周期中执行多次*//*
-        *//*获取或创建一个模版*//*
-        Template temp = cfg.getTemplate("htmldemo.ftl");
-
-        *//*创建一个数据模型Create a data model *//*
-        Map root = new HashMap();
-        root.put("user", "Big Joe");
-        Map latest = new HashMap();
-        root.put("latestProduct", latest);
-        latest.put("url", "products/greenmouse.html");
-        latest.put("name", "green mouse");
-
-        // 方法变量，indexOf为自己定义的方法变量
-        root.put("indexOf", new IndexOfMethod());
-
-        // 转换器变量
-        root.put("upperCase", new UpperCaseTransform());
-
-        *//* 合并数据模型和模版*//*
-        Writer out = new OutputStreamWriter(System.out);
-        temp.process(root, out);
-        out.flush();*/
     }
 
     public static void createFtl() throws IOException, TemplateException {
@@ -92,12 +43,15 @@ public class DemoMain {
         Configuration cfg = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
         Template template = null;
 
-
+        //模板路径
         cfg.setDirectoryForTemplateLoading(new File("D:/soft/HAP/Project/HbiParent/core/src/main/java/com/hand/hap/test/ftl"));
+        //模板名称
         template = cfg.getTemplate("htmldemo.ftl");
-
+        //字符集
         template.setEncoding("UTF-8");
+        //文件生成路径
         File file = new File("D:/soft/HAP/Project/HbiParent/core/src/main/java/com/hand/hap/test/ftl/index.html");
+        //创建空文件
         createFileDir(file);
         FileOutputStream out = new FileOutputStream(file);
 
@@ -107,7 +61,7 @@ public class DemoMain {
         root.put("lastestProduct", latest);
         latest.put("url", "products/greenmouse.html");
         latest.put("name", "green mouse");
-
+        //执行创建
         template.process(root, new OutputStreamWriter(out));
         out.flush();
     }

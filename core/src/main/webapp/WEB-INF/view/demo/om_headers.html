@@ -272,12 +272,14 @@
             }
         ],
         change: function (e) {
+            var selectedRows = this.select();
             for (var i = 0; i < selectedRows.length; i++) {
                 var dataItem = this.dataItem(selectedRows[i]);
                 gvBrowseUp.setCurrentRow(dataItem);
                 break;
             }
-        }, dataBound: function () {
+        },
+        dataBound: function () {
             var rows = this.tbody.find("tr");
             if (rows.length > 0) {
                 rows[0].click();
@@ -367,7 +369,6 @@
         }
     });
 
-
     gcBrowseDown = $("#DetailGrid").kendoGrid({
         dataSource: dsBrowseDown,
         resizable: true,
@@ -392,10 +393,10 @@
                 width: 120
             },
         ],
-/*        editable: true,
-        edit: function (e) {
-            $(e.container).find("input").attr("readonly", "readonly");
-        },*/
+        /*        editable: true,
+         edit: function (e) {
+         $(e.container).find("input").attr("readonly", "readonly");
+         },*/
         change: function (e) {
             var selectedRows = this.select();
             for (var i = 0; i < selectedRows.length; i++) {

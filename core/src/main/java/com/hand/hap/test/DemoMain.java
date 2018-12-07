@@ -1,4 +1,4 @@
-package hbi.core.test;
+package com.hand.hap.test;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;

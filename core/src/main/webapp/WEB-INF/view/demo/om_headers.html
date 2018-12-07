@@ -237,7 +237,8 @@
             total: 'total',
             model: {
                 id: "omHeaderId",
-                fields: {}
+                fields: {},
+                editable: false
             }
         }
     });
@@ -270,11 +271,12 @@
                 }
             }
         ],
-        editable: true,
-        edit: function (e) {
-            $(e.container).find("input").attr("readonly", "readonly");
-        },
+        //editable: true,
+        /*        edit: function (e) {
+         $(e.container).find("input").attr("readonly", "readonly");
+         },*/
         change: function (e) {
+            var selectedRows = this.select();
             for (var i = 0; i < selectedRows.length; i++) {
                 var dataItem = this.dataItem(selectedRows[i]);
                 gvBrowseUp.setCurrentRow(dataItem);
@@ -364,7 +366,8 @@
             total: 'total',
             model: {
                 id: "omLineId",
-                fields: {}
+                fields: {},
+                editable: true
             }
         }
     });
@@ -394,10 +397,10 @@
                 width: 120
             },
         ],
-        editable: true,
+/*        editable: true,
         edit: function (e) {
             $(e.container).find("input").attr("readonly", "readonly");
-        },
+        },*/
         change: function (e) {
             var selectedRows = this.select();
             for (var i = 0; i < selectedRows.length; i++) {

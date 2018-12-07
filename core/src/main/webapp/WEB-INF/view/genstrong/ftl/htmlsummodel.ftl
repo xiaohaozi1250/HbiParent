@@ -105,7 +105,7 @@ ${'<#include "../include/header.html"/>'}
 
 <!--进入编辑窗口的div-->
 <div id="dialog"></div>
-<!--高级查询布局【每行最多放3列,class:不能随便定义】-->
+<!--高级查询布局,每行最多放3列,class:不能随便定义-->
 <div id="div_query" style="display: none;">
     <div style="margin-top: 5px;">
         <form id="searchform" class="form-horizontal" method="post" enctype="application/json;charset=UTF-8">
@@ -245,7 +245,8 @@ ${'<#include "../include/header.html"/>'}
             total: 'total',
             model: {
                 id: "${columnsInfoHeader[0].tableColumnsName}",
-                fields: {}
+                fields: {},
+                editable: false
             }
         }
     });
@@ -279,11 +280,8 @@ ${'<#include "../include/header.html"/>'}
                 }
             }
         ],
-        editable: true,
-        edit: function (e) {
-            $(e.container).find("input").attr("readonly", "readonly");
-        },
         change: function (e) {
+            var selectedRows = this.select();
             for (var i = 0; i < selectedRows.length; i++) {
                 var dataItem = this.dataItem(selectedRows[i]);
                 gvBrowseUp.setCurrentRow(dataItem);
@@ -373,7 +371,8 @@ ${'<#include "../include/header.html"/>'}
             total: 'total',
             model: {
                 id: "${columnsInfoLine[0].tableColumnsName}",
-                fields: {}
+                fields: {},
+                editable: false
             }
         }
     });
@@ -399,10 +398,10 @@ ${'<#include "../include/header.html"/>'}
                 width: 120
             },
         </#list>],
-        editable: true,
-        edit: function (e) {
-            $(e.container).find("input").attr("readonly", "readonly");
-        },
+        /*        editable: true,
+                edit: function (e) {
+                    $(e.container).find("input").attr("readonly", "readonly");
+                },*/
         change: function (e) {
             var selectedRows = this.select();
             for (var i = 0; i < selectedRows.length; i++) {

@@ -45,7 +45,7 @@ ${'<#include "../include/header.html"/>'}
                     JSON.stringify(checked), function (data) {
                         if (!data.success) {
                             kendo.ui.showErrorDialog({message: data.message});
-
+                            return;
                         } else {
                             dsBrowseUp.page(1);
                         }
@@ -105,7 +105,7 @@ ${'<#include "../include/header.html"/>'}
 
 <!--进入编辑窗口的div-->
 <div id="dialog"></div>
-<!--高级查询布局【每行最多放3列,class:不能随便定义】-->
+<!--高级查询布局,每行最多放3列,class:不能随便定义,-->
 <div id="div_query" style="display: none;">
     <div style="margin-top: 5px;">
         <form id="searchform" class="form-horizontal" method="post" enctype="application/json;charset=UTF-8">
@@ -230,7 +230,7 @@ ${'<#include "../include/header.html"/>'}
             },
             parameterMap: function (options, type) {
                 if (type !== "read" && options.models) {
-                    var datas = Hap.prepareSubmitParameter(options, type);
+                    var datas = Hap.prepareSubmitParameter(options, type)
                     return kendo.stringify(datas);
                 } else if (type === "read") {
                     return Hap.prepareQueryParameter(viewModel.model.toJSON(), options)
@@ -245,7 +245,8 @@ ${'<#include "../include/header.html"/>'}
             total: 'total',
             model: {
                 id: "${columnsInfoHeader[0].tableColumnsName}",
-                fields: {}
+                fields: {},
+                editable: false
             }
         }
     });
@@ -275,15 +276,12 @@ ${'<#include "../include/header.html"/>'}
                 title: '${'<@spring.message "hap.details"/>'}',
                 width: 120,
                 template: function (item) {
-                    return Hap.createAnchor('${'<@spring.message "hap.details"/>'}', openWindow, item.${columnsInfoHeader[0].tableColumnsName});
+                    return Hap.createAnchor('${'<@spring.message "hap.details"/>'}', openWindow, item.${headerRelationColumn});
                 }
             }
         ],
-        editable: true,
-        edit: function (e) {
-            $(e.container).find("input").attr("readonly", "readonly");
-        },
         change: function (e) {
+            var selectedRows = this.select();
             for (var i = 0; i < selectedRows.length; i++) {
                 var dataItem = this.dataItem(selectedRows[i]);
                 gvBrowseUp.setCurrentRow(dataItem);
@@ -349,17 +347,17 @@ ${'<#include "../include/header.html"/>'}
                     var map = {};
                     console.log(gvBrowseUp.currentRow());
                     if (gvBrowseUp.currentRow())
-                        map.omHeaderId = gvBrowseUp.currentRow().omHeaderId;
+                        map.${lineRelationColumn} = gvBrowseUp.currentRow().${headerRelationColumn};
                     else
-                        map.omHeaderId = 0;
+                        map.${lineRelationColumn} = 0;
                     return map;
                 } else if (type === "read") {
                     //return Hap.prepareQueryParameter(viewModel.model.toJSON(), options)
                     var map = {};
                     if (gvBrowseUp.currentRow())
-                        map.omHeaderId = gvBrowseUp.currentRow().omHeaderId;
+                        map.${lineRelationColumn} = gvBrowseUp.currentRow().${headerRelationColumn};
                     else
-                        map.omHeaderId = 0;
+                        map.${lineRelationColumn} = 0;
                     return map;
                 }
 
@@ -373,7 +371,8 @@ ${'<#include "../include/header.html"/>'}
             total: 'total',
             model: {
                 id: "${columnsInfoLine[0].tableColumnsName}",
-                fields: {}
+                fields: {},
+                editable: false
             }
         }
     });
@@ -399,10 +398,6 @@ ${'<#include "../include/header.html"/>'}
                 width: 120
             },
         </#list>],
-        editable: true,
-        edit: function (e) {
-            $(e.container).find("input").attr("readonly", "readonly");
-        },
         change: function (e) {
             var selectedRows = this.select();
             for (var i = 0; i < selectedRows.length; i++) {
@@ -438,7 +433,7 @@ ${'<#include "../include/header.html"/>'}
             height: '75%',
             title: '明细',
             url: url
-        });
+        })
         if (parent.autoResizeIframe) {
             parent.autoResizeIframe('${'$'}{RequestParameters.functionCode!}', 870, function () {
                 editWin.center().open();

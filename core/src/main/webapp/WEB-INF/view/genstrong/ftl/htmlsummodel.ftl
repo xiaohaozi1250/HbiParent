@@ -245,7 +245,8 @@ ${'<#include "../include/header.html"/>'}
             total: 'total',
             model: {
                 id: "${columnsInfoHeader[0].tableColumnsName}",
-                fields: {}
+                fields: {},
+                editable: false
             }
         }
     });
@@ -279,11 +280,6 @@ ${'<#include "../include/header.html"/>'}
                 }
             }
         ],
-
-        editable: true,
-        edit: function (e) {
-            $(e.container).find("input").attr("readonly", "readonly");
-        },
         change: function (e) {
             for (var i = 0; i < selectedRows.length; i++) {
                 var dataItem = this.dataItem(selectedRows[i]);
@@ -374,7 +370,8 @@ ${'<#include "../include/header.html"/>'}
             total: 'total',
             model: {
                 id: "${columnsInfoLine[0].tableColumnsName}",
-                fields: {}
+                fields: {},
+                editable: false
             }
         }
     });
@@ -400,10 +397,10 @@ ${'<#include "../include/header.html"/>'}
                 width: 120
             },
         </#list>],
-        editable: true,
+/*        editable: true,
         edit: function (e) {
             $(e.container).find("input").attr("readonly", "readonly");
-        },
+        },*/
         change: function (e) {
             var selectedRows = this.select();
             for (var i = 0; i < selectedRows.length; i++) {

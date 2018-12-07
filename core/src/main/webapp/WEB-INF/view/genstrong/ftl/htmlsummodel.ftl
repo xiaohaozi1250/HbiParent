@@ -279,6 +279,7 @@ ${'<#include "../include/header.html"/>'}
                 }
             }
         ],
+
         editable: true,
         edit: function (e) {
             $(e.container).find("input").attr("readonly", "readonly");

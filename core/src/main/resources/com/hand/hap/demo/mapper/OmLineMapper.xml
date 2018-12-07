@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hand.hap.demo.mapper.OmLineMapper">
+    <resultMap id="BaseResultMap" type="com.hand.hap.demo.dto.OmLine">
+            <result column="OM_LINE_ID" property="omLineId"
+                    jdbcType="DECIMAL"/>
+            <result column="OM_HEADER_ID" property="omHeaderId"
+                    jdbcType="DECIMAL"/>
+            <result column="INVENTORY_ITEM_ID" property="inventoryItemId"
+                    jdbcType="VARCHAR"/>
+            <result column="ORDER_QUANTITY" property="orderQuantity"
+                    jdbcType="VARCHAR"/>
+    </resultMap>
+    <delete id="deleteByOmHeaderId" parameterType="java.lang.Long">
+        DELETE FROM cux_om_lines_all
+        WHERE OM_HEADER_ID= #{OM_HEADER_ID,jdbcType=DECIMAL}
+    </delete>
+</mapper>

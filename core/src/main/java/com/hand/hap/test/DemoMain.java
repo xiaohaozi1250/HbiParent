@@ -60,7 +60,7 @@ public class DemoMain {
         root.put("lastestProduct", latest);
         latest.put("url", "products/greenmouse.html");
         latest.put("name", "green mouse");
-        //执行创建
+        //执行创建，写入数据
         template.process(root, new OutputStreamWriter(out));
         out.flush();
     }

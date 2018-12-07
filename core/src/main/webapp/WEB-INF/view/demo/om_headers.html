@@ -237,7 +237,8 @@
             total: 'total',
             model: {
                 id: "omHeaderId",
-                fields: {}
+                fields: {},
+                editable: false
             }
         }
     });
@@ -270,17 +271,15 @@
                 }
             }
         ],
-        editable: true,
-        edit: function (e) {
-            $(e.container).find("input").attr("readonly", "readonly");
-        },
         change: function (e) {
+            var selectedRows = this.select();
             for (var i = 0; i < selectedRows.length; i++) {
                 var dataItem = this.dataItem(selectedRows[i]);
                 gvBrowseUp.setCurrentRow(dataItem);
                 break;
             }
-        }, dataBound: function () {
+        },
+        dataBound: function () {
             var rows = this.tbody.find("tr");
             if (rows.length > 0) {
                 rows[0].click();
@@ -364,11 +363,11 @@
             total: 'total',
             model: {
                 id: "omLineId",
-                fields: {}
+                fields: {},
+                editable: false
             }
         }
     });
-
 
     gcBrowseDown = $("#DetailGrid").kendoGrid({
         dataSource: dsBrowseDown,
@@ -394,10 +393,10 @@
                 width: 120
             },
         ],
-        editable: true,
-        edit: function (e) {
-            $(e.container).find("input").attr("readonly", "readonly");
-        },
+        /*        editable: true,
+         edit: function (e) {
+         $(e.container).find("input").attr("readonly", "readonly");
+         },*/
         change: function (e) {
             var selectedRows = this.select();
             for (var i = 0; i < selectedRows.length; i++) {

@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hand.hap.demo.dto.OmHeaders;
 import com.hand.hap.demo.service.IOmHeadersService;
 import com.hand.hap.demo.mapper.OmHeadersMapper;
-import com.hand.hap.demo.dto.OmLine;
-import com.hand.hap.demo.mapper.OmLineMapper;
+import com.hand.hap.demo.dto.OmLines;
+import com.hand.hap.demo.mapper.OmLinesMapper;
 import com.hand.hap.core.IRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Iterator;
@@ -20,7 +20,7 @@ public class OmHeadersServiceImpl extends BaseServiceImpl<OmHeaders> implements 
     @Autowired
     private OmHeadersMapper headerMapper;
     @Autowired
-    private OmLineMapper lineMapper;
+    private OmLinesMapper lineMapper;
 
     @Transactional(rollbackFor = Exception.class)
     public boolean batchDeleteHeaders(List<OmHeaders> headers) {
@@ -52,7 +52,7 @@ public class OmHeadersServiceImpl extends BaseServiceImpl<OmHeaders> implements 
     public OmHeaders createOmHeaders(OmHeaders header) {
         headerMapper.insertSelective(header);
         if (header.getLines() != null) {
-            for (OmLine line : header.getLines()) {
+            for (OmLines line : header.getLines()) {
                 line.setOmHeaderId(header.getOmHeaderId());
                 lineMapper.insertSelective(line);
             }
@@ -66,7 +66,7 @@ public class OmHeadersServiceImpl extends BaseServiceImpl<OmHeaders> implements 
         int updateCount = headerMapper.updateByPrimaryKeySelective(header);
         checkOvn(updateCount, header);
         if (header.getLines() != null) {
-            for (OmLine line : header.getLines()) {
+            for (OmLines line : header.getLines()) {
                 if (line.getOmLineId() == null) {
                     line.setOmHeaderId(header.getOmHeaderId());
                     lineMapper.insertSelective(line);

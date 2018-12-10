@@ -78,7 +78,8 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">选择头表:</label>
                             <div class="col-sm-4">
-                                <input id="autoHeaderComplete" style="width:100%;padding:0px" onchange="clearRelationCol(0)"/>
+                                <input id="autoHeaderComplete" style="width:100%;padding:0px"
+                                       onchange="clearRelationCol(0)"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -757,6 +758,7 @@
                 var mess;
                 if (data == 0) {
                     mess = "文件创建成功";
+                    window.location.reload();
                 } else if (data == 1) {
                     mess = "项目中已存在同名Dto";
                 } else if (data == 2) {

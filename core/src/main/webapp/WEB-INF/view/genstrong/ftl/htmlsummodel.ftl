@@ -142,7 +142,7 @@ ${'<#include "../include/header.html"/>'}
 <div id="page-content">
     <div class="pull-right" id="toolbar-btn" style="padding-left:10px;padding-bottom:10px">
         <span class="btn btn-success" style="float:left;margin-right:3px;"
-              data-bind="click:refreshMain" type="submit"><i class="fa fa-refresh"
+              data-bind="click:refresh" type="submit"><i class="fa fa-refresh"
                                                              style="margin-right:3px;"></i><${'@spring.message "hap.refresh"'}/></span>
         <span class="btn btn-primary" style="float:left;margin-right:3px;"
               data-bind="click:moreQueryFunction" type="submit"><i class="fa fa-search"

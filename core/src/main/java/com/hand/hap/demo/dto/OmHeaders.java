@@ -44,12 +44,12 @@ public class OmHeaders extends BaseDTO {
 
      @Children
      @Transient
-     private List<OmLine> lines;
-     public void setLines(List<OmLine> lines){
+     private List<OmLines> lines;
+     public void setLines(List<OmLines> lines){
          this.lines = lines;
      }
 
-     public List<OmLine> getLines(){
+     public List<OmLines> getLines(){
          return lines;
      }
 

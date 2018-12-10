@@ -3,10 +3,7 @@ ${'<#include "../include/header.html"/>'}
 <script type="text/javascript">
     var viewModel = kendo.observable({
         model: {},
-        refresh: function () {
-            $('#Grid').data('kendoGrid').dataSource.read();
-        },
-        refreshMain: function (e) {
+        refresh: function (e) {
             this.set("lastSelectedRow", null);
             dsBrowseUp.page(1);
             gvBrowseUp.setCurrentRow(null);//将当前行置空
@@ -18,7 +15,8 @@ ${'<#include "../include/header.html"/>'}
             if (viewModel.get("browseDisabled")) {
                 return false;
             }
-            queryData();
+            var win = $("#div_query").data("kendoWindow");
+            win.center().open();
         },
         closeWinSearch: function (e) {//关闭高级查询
             $("#div_query").data("kendoWindow").close();
@@ -40,26 +38,21 @@ ${'<#include "../include/header.html"/>'}
         }, removeheader: function (e) {
             var bMainGrid = $("#Grid").data('kendoGrid');
             var checked = bMainGrid.selectedDataItems();
-            var BaseUrl = _basePath;
-            AjaxJson(BaseUrl + "${headerRemoveUrl}",
-                    JSON.stringify(checked), function (data) {
-                        if (!data.success) {
-                            kendo.ui.showErrorDialog({message: data.message});
-                            return;
-                        } else {
-                            dsBrowseUp.page(1);
-                        }
-
-                    }, false, 'POST', "application/json");
+            var url = _basePath + "${headerRemoveUrl}";
+            if ($.isEmpty(checked)) {
+                var bDetailGrid = $("#DetailGrid").data('kendoGrid');
+                checked = bDetailGrid.selectedDataItems();
+                url = _basePath + "${lineRemoveUrl}";
+            }
+            AjaxJson(url, JSON.stringify(checked), function (data) {
+                if (!data.success) {
+                    kendo.ui.showErrorDialog({message: data.message});
+                } else {
+                    dsBrowseUp.page(1);
+                }
+            }, false, 'POST', "application/json");
         }
     });
-
-
-    //更多查询Func
-    function queryData() {
-        var win = $("#div_query").data("kendoWindow");
-        win.center().open();
-    }
 
     //查询窗口
     $(function () {
@@ -100,16 +93,14 @@ ${'<#include "../include/header.html"/>'}
             }
         });
     }
-
 </script>
 
 <!--进入编辑窗口的div-->
 <div id="dialog"></div>
-<!--高级查询布局,每行最多放3列,class:不能随便定义,-->
 <div id="div_query" style="display: none;">
     <div style="margin-top: 5px;">
         <form id="searchform" class="form-horizontal" method="post" enctype="application/json;charset=UTF-8">
-            <!--高级查询 开始日期-->
+            <!--高级查询-->
         <#list columnsInfoHeader as infos>
             <#if (infos_index+1)%3 == 0>
             <div class="row">
@@ -123,7 +114,7 @@ ${'<#include "../include/header.html"/>'}
                                data-label='${'<@spring.message'} "${headerDtoName?lower_case}.${infos.tableColumnsName?lower_case}"/>'
                                data-role="maskedtextbox"
                                type="text" style="width: 100%" data-bind="value:model.${infos.tableColumnsName}"
-                               class="k-textbox">
+                               class="k-textbox" required>
                     </div>
                 </div>
             </div>
@@ -131,7 +122,6 @@ ${'<#include "../include/header.html"/>'}
             </div>
             </#if>
         </#list>
-
             <div style="text-align:right; line-height: 50px;height: 50px; position: fixed;bottom: 0px; background-color: #ededed; width: 100%; margin-left:-0.58em;">
                 <div style="padding-right: 10px;">
                     <span class="btn btn-primary" data-bind="click:querySearch" type="submit"
@@ -145,14 +135,10 @@ ${'<#include "../include/header.html"/>'}
                                                                          style="margin-right:3px;"></i>${'<@spring.message "hap.cancel"'}/></span>
                 </div>
             </div>
-
         </form>
     </div>
 </div>
-
 <body>
-<!--<div id="page-content">-->
-
 <div id="page-content">
     <div class="pull-right" id="toolbar-btn" style="padding-left:10px;padding-bottom:10px">
         <span class="btn btn-success" style="float:left;margin-right:3px;"
@@ -166,10 +152,8 @@ ${'<#include "../include/header.html"/>'}
         <span data-bind="click:removeheader" type="submit" class="btn btn-danger"
               style="float:left;margin-right:5px"><i class="fa fa-trash-o"
                                                      style="margin-right:3px;"></i>${'<@spring.message "hap.delete"/>'}</span>
-
     </div>
     <script>kendo.bind($('#toolbar-btn'), viewModel);</script>
-
 
     <div style="clear:both; margin-top: 10px;">
         <div id="Grid"></div>
@@ -187,24 +171,17 @@ ${'<#include "../include/header.html"/>'}
 
 <!-- 查询 -->
 <script>
-
     kendo.bind($('#div_query'), viewModel);
-
     //验证
-    $("#queryForm,#mainform").kendoValidator({
+    $("#searchform").kendoValidator({
         messages: {
             required: '${'<@spring.message'} "hap.validation.notempty"/>'
         },
         invalidMessageType: "tooltip"
     });
 </script>
-<!-- 查询 -->
 
-
-<!-- 数据源以及表格-->
 <script type="text/javascript">
-
-    //头数据源
     var BaseUrl = _basePath;
     dsBrowseUp = new kendo.data.DataSource({
         transport: {
@@ -251,7 +228,6 @@ ${'<#include "../include/header.html"/>'}
         }
     });
 
-    //头表格
     gcBrowseUp = $("#Grid").kendoGrid({
         dataSource: dsBrowseUp,
         resizable: true,
@@ -280,14 +256,7 @@ ${'<#include "../include/header.html"/>'}
                 }
             }
         ],
-        change: function (e) {
-            var selectedRows = this.select();
-            for (var i = 0; i < selectedRows.length; i++) {
-                var dataItem = this.dataItem(selectedRows[i]);
-                gvBrowseUp.setCurrentRow(dataItem);
-                break;
-            }
-        }, dataBound: function () {
+        dataBound: function () {
             var rows = this.tbody.find("tr");
             if (rows.length > 0) {
                 rows[0].click();
@@ -297,9 +266,7 @@ ${'<#include "../include/header.html"/>'}
 
     gvBrowseUp = gcBrowseUp.data("kendoGrid");
 
-
     gcBrowseUp.on('click', '.k-grid-content tr', function () {
-
         var row = $(this).closest("tr");
         $(this).parent().find("tr").removeClass("bkg");
         row.addClass("bkg");
@@ -377,7 +344,6 @@ ${'<#include "../include/header.html"/>'}
         }
     });
 
-
     gcBrowseDown = $("#DetailGrid").kendoGrid({
         dataSource: dsBrowseDown,
         resizable: true,
@@ -397,31 +363,8 @@ ${'<#include "../include/header.html"/>'}
                 title: '${'<@spring.message'} "${lineDtoName?lower_case}.${infos.tableColumnsName?lower_case}"/>',
                 width: 120
             },
-        </#list>],
-        change: function (e) {
-            var selectedRows = this.select();
-            for (var i = 0; i < selectedRows.length; i++) {
-                var dataItem = this.dataItem(selectedRows[i]);
-                gvBrowseDown.setCurrentRow(dataItem);
-                break;
-            }
-        }
-    });
-
-    gvBrowseDown = gcBrowseDown.data("kendoGrid");
-    gcBrowseDown.on('click', '.k-grid-content tr', function () {
-
-        // 获取当前选择行数据
-        gvBrowseDown.setCurrentRow(gvBrowseDown.dataItem($(this).context));
-
-    });
-    gvBrowseDown.setCurrentRow = function (rowItem) {
-        gvBrowseDown.cusCurrentRow = rowItem;
-    };
-    gvBrowseDown.currentRow = function () {
-        return gvBrowseDown.cusCurrentRow;
-    };
-
+        </#list>]
+    }).data("kendoGrid");
 
     function openWindow(param) {
         var url = BaseUrl + '${lineUrl}';

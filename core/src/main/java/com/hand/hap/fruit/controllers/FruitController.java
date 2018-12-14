@@ -9,6 +9,7 @@ import com.hand.hap.excel.service.IExportService;
 import com.hand.hap.fruit.dto.Fruit;
 import com.hand.hap.fruit.dto.FruitVendor;
 import com.hand.hap.fruit.service.IFruitService;
+import com.hand.hap.intergration.annotation.HapInbound;
 import com.hand.hap.system.controllers.BaseController;
 import com.hand.hap.system.dto.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(path = "/demo/fruit")
-public class FruitController extends BaseController{
+public class FruitController extends BaseController {
     @Autowired
     private IFruitService fruitService;
     @Autowired
@@ -41,18 +42,18 @@ public class FruitController extends BaseController{
                               @RequestParam(required = false, defaultValue = "1") int page,
                               @RequestParam(required = false, defaultValue = "10") int pageSize) {
         //return new ResponseData(fruitService.select(createRequestContext(request),fruit,page,pageSize));
-        return new ResponseData(fruitService.queryList(fruit,page,pageSize));
+        return new ResponseData(fruitService.queryList(fruit, page, pageSize));
     }
 
 
     @RequestMapping(value = "line/query", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData linequery(HttpServletRequest request,
-                                   FruitVendor fruitVendor,
-                                   @RequestParam(required = false, defaultValue = "1") int page,
-                                   @RequestParam(required = false, defaultValue = "10") int pageSize) {
+                                  FruitVendor fruitVendor,
+                                  @RequestParam(required = false, defaultValue = "1") int page,
+                                  @RequestParam(required = false, defaultValue = "10") int pageSize) {
         //return new ResponseData(fruitService.select(createRequestContext(request),fruit,page,pageSize));
-        return new ResponseData(fruitService.queryLineList(fruitVendor,page,pageSize));
+        return new ResponseData(fruitService.queryLineList(fruitVendor, page, pageSize));
     }
 
     @RequestMapping(path = "/delete")
@@ -75,7 +76,7 @@ public class FruitController extends BaseController{
     @RequestMapping(path = "/insert")
     public ResponseData insert(HttpServletRequest request,
                                @RequestBody Fruit fruit) {
-        fruitService.insertSelective(createRequestContext(request),fruit);
+        fruitService.insertSelective(createRequestContext(request), fruit);
         return new ResponseData(true);
     }
 
@@ -89,8 +90,8 @@ public class FruitController extends BaseController{
 
     @RequestMapping(path = "line/submit")
     public ResponseData batchLineUpdate(HttpServletRequest request,
-                                    @RequestBody List<Fruit> fruits) {
-        List<Fruit> datas  = fruitService.batchLineUpdate(createRequestContext(request), fruits);
+                                        @RequestBody List<Fruit> fruits) {
+        List<Fruit> datas = fruitService.batchLineUpdate(createRequestContext(request), fruits);
         return new ResponseData(datas);
     }
 
@@ -106,4 +107,16 @@ public class FruitController extends BaseController{
                 exportConfig, request, httpServletResponse, requestContext);
 
     }
+
+
+    @RequestMapping(value = "/api/public/com/hand/hap/interface/fruit", method = RequestMethod.POST)
+    @ResponseBody
+    @HapInbound(apiName = "com.hand.hap.interface.fruit")
+    public ResponseData queryWs(HttpServletRequest request,
+                                Fruit fruit,
+                                @RequestParam(required = false, defaultValue = "1") int page,
+                                @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        return new ResponseData(fruitService.queryList(fruit, page, pageSize));
+    }
+
 }

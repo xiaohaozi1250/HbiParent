@@ -109,14 +109,7 @@ public class FruitController extends BaseController {
     }
 
 
-    @RequestMapping(value = "/api/public/com/hand/hap/interface/fruit", method = RequestMethod.POST)
-    @ResponseBody
-    @HapInbound(apiName = "com.hand.hap.interface.fruit")
-    public ResponseData queryWs(HttpServletRequest request,
-                                Fruit fruit,
-                                @RequestParam(required = false, defaultValue = "1") int page,
-                                @RequestParam(required = false, defaultValue = "10") int pageSize) {
-        return new ResponseData(fruitService.queryList(fruit, page, pageSize));
-    }
+
+
 
 }

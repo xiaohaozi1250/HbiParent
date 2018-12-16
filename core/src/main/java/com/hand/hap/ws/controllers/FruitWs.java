@@ -30,4 +30,14 @@ public class FruitWs extends BaseController {
         return new ResponseData(fruitService.queryList(fruit, page, pageSize));
     }
 
+    @RequestMapping(value = "/api/com/hand/hap/token/fruit", method = RequestMethod.POST)
+    @ResponseBody
+    @HapInbound(apiName = "com.hand.hap.token.fruit")
+    public ResponseData querytokenWs(HttpServletRequest request,
+                                Fruit fruit,
+                                @RequestParam(required = false, defaultValue = "1") int page,
+                                @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        return new ResponseData(fruitService.queryList(fruit, page, pageSize));
+    }
+
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 @TopicMonitor(channel = "com.hand.hap:hello")
 public class HelloMessageConsumer implements IMessageConsumer<String> {
 
+
     @Override
     public void onMessage(String message , String pattern) {
         System.out.println("------------------------------------------");

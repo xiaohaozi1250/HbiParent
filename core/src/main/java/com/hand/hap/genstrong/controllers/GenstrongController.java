@@ -28,7 +28,6 @@ public class GenstrongController extends BaseController {
     public GenstrongController() {
     }
 
-
     @RequestMapping(
             value = {"/alltables"},
             method = {RequestMethod.GET}

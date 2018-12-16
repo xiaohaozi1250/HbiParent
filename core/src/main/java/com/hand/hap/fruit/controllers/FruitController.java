@@ -24,7 +24,7 @@ import java.util.List;
  * Created by zhihao.dai on 2017/4/21.
  */
 @RestController
-@RequestMapping(path = "/demo/fruit")
+//@RequestMapping(path = "/demo/fruit")
 public class FruitController extends BaseController {
     @Autowired
     private IFruitService fruitService;
@@ -107,6 +107,7 @@ public class FruitController extends BaseController {
                 exportConfig, request, httpServletResponse, requestContext);
 
     }
+
 
 
 

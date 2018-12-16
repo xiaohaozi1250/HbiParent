@@ -49,12 +49,11 @@
         m.price,
         m.producing_area,
         m.region_id,
-        r.region_name,
+        null region_name,
         date_format(m.active_date, '%Y-%m-%d') active_date,
         m.color,
         m.object_version_number
-        FROM fruit m left OUTER  join region r
-          on  m.region_id = r.region_id
+        FROM fruit m
         <where>
             1 = 1
             <if test="id != null">
@@ -81,8 +80,7 @@
         SELECT
         m.id,
         m.name
-        FROM fruit m left OUTER  join region r
-        on  m.region_id = r.region_id
+        FROM fruit m
     </select>
 
 

@@ -206,16 +206,16 @@ public class FileUtil {
             sb1.append("import javax.validation.constraints.NotNull;\r\n");
         }
 
-        if (needNotEmpty) {
-            sb1.append("import org.hibernate.validator.constraints.NotEmpty;\r\n");
-        }
+            if (needNotEmpty) {
+                sb1.append("import org.hibernate.validator.constraints.NotEmpty;\r\n");
+            }
 
-        if (source.equals("header")) {
-            sb1.append("import com.hand.hap.core.annotation.Children;\r\n");
-            sb1.append("import javax.persistence.Transient;\r\n");
-            sb1.append("import java.util.List;\r\n");
-        }
-        if (table.isMultiLanguage()) {
+            if (source.equals("header")) {
+                sb1.append("import com.hand.hap.core.annotation.Children;\r\n");
+                sb1.append("import javax.persistence.Transient;\r\n");
+                sb1.append("import java.util.List;\r\n");
+            }
+            if (table.isMultiLanguage()) {
             String p1 = MultiLanguageField.class.getName();
             String cl = MultiLanguage.class.getName();
             sb1.append("import " + p1 + ";\r\n");

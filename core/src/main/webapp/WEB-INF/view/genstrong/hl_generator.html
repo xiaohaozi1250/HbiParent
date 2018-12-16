@@ -477,17 +477,20 @@
             if (status == "success") {
                 var mess;
                 if (data == 1) {
+                    console.log(1);
                     mess = "该字段不在表内，请重新输入!";
                     kendo.ui.showInfoDialog({
                         message: mess
                     });
                     $("#autoHeaderRelation").val("");
+                    return;
                 } else if (data == 2) {
                     mess = "该字段不在表内，请重新输入!";
                     kendo.ui.showInfoDialog({
                         message: mess
                     });
                     $("#autoLineRelation").val("");
+                    return;
                 }
             }
         })

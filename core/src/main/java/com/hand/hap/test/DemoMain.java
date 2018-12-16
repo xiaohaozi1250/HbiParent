@@ -40,11 +40,11 @@ public class DemoMain {
     public static void createFtl() throws IOException, TemplateException {
 
         Configuration cfg = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
-        Template template = null;
+        Template template;
 
-        //模板路径
+        //加载模板路径
         cfg.setDirectoryForTemplateLoading(new File("D:/soft/HAP/Project/HbiParent/core/src/main/java/com/hand/hap/test/ftl"));
-        //模板名称
+        //获取模板
         template = cfg.getTemplate("htmldemo.ftl");
         //字符集
         template.setEncoding("UTF-8");

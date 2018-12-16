@@ -1,13 +1,11 @@
-package hbi.core.mydemo.service;
+package hbi.core.empws.service;
 
 import com.hand.hap.core.IRequest;
 import com.hand.hap.core.ProxySelf;
-import com.hand.hap.system.dto.ResponseData;
 import com.hand.hap.system.service.IBaseService;
-import hbi.core.mydemo.dto.Emp;
-import hbi.core.mydemo.dto.EmpBaseResponse;
-import hbi.core.mydemo.dto.EmpRestInvoke;
-import hbi.core.mydemo.exception.EmpBaseException;
+import hbi.core.empws.dto.Emp;
+import hbi.core.empws.dto.EmpBaseResponse;
+import hbi.core.empws.exception.EmpBaseException;
 
 import java.util.List;
 

@@ -1,14 +1,14 @@
-package hbi.core.mydemo.controllers;
+package hbi.core.empws.controllers;
 
 import com.hand.hap.intergration.annotation.HapInbound;
-import hbi.core.mydemo.dto.*;
-import hbi.core.mydemo.exception.EmpBaseException;
-import hbi.core.mydemo.service.IRestApiService;
+import hbi.core.empws.dto.*;
+import hbi.core.empws.exception.EmpBaseException;
+import hbi.core.empws.service.IRestApiService;
 import org.springframework.stereotype.Controller;
 import com.hand.hap.system.controllers.BaseController;
 import com.hand.hap.core.IRequest;
 import com.hand.hap.system.dto.ResponseData;
-import hbi.core.mydemo.service.IEmpService;
+import hbi.core.empws.service.IEmpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,11 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.validation.BindingResult;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import hbi.core.mydemo.dto.EmpBaseResponse.Status;
+import hbi.core.empws.dto.EmpBaseResponse.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

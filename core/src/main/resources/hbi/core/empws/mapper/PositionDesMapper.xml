@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="hbi.core.mydemo.mapper.PositionDesMapper">
-    <resultMap id="BaseResultMap" type="hbi.core.mydemo.dto.Position">
+<mapper namespace="hbi.core.empws.mapper.PositionDesMapper">
+    <resultMap id="BaseResultMap" type="hbi.core.empws.dto.Position">
         <result column="POSITION_ID" property="positionId" jdbcType="DECIMAL" />
         <result column="POSITION_CODE" property="positionCode" jdbcType="VARCHAR" />
         <result column="NAME" property="name" jdbcType="VARCHAR" />

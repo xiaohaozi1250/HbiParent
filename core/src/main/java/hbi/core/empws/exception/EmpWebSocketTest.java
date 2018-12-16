@@ -1,4 +1,4 @@
-package hbi.core.mydemo.exception;
+package hbi.core.empws.exception;
 
 import com.hand.hap.message.IMessageConsumer;
 import com.hand.hap.message.TopicMonitor;

@@ -1,4 +1,4 @@
-package hbi.core.mydemo.dto;
+package hbi.core.empws.dto;
 
 import com.hand.hap.system.dto.ResponseData;
 

@@ -1,4 +1,4 @@
-package hbi.core.mydemo.service.impl;
+package hbi.core.empws.service.impl;
 
 import com.github.pagehelper.StringUtil;
 import com.hand.hap.core.IRequest;
@@ -10,8 +10,8 @@ import com.hand.hap.intergration.service.IHapAuthenticationService;
 import com.hand.hap.intergration.service.IHapInterfaceHeaderService;
 import com.hand.hap.intergration.service.impl.HapAuthenticationServiceImpl;
 import com.hand.hap.system.dto.ResponseData;
-import hbi.core.mydemo.dto.Emp;
-import hbi.core.mydemo.service.IRestApiService;
+import hbi.core.empws.dto.Emp;
+import hbi.core.empws.service.IRestApiService;
 import net.sf.json.JSONNull;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;

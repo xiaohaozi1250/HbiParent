@@ -1,9 +1,9 @@
-package hbi.core.mydemo.service.impl;
+package hbi.core.empws.service.impl;
 
 import com.hand.hap.system.service.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
-import hbi.core.mydemo.dto.Position;
-import hbi.core.mydemo.service.IPositionService;
+import hbi.core.empws.dto.Position;
+import hbi.core.empws.service.IPositionService;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service

@@ -1,11 +1,11 @@
-package hbi.core.mydemo.controllers;
+package hbi.core.empws.controllers;
 
 import org.springframework.stereotype.Controller;
 import com.hand.hap.system.controllers.BaseController;
 import com.hand.hap.core.IRequest;
 import com.hand.hap.system.dto.ResponseData;
-import hbi.core.mydemo.dto.Position;
-import hbi.core.mydemo.service.IPositionService;
+import hbi.core.empws.dto.Position;
+import hbi.core.empws.service.IPositionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

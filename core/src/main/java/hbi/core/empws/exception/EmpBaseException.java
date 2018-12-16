@@ -1,4 +1,4 @@
-package hbi.core.mydemo.exception;
+package hbi.core.empws.exception;
 
 /**
  * Created by La on 2018/10/22.

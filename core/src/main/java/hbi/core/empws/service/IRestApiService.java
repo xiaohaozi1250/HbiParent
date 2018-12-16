@@ -1,8 +1,4 @@
-package hbi.core.mydemo.service;
-
-import com.hand.hap.core.IRequest;
-import com.hand.hap.system.dto.ResponseData;
-import hbi.core.mydemo.dto.Emp;
+package hbi.core.empws.service;
 
 /**
  * Created by La on 2018/10/22.

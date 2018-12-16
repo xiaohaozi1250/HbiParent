@@ -1,4 +1,4 @@
-package hbi.core.mydemo.dto;
+package hbi.core.empws.dto;
 
 /**
  * Created by La on 2018/10/25.

@@ -1,4 +1,4 @@
-package hbi.core.mydemo.service.impl;
+package hbi.core.empws.service.impl;
 
 import com.hand.hap.core.IRequest;
 import com.hand.hap.intergration.dto.HapInterfaceHeader;
@@ -7,13 +7,13 @@ import com.hand.hap.intergration.service.IHapInterfaceHeaderService;
 import com.hand.hap.message.IMessagePublisher;
 import com.hand.hap.message.websocket.CommandMessage;
 import com.hand.hap.system.service.impl.BaseServiceImpl;
-import hbi.core.mydemo.dto.Emp;
-import hbi.core.mydemo.dto.EmpBaseResponse;
+import hbi.core.empws.dto.Emp;
+import hbi.core.empws.dto.EmpBaseResponse;
 
-import hbi.core.mydemo.dto.JsonDateValueProcessor;
-import hbi.core.mydemo.exception.EmpBaseException;
-import hbi.core.mydemo.mapper.EmpMapper;
-import hbi.core.mydemo.service.IEmpService;
+import hbi.core.empws.dto.JsonDateValueProcessor;
+import hbi.core.empws.exception.EmpBaseException;
+import hbi.core.empws.mapper.EmpMapper;
+import hbi.core.empws.service.IEmpService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.*;
 

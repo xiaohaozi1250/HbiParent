@@ -1,4 +1,4 @@
-package hbi.core.mydemo.dto;
+package hbi.core.empws.dto;
 
 import net.sf.json.JsonConfig;
 import net.sf.json.processors.JsonValueProcessor;

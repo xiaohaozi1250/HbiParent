@@ -1,0 +1,36 @@
+<#include "../include/header.html">
+    <body>
+<div id="dtabstrip">
+    <ul>
+        <li class="k-state-active">First Tab
+            <img src="images/DeleteIcon.gif" style="padding-left: 10px; z-index: 1111" onclick='DeleteTabs(this);' />
+        </li>
+        <li>Second Tab</li>
+    </ul>
+    <div>
+        1111111sdffds</div>
+    <div>
+        2222ssadasfas</div>
+</div>
+
+<script>
+var dtabStrip = $("#dtabstrip").kendoTabStrip({
+animation: {
+open: {
+effects: "fadeIn"
+},
+close: {
+duration: 200,
+effects: "fadeOut"
+}
+}
+
+}).data("kendoTabStrip");
+
+function DeleteTabs(ImgObj) {
+var aa = $(ImgObj).closest("li").text() ;
+dtabStrip.remove($(ImgObj).closest("li").index());
+}
+</script>
+    </body>
+    </html>

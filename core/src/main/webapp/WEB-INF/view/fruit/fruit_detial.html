@@ -1,0 +1,332 @@
+<#include "../include/header.html">
+
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <link href="${base.contextPath}/resources/css/viewer.css">
+    <script src="${base.contextPath}/resources/js/viewer.js"></script>
+
+    <body>
+    <div id="page-content">
+        <form id="mainform"  class="panel form-horizontal"  method="post"
+              enctype="application/json;charset=UTF-8">
+            <div class="panel-body">
+                <div  id="query-form" style="padding-bottom:10px;">
+                    <!--<div class="form-group">-->
+
+                        <div class="form-group">
+                        <label class="col-sm-2 control-label">价格:</label>
+                        <div class="col-sm-4">
+                            <input type="text" required style="width:100%" id="price"
+                                   data-bind="value:model.price" class="k-textbox">
+                        </div>
+                        <div class="col-sm-4" >
+                            <span data-for="price" class=".k-invalid-msg"></span>
+                        </div>
+                        </div>
+
+                        <div class="form-group">
+                        <label class="col-sm-2 control-label">名称:</label>
+                        <div class="col-sm-4">
+                            <input type="text" required style="width:100%" id="name"
+                                   data-bind="value:model.name" class="k-textbox">
+                        </div>
+                        <div class="col-sm-4" >
+                            <span data-for="name" class=".k-invalid-msg"></span>
+                        </div>
+                        </div>
+
+
+                        <div class="form-group">
+                        <label class="col-sm-2 control-label">产地:</label>
+                        <div class="col-sm-4">
+                            <input type="text" required style="width:100%" id="producingArea"
+                                   data-bind="value:model.producingArea" class="k-textbox">
+                        </div>
+                        <div class="col-sm-4" >
+                            <span data-for="producingArea" class=".k-invalid-msg"></span>
+                        </div>
+                        </div>
+
+                    <div class="form-group">
+                    <label class="col-sm-2 control-label">地理:</label>
+                    <div class="col-sm-4">
+                        <select id="first" data-bind="value:model.regionId"></select>
+                    </div>
+                    <div class="col-sm-4" >
+                        <span data-for="regionId" class=".k-invalid-msg"></span>
+                    </div>
+                </div>
+
+                    <!--</div>-->
+                </div>
+            </div>
+
+
+            <!--Tab-->
+            <div id="dtabstrip" class="col-sm-12" style="margin-top: 40px;">
+                <ul class="nav nav-tabs" id="mytab">
+                    <li class="active"><a href="#personal" data-toggle="tab">
+                        供应商信息</a></li>
+                    <li class=""><a href="#company" data-toggle="tab"><@spring.message
+                        "fruit.image"/></a></li>
+                    <li class=""><a href="#another" data-toggle="tab"><@spring.message
+                        "employee.otherinfo"/></a></li>
+                </ul>
+
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade in active" style="margin-top: 20px;" id="personal">
+                        <div class="form-group">
+                            <div style="clear:both">
+                                <div id="grid" ></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" style="margin-top: 20px;" id="company">
+                        <div style="margin-top: 20px;"  class="col-sm-2">
+                            <p><@spring.message "fruit.image"/></p>
+                            <!--可以对图片样式进行控制-->
+                            <ul id="images">
+                                <li><img src="${base.contextPath}/resources/images/lock.jpg" alt="Picture"></li>
+                                <li><img src="${base.contextPath}/resources/images/login_bg.jpg"></li>
+                            </ul>
+
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="another">
+                        <div style="margin-top: 20px;" class="col-sm-2">
+                            <p><@spring.message "employee.otherinfo"/></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+
+    <script>
+        var isEdit = false;
+        var id = '${RequestParameters.id!0}';
+        if (id!=0) {
+            isEdit = true;
+            $.ajax({
+                type: "POST",
+                url:   '${base.contextPath}/demo/fruit/query?id='+ id, //'${RequestParameters.myId!0}',
+                dataType : "json",
+                contentType : "application/json",
+                success: function (args) {
+                    var a0 = args.rows[0] || {};
+                    for (var k in a0) {
+                        viewModel.model.set(k, a0[k]);
+                    }
+                }
+            });
+        };
+
+        var viewModel = new kendo.observable({
+            model: {},
+            save: function(e){
+                var data= viewModel.model.toJSON();
+                if(isEdit){
+                    data.__status = "update";
+                }else{
+                    data.__status = "add";
+                }
+                var validator = $("#mainform").kendoValidator().data("kendoValidator");
+                if (validator.validate()) {
+                    //document.write("tab change1");
+                    $.ajax({
+                        type   : 'POST',
+                        url    : '${base.contextPath}/demo/fruit/submit',
+                        dataType : "json",
+                        contentType : "application/json",
+                        data   : kendo.stringify([data]),
+                        success: function (data) {
+                            if(data.success==false){
+                                kendo.ui.showErrorDialog({
+                                    message:data.message
+                                });
+                            }else{
+                                window.parent.$("#dialog").data("kendoWindow").close();
+                            }
+                        }
+                    });
+                }
+            },
+            closeWin: function(e){
+                window.parent.$("#dialog").data("kendoWindow").close();
+            }});
+
+        kendo.bind($('#page-content'), viewModel);
+
+    </script>
+
+    <!-- 联动-->
+    <script>
+        var myData = [];
+        function myDataToJson(data) {
+            this.regionName = data.regionName;
+            this.regionId = data.regionId;
+            this.parentId = data.parentId;
+        }
+
+
+        $.ajax({
+            url : '${base.contextPath}/demo/link/query',
+            type : 'POST',
+            contentType : "application/json;charset=utf-8",
+            cache : false,
+            dataType : 'json',
+            async : false,
+            success : function(data) {
+                for (var i = 1; i < data.rows.length; i++) {
+                    myData.push(new myDataToJson(data.rows[i]));
+                }
+            }
+        });
+
+        $(document).ready(function(){
+            //初始化控件
+            firstDropDownList = $("#first").kendoDropDownList({
+                optionLabel: "  --请选择省份--",
+                dataTextField:"regionName",
+                dataValueField:"regionId",
+                dataSource:{
+                    data:myData
+                },
+                valuePrimitive: true,
+                change:function(){
+                }
+            }).data("kendoDropDownList");
+
+            firstDropDownList.dataSource.filter({ field: "parentId", operator: "eq", value: 0 });
+        });
+
+    </script>
+
+
+    <!--行信息-->
+    <script>
+        var id = '${RequestParameters.id!0}';
+        var crudServiceBaseUrl = '${base.contextPath}';
+        var dataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        url: crudServiceBaseUrl + "/demo/fruit/line/query?fruitid="+ id,
+                        type: "POST",
+                        dataType: "json"
+                    },
+                    parameterMap: function (options, type) {
+                        if (type !== "read" && options.models) {
+                            var datas = Hap.prepareSubmitParameter(options, type);
+                            return kendo.stringify(datas);
+                        } else if (type === "read") {
+                            return Hap.prepareQueryParameter(viewModel.model.toJSON(), options);
+                        }
+                    }
+                },
+                batch: true,
+                serverPaging: true,
+                serverSorting: true,
+                pageSize: 10,
+                schema: {
+                    data: 'rows',
+                    total: 'total',
+                    model: {
+                        id: "id",
+                        fields: {
+                            name: {type:"string"},
+                            location: {type:"string"},
+                            isFelsh: {defaultValue: 'Y',type: 'boolean',checkedValue:'Y',uncheckedValue:'N'}
+                        }
+                    }
+                }
+            }
+        );
+        var grid = $("#grid").kendoGrid({
+            dataSource: dataSource,
+            navigatable: false,
+            height: '100%',
+            resizable: true,
+            scrollable: true,
+            selectable: 'multiple, rowbox',
+            pageable: {
+                //可以选择一个页面多少条数据
+                pageSizes: [5, 10, 20, 50],
+                refresh: true,
+                buttonCount: 5
+            },
+             toolbar: [{
+             name: "create",
+             template: '<span class=" btn btn-primary k-grid-add">#=text#</span>'
+             }, {
+             name: "save",
+             template: '<span class="btn btn-success" onclick="saveFruit()" type="submit">#=text#</span>'
+             }, {
+             name: "cancel",
+             template: '<span class="btn btn-default" onclick="closeWinP()" type="button">取消</span>'
+             }, {
+             template: '<span onclick="deleteData()"  class="btn btn-danger">删除</span>'
+             }],
+            columns: [{
+                field : "name",
+                title : "供应商名称"
+            }, {
+                field : "location",
+                title : '地点'
+            },{
+                field : "isFelsh",
+                title : '新鲜',
+                attributes: {style: "text-align:center"},
+                width : 80
+            }
+            ],
+            editable: true
+        }).data("kendoGrid");
+
+
+        //保存头行
+        function saveFruit(e){
+            var validator = $("#mainform").kendoValidator().data("kendoValidator");
+            if (validator.validate()) {
+                viewModel.model.__status = isEdit ? 'update' : 'add';
+                Hap.submitForm({
+                    url           : crudServiceBaseUrl + "/demo/fruit/line/submit",
+                    formModel     : viewModel.model,
+                    grid: {"fruitVendors": $("#grid")},
+                    success: function (data) {
+                        if(data.success==false){
+                            kendo.ui.showErrorDialog({
+                                message:data.message
+                            });
+                        }else{
+                            window.parent.$("#dialog").data("kendoWindow").close();
+                        }
+                    }
+                });
+            }
+        };
+
+
+
+
+        //关闭编辑窗口
+        function closeWinP(e){
+            //关闭该window
+            window.parent.$("#dialog").data("kendoWindow").close()
+
+        }
+    </script>
+
+    <!-- 自适应-->
+    <script> Hap.autoResizeGrid($("#grid"));</script>
+
+    <script type="text/javascript">
+       var viewer = new Viewer(document.getElementById('images'));
+    </script>
+
+
+    </body>
+    </html>

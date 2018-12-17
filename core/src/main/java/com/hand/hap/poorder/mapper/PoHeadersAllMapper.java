@@ -1,6 +1,6 @@
-package com.hand.hap.podemo.mapper;
+package com.hand.hap.poorder.mapper;
 
 import com.hand.hap.mybatis.common.Mapper;
-import com.hand.hap.podemo.dto.PoHeadersAll;
+import com.hand.hap.poorder.dto.PoHeadersAll;
 public interface PoHeadersAllMapper extends Mapper<PoHeadersAll>{
 }

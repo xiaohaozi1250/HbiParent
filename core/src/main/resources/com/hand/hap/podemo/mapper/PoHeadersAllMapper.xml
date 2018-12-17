@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.hand.hap.podemo.mapper.PoHeadersAllMapper">
-    <resultMap id="BaseResultMap" type="com.hand.hap.podemo.dto.PoHeadersAll">
+<mapper namespace="com.hand.hap.poorder.mapper.PoHeadersAllMapper">
+    <resultMap id="BaseResultMap" type="com.hand.hap.poorder.dto.PoHeadersAll">
             <result column="PO_HEADER_ID" property="poHeaderId"
                     jdbcType="DECIMAL"/>
             <result column="SEGMENT1" property="segment1"

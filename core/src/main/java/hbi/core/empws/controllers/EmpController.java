@@ -215,21 +215,6 @@ public class EmpController extends BaseController {
         System.out.println("SessionId：" + request.getRequestedSessionId());
         requestContext.setAttribute("SessionId", request.getRequestedSessionId());
         service.WebSocketDemo(requestContext);
-/*        try {
-            service.inAction2(requestContext);
-*//*            for (Emp employee : dto) {
-                System.out.println("Id：" + employee.getEmployeeId());
-                System.out.println("编码：" + employee.getEmployeeCode());
-                System.out.println("生日：" + employee.getBornDate());
-                Emp emp = service.inAction1(requestContext, employee);
-                System.out.println("解析获取的 Id：" + emp.getEmployeeId());
-                System.out.println("解析获取的 编码：" + emp.getEmployeeCode());
-                System.out.println("解析获取的 生日：" + emp.getBornDate());
-                employees.add(emp);
-            }*//*
-        } catch (Exception e) {
-            System.out.println("invoke Error");
-        }*/
         //返回请求
         return new ResponseData(employees);
     }

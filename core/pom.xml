@@ -35,42 +35,8 @@
             <artifactId>hap</artifactId>
             <version>${hap.version}</version>
             <classifier>classes</classifier>
-            <!--<scope>provided</scope>-->
+            <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>2.3.21</version>
-        </dependency>
-
-        <!--
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>4.3.20.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>4.3.20.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>4.3.20.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
-            <version>4.3.20.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aspects</artifactId>
-            <version>4.3.20.RELEASE</version>
-        </dependency>
-        -->
-
         <!-- <dependency>
             <groupId>com.hand</groupId>
             <artifactId>hap-db</artifactId>

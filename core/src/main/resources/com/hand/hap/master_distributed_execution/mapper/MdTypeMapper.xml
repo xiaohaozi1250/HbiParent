@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hand.hap.master_distributed_execution.mapper.MdTypeMapper">
+    <resultMap id="BaseResultMap" type="com.hand.hap.master_distributed_execution.dto.MdType">
+        <result column="ID" property="id" jdbcType="DECIMAL" />
+        <result column="MD_TYPE_CODE" property="mdTypeCode" jdbcType="VARCHAR" />
+        <result column="MD_TYPE_NAME" property="mdTypeName" jdbcType="VARCHAR" />
+        <result column="PARENT_ID" property="parentId" jdbcType="DECIMAL" />
+        <result column="IS_ALIVE" property="isAlive" jdbcType="VARCHAR" />
+        <result column="IS_ENABLED" property="isEnabled" jdbcType="VARCHAR" />
+        <result column="PROGRAM_APPLICATION_ID" property="programApplicationId" jdbcType="DECIMAL" />
+        <result column="PROGRAM_UPDATE_DATE" property="programUpdateDate" jdbcType="DATE" />
+    </resultMap>
+    <resultMap id="baseTreeViewMap" type="com.hand.hap.treeview.dto.TreeView">
+        <id column="id" property="id"/>
+        <result column="text" property="text"/>
+        <result column="parentId" property="parentId"/>
+        <result column="code" property="code"/>
+        <result column="icon" property="icon"/>
+        <result column="lvl" property="lvl" />
+    </resultMap>
+    <select id="selectMdTypeTreeData" resultMap="baseTreeViewMap">
+        SELECT
+        ID AS id,
+        MD_TYPE_CODE AS code,
+        MD_TYPE_NAME AS text,
+        PARENT_ID AS parentId
+        FROM
+        hmdm_md_type
+    </select>
+</mapper>

@@ -1,0 +1,59 @@
+<#include "../include/header.html"/>
+<body>
+<div id="content-container">
+    <div id="page-content">
+        <div class="panel" style="padding:0px;">
+            <div class="pull-left" id="toolbarMd-btn" style="padding-bottom:10px;">
+                <span class="btn btn-primary" onclick="expandMd()" style="float:left;margin-right:5px;"><i
+                        class="fa fa-plus-circle"></i> <@spring.message "hap.expand"/></span>
+                <span class="btn btn-warning" onclick="collapseMd()" style="float:left;margin-right:5px;"><i
+                        class="fa fa-minus-circle"></i> <@spring.message "hap.collapse"/></span>
+                <span class="btn btn-info" onclick="refreshMd()" style="float:right;margin-right:5px;"><i
+                        class="fa fa-refresh"></i> <@spring.message "hap.refresh"/></span>
+            </div>
+            <div class="panel-body">
+                <div id="treeViewMd" style="clear: both"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    baseUrl = "${base.contextPath}";
+    //treeViewMd
+    var treeViewMd = $("#treeViewMd").kendoTreeView({
+        template: "<span style='font-weight:bold;'><i class='#= item.icon #'></i> #= item.text #</span>",
+        dataValueField: "id"
+    }).data("kendoTreeView");
+
+    var MdTreeDataSource = new kendo.data.HierarchicalDataSource({
+        transport: {
+            read: {
+                url: baseUrl + "/mdTypeTree",
+                dataType: "json",
+                type: "POST"
+            }
+        },
+        schema: {
+            model: {
+                id: "id",
+                children: "items"
+            }
+        }
+    });
+
+    $('#treeViewMd').data('kendoTreeView').setDataSource(MdTreeDataSource);
+
+    function expandMd() {
+        $('#treeViewMd').data('kendoTreeView').expand(".k-item");
+    }
+    function collapseMd() {
+        $('#treeViewMd').data('kendoTreeView').collapse(".k-item");
+    }
+
+    function refreshMd() {
+        MdTreeDataSource.read();
+    }
+
+</script>
+</body>
+</html>

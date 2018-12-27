@@ -35,8 +35,6 @@
         </where>
     </select>
     <select id="selectMdTypeCode" resultMap="BaseResultMap">
-        select -1 AS ID,"MASTER" AS MD_TYPE_CODE,"主数据类型" AS MD_TYPE_NAME from dual
-        UNION
         select ID,MD_TYPE_CODE,MD_TYPE_NAME from hmdm_md_type
     </select>
 </mapper>

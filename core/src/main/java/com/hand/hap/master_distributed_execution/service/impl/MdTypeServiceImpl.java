@@ -13,16 +13,16 @@ import java.util.List;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class MdTypeServiceImpl extends BaseServiceImpl<MdType> implements IMdTypeService{
+public class MdTypeServiceImpl extends BaseServiceImpl<MdType> implements IMdTypeService {
     @Autowired
     private MdTypeMapper mdTypeMapper;
 
     /**
+     * @return
      * @desc 主数据类型树
      * @date 2018-12-26
-     * @return
      */
-    public List<TreeView> selectMdTypeTree() {
-        return mdTypeMapper.selectMdTypeTreeData();
+    public List<TreeView> selectMdTypeTree(Long id) {
+        return mdTypeMapper.selectMdTypeTreeData(id);
     }
 }

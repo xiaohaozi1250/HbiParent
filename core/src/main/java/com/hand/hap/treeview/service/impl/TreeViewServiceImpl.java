@@ -53,7 +53,6 @@ public class TreeViewServiceImpl extends BaseServiceImpl<TreeView> implements IT
                 node.setExpanded(true);
                 treeRoot.add(node);
             } else {
-
                 TreeView treeViewNode = (TreeView) nodeList.get(node.getParentId());
                 if (treeViewNode != null) {
                     if (treeViewNode.getItems() == null || treeViewNode.getItems().size() == 0) {
@@ -64,6 +63,8 @@ public class TreeViewServiceImpl extends BaseServiceImpl<TreeView> implements IT
                     } else {
                         treeViewNode.getItems().add(node);
                     }
+                } else {
+                    treeRoot.add(node);
                 }
             }
         }

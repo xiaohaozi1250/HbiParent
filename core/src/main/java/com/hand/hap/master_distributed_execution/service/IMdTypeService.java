@@ -8,5 +8,5 @@ import com.hand.hap.treeview.dto.TreeView;
 import java.util.List;
 
 public interface IMdTypeService extends IBaseService<MdType>, ProxySelf<IMdTypeService> {
-    List<TreeView> selectMdTypeTree();
+    List<TreeView> selectMdTypeTree(Long id);
 }

@@ -1,36 +1,85 @@
 <#include "../include/header.html"/>
 <body>
+
 <div id="content-container">
-    <div id="page-content">
-        <div class="panel" style="padding:0px;">
-            <div class="pull-left" id="toolbarMd-btn" style="padding-bottom:10px;">
-                <span class="btn btn-primary" onclick="expandMd()" style="float:left;margin-right:5px;"><i
-                        class="fa fa-plus-circle"></i> <@spring.message "hap.expand"/></span>
-                <span class="btn btn-warning" onclick="collapseMd()" style="float:left;margin-right:5px;"><i
-                        class="fa fa-minus-circle"></i> <@spring.message "hap.collapse"/></span>
-                <span class="btn btn-info" onclick="refreshMd()" style="float:right;margin-right:5px;"><i
-                        class="fa fa-refresh"></i> <@spring.message "hap.refresh"/></span>
+    <div class="col-sm-2">
+        <form class="form-horizontal" id="form1">
+            <div id="page-content">
+                <div class="panel" style="padding:0px;">
+                    <label class="pull-left" style="padding-bottom:10px;">分发数据</label>
+                    <div class="pull-left" id="toolbarMd-btn" style="padding-bottom:10px;">
+                        <input id="distributeData" type="text" data-role="maskedtextbox"
+                               style="float:left;width:150px;margin-right:5px;"
+                               class="k-textbox" onblur="validateDistributeData()"/>
+                    </div>
+                    <div class="panel-body">
+                        <div id="treeViewMd" style="clear: both"></div>
+                    </div>
+                </div>
             </div>
-            <div class="panel-body">
-                <div id="treeViewMd" style="clear: both"></div>
+        </form>
+    </div>
+    <div class="col-sm-6" style="height:170px;">
+        <div id="tabstrip" style="height:100%">
+            <ul>
+                <li class="k-state-active">
+                    Paris
+                </li>
+                <li>
+                    New York
+                </li>
+                <li>
+                    London
+                </li>
+                <li>
+                    Moscow
+                </li>
+            </ul>
+            <div>
+                <span class="rainy">&nbsp;</span>
+                <div class="weather">
+                    <h2>17<span>&ordm;C</span></h2>
+                    <p>Rainy weather in Paris.</p>
+                </div>
+            </div>
+            <div>
+                <span class="sunny">&nbsp;</span>
+                <div class="weather">
+                    <h2>29<span>&ordm;C</span></h2>
+                    <p>Sunny weather in New York.</p>
+                </div>
+            </div>
+            <div>
+                <span class="sunny">&nbsp;</span>
+                <div class="weather">
+                    <h2>21<span>&ordm;C</span></h2>
+                    <p>Sunny weather in London.</p>
+                </div>
+            </div>
+            <div>
+                <span class="cloudy">&nbsp;</span>
+                <div class="weather">
+                    <h2>16<span>&ordm;C</span></h2>
+                    <p>Cloudy weather in Moscow.</p>
+                </div>
             </div>
         </div>
     </div>
 </div>
 <script type="text/javascript">
     baseUrl = "${base.contextPath}";
-    //treeViewMd
-    var treeViewMd = $("#treeViewMd").kendoTreeView({
-        template: "<span style='font-weight:bold;'><i class='#= item.icon #'></i> #= item.text #</span>",
-        dataValueField: "id"
-    }).data("kendoTreeView");
-
     var MdTreeDataSource = new kendo.data.HierarchicalDataSource({
         transport: {
             read: {
                 url: baseUrl + "/mdTypeTree",
+                type: "POST",
                 dataType: "json",
-                type: "POST"
+                contentType: "application/json;charset=UTF-8"
+            },
+            parameterMap: function (options, type) {
+                var mdType = $("#distributeData").val() || -1;
+                console.log(mdType);
+                return kendo.stringify(mdType);
             }
         },
         schema: {
@@ -40,19 +89,36 @@
             }
         }
     });
-
-    $('#treeViewMd').data('kendoTreeView').setDataSource(MdTreeDataSource);
-
-    function expandMd() {
-        $('#treeViewMd').data('kendoTreeView').expand(".k-item");
+    var treeViewMd = $("#treeViewMd").kendoTreeView({
+        template: "<span style='font-weight:bold;'><i class='#= item.icon #'></i> #= item.text #</span>",
+        dataValueField: "id",
+        dataSource: MdTreeDataSource
+    }).data("kendoTreeView");
+    $("#distributeData").kendoLov({
+        code: "DistributeData",
+        contextPath: '${base.contextPath}',
+        locale: 'zh_CN',
+        textField: 'id',
+        select: function (e) {
+            MdTreeDataSource.read();
+        }
+    });
+    function validateDistributeData() {
+        if ($.isEmpty($("#distributeData").val())) {
+            MdTreeDataSource.read();
+        }
     }
-    function collapseMd() {
-        $('#treeViewMd').data('kendoTreeView').collapse(".k-item");
-    }
 
-    function refreshMd() {
-        MdTreeDataSource.read();
-    }
+    /*    function expandMd() {
+     $('#treeViewMd').data('kendoTreeView').expand(".k-item");
+     }
+     function collapseMd() {
+     $('#treeViewMd').data('kendoTreeView').collapse(".k-item");
+     }
+
+     function refreshMd() {
+     MdTreeDataSource.read();
+     }*/
 
 </script>
 </body>

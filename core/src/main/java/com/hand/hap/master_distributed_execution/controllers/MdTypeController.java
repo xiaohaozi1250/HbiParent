@@ -61,16 +61,17 @@ public class MdTypeController extends BaseController {
      */
     @RequestMapping(value = "/mdTypeTree", method = RequestMethod.POST)
     @ResponseBody
-    public List<TreeView> orgTypeTreeView() {
+    public List<TreeView> orgTypeTreeView(@RequestBody Long id) {
+        System.out.println("id:" + id);
         List<TreeView> treeViews = new ArrayList<>();
         TreeView treeViewRoot = new TreeView();
         treeViewRoot.setText("主数据类型");
         treeViewRoot.setCode("Master Type");
         treeViewRoot.setExpanded(true);
         treeViewRoot.setParentId(new Long(-1));
-        List<TreeView> mdTypeTree = service.selectMdTypeTree();
+        List<TreeView> mdTypeTree = service.selectMdTypeTree(id);
         treeViewService.getTreeViewNodeList(mdTypeTree, treeViewRoot);
-        if (treeViewRoot.getItems().size() <= 0) {
+        if (treeViewRoot.getItems().size() < 0) {
             return new ArrayList<>();
         }
         treeViews.add(treeViewRoot);

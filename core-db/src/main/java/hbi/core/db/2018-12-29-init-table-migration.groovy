@@ -10,7 +10,7 @@ import com.hand.hap.liquibase.MigrationHelper
 
 def mhi = MigrationHelper.getInstance()
 
-databaseChangeLog(logicalFilePath:"hbi/core/db/2018-12-28-init-hmdm-distribute-table.groovy"){
+databaseChangeLog(logicalFilePath:"hbi/core/db/2018-12-29-init-table-migration.groovy"){
     changeSet(author:"Admin", id: "2018-12-28_HMDM_DISTRIBUTE_SITUATION"){
         if(mhi.isDbType('oracle') || mhi.isDbType('hana')){
             createSequence(sequenceName:'HMDM_DISTRIBUTE_SITUATION_S', startValue:"10001")

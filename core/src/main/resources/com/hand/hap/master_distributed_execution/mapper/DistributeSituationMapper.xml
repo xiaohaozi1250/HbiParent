@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hand.hap.master_distributed_execution.mapper.DistributeSituationMapper">
+    <resultMap id="BaseResultMap" type="com.hand.hap.master_distributed_execution.dto.DistributeSituation">
+        <result column="HEADER_ID" property="headerId" jdbcType="DECIMAL" />
+        <result column="ITEM_CODE" property="itemCode" jdbcType="VARCHAR" />
+        <result column="ITEM_NAME" property="itemName" jdbcType="VARCHAR" />
+        <result column="ORANIZATION_CODE" property="oranizationCode" jdbcType="VARCHAR" />
+        <result column="BATCH_NUM" property="batchNum" jdbcType="VARCHAR" />
+        <result column="STATUS" property="status" jdbcType="VARCHAR" />
+        <result column="DISTRIBUTION_DATE" property="distributionDate" jdbcType="DATE" />
+        <result column="PROGRAM_APPLICATION_ID" property="programApplicationId" jdbcType="DECIMAL" />
+        <result column="PROGRAM_UPDATE_DATE" property="programUpdateDate" jdbcType="DATE" />
+    </resultMap>
+
+
+</mapper>

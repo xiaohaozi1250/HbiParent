@@ -3,16 +3,74 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hand.hap.master_distributed_execution.mapper.DistributeSituationMapper">
     <resultMap id="BaseResultMap" type="com.hand.hap.master_distributed_execution.dto.DistributeSituation">
-        <result column="HEADER_ID" property="headerId" jdbcType="DECIMAL" />
-        <result column="ITEM_CODE" property="itemCode" jdbcType="VARCHAR" />
-        <result column="ITEM_NAME" property="itemName" jdbcType="VARCHAR" />
-        <result column="ORANIZATION_CODE" property="oranizationCode" jdbcType="VARCHAR" />
-        <result column="BATCH_NUM" property="batchNum" jdbcType="VARCHAR" />
-        <result column="STATUS" property="status" jdbcType="VARCHAR" />
-        <result column="DISTRIBUTION_DATE" property="distributionDate" jdbcType="DATE" />
-        <result column="PROGRAM_APPLICATION_ID" property="programApplicationId" jdbcType="DECIMAL" />
-        <result column="PROGRAM_UPDATE_DATE" property="programUpdateDate" jdbcType="DATE" />
+        <result column="HEADER_ID" property="headerId" jdbcType="DECIMAL"/>
+        <result column="ITEM_CODE" property="itemCode" jdbcType="VARCHAR"/>
+        <result column="ITEM_NAME" property="itemName" jdbcType="VARCHAR"/>
+        <result column="ORGANIZATION_CODE" property="organizationCode" jdbcType="VARCHAR"/>
+        <result column="BATCH_NUM" property="batchNum" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="VARCHAR"/>
+        <result column="DISTRIBUTION_DATE" property="distributionDate" jdbcType="DATE"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <select id="selectDistributionData" resultMap="BaseResultMap">
+        SELECT hds.header_id
+        ,hds.item_code
+        ,hds.item_name
+        ,hds.organization_code
+        ,hds.batch_num
+        ,hds.status
+        ,hds.distribution_date
+        ,he.name
+        FROM hmdm_distribute_situation hds
+        ,hr_employee he
+        WHERE hds.created_by = he.employee_id
+        <if test="itemCode != null">
+            AND hds.item_code = #{itemCode,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null">
+            AND hds.status = #{status,jdbcType=VARCHAR}
+        </if>
+        <if test="batchNum != null">
+            AND hds.batch_num = #{batchNum,jdbcType=VARCHAR}
+        </if>
+        <if test="distributionDate != null">
+            AND hds.distribution_date = str_to_date(#{distributionDate},'%Y-%m-%d')
+        </if>
+        <if test="createdBy != null">
+            AND hds.created_by = #{createdBy,jdbcType=INTEGER}
+        </if>
+        <if test="organizationCode != null">
+            AND hds.organization_code = #{organizationCode,jdbcType=VARCHAR}
+        </if>
+        <if test="creationDateFrom != null">
+            AND hds.creation_date >=str_to_date(#{creationDateFrom},'%Y-%m-%d %H:%i:%s')
+        </if>
+        <if test="creationDateTo != null">
+            AND str_to_date(#{creationDateTo},'%Y-%m-%d %H:%i:%s') >=hds.creation_date
+        </if>
+        <if test="lastUpdateDateFrom != null">
+            AND hds.last_update_date >=str_to_date(#{lastUpdateDateFrom},'%Y-%m-%d %H:%i:%s')
+        </if>
+        <if test="lastUpdateDateTo != null">
+            AND str_to_date(#{lastUpdateDateTo},'%Y-%m-%d %H:%i:%s')>=hds.last_update_date
+        </if>
+        ORDER BY hds.organization_code,hds.item_code
+    </select>
 
+    <select id="selectItemCode" resultMap="BaseResultMap">
+        select ITEM_CODE from hmdm_distribute_situation
+    </select>
+
+    <select id="selectStatus" resultMap="BaseResultMap">
+        SELECT DISTINCT STATUS FROM hmdm_distribute_situation
+    </select>
+
+    <select id="selectBatchNum" resultMap="BaseResultMap">
+        SELECT DISTINCT BATCH_NUM FROM hmdm_distribute_situation
+    </select>
+
+    <select id="selectOrganizationCode" resultMap="BaseResultMap">
+        SELECT DISTINCT ORGANIZATION_CODE FROM hmdm_distribute_situation
+    </select>
 </mapper>

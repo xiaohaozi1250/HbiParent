@@ -14,4 +14,5 @@
     <bean id="selectStatus" class="com.hand.hap.master_distributed_execution.dto.DistributeSituation"/>
     <bean id="selectBatchNum" class="com.hand.hap.master_distributed_execution.dto.DistributeSituation"/>
     <bean id="selectOrganizationCode" class="com.hand.hap.master_distributed_execution.dto.DistributeSituation"/>
+    <bean id="selectCreatedBy" class="com.hand.hap.master_distributed_execution.dto.DistributeSituation"/>
 </beans>

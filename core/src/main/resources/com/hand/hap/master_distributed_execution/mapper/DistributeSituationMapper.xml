@@ -13,7 +13,8 @@
         <result column="NAME" property="name" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <select id="selectDistributionData" resultMap="BaseResultMap">
+    <select id="selectDistributionData" resultMap="BaseResultMap"
+            parameterType="com.hand.hap.master_distributed_execution.dto.DistributeSituation">
         SELECT hds.header_id
         ,hds.item_code
         ,hds.item_name
@@ -25,7 +26,7 @@
         FROM hmdm_distribute_situation hds
         ,hr_employee he
         WHERE hds.created_by = he.employee_id
-        <if test="itemCode != null">
+        <if test=" itemCode!= null">
             AND hds.item_code = #{itemCode,jdbcType=VARCHAR}
         </if>
         <if test="status != null">
@@ -35,7 +36,7 @@
             AND hds.batch_num = #{batchNum,jdbcType=VARCHAR}
         </if>
         <if test="distributionDate != null">
-            AND hds.distribution_date = str_to_date(#{distributionDate},'%Y-%m-%d')
+            AND hds.distribution_date = #{distributionDate}
         </if>
         <if test="createdBy != null">
             AND hds.created_by = #{createdBy,jdbcType=INTEGER}
@@ -44,16 +45,16 @@
             AND hds.organization_code = #{organizationCode,jdbcType=VARCHAR}
         </if>
         <if test="creationDateFrom != null">
-            AND hds.creation_date >=str_to_date(#{creationDateFrom},'%Y-%m-%d %H:%i:%s')
+            AND hds.creation_date >=#{creationDateFrom}
         </if>
         <if test="creationDateTo != null">
-            AND str_to_date(#{creationDateTo},'%Y-%m-%d %H:%i:%s') >=hds.creation_date
+            AND #{creationDateTo}>=hds.creation_date
         </if>
         <if test="lastUpdateDateFrom != null">
-            AND hds.last_update_date >=str_to_date(#{lastUpdateDateFrom},'%Y-%m-%d %H:%i:%s')
+            AND hds.last_update_date >=#{lastUpdateDateFrom}
         </if>
         <if test="lastUpdateDateTo != null">
-            AND str_to_date(#{lastUpdateDateTo},'%Y-%m-%d %H:%i:%s')>=hds.last_update_date
+            AND #{lastUpdateDateTo} >= hds.last_update_date
         </if>
         ORDER BY hds.organization_code,hds.item_code
     </select>
@@ -72,5 +73,15 @@
 
     <select id="selectOrganizationCode" resultMap="BaseResultMap">
         SELECT DISTINCT ORGANIZATION_CODE FROM hmdm_distribute_situation
+    </select>
+
+    <select id="selectCreatedBy" resultMap="BaseResultMap">
+        SELECT he.NAME,
+	           he.employee_id created_by
+        FROM   hr_employee he
+        WHERE EXISTS ( SELECT 1
+		               FROM hmdm_distribute_situation hds
+		              WHERE hds.created_by = he.employee_id
+	)
     </select>
 </mapper>

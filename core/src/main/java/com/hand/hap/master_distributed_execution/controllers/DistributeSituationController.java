@@ -24,10 +24,9 @@ public class DistributeSituationController extends BaseController {
     @Autowired
     private IDistributeSituationService service;
 
-
     @RequestMapping(value = "/hmdm/distribute/situation/query")
     @ResponseBody
-    public ResponseData query(DistributeSituation dto, @RequestParam(defaultValue = DEFAULT_PAGE) int page,
+    public ResponseData query(@RequestBody DistributeSituation dto, @RequestParam(defaultValue = DEFAULT_PAGE) int page,
                               @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int pageSize, HttpServletRequest request) {
         IRequest requestContext = createRequestContext(request);
         return new ResponseData(service.selectDistributeSituation(dto, requestContext, page, pageSize));

@@ -54,8 +54,7 @@ public class DistributeSituation extends BaseDTO {
     @Length(max = 240)
     private String status;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = BaseConstants.DATE_TIME_FORMAT)
+    @JsonFormat(pattern = BaseConstants.DATE_FORMAT)
     private Date distributionDate;
 
     @Transient
@@ -73,6 +72,7 @@ public class DistributeSituation extends BaseDTO {
     @Transient
     @JsonFormat(pattern = BaseConstants.DATE_TIME_FORMAT)
     private Date lastUpdateDateTo;
+
     @Transient
     private String name;
 

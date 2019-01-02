@@ -20,4 +20,7 @@ public interface DistributeSituationMapper extends Mapper<DistributeSituation> {
 
     //获取组织
     List<DistributeSituation> selectOrganizationCode(DistributeSituation dto);
+
+    //获取分发申请人
+    List<DistributeSituation> selectCreatedBy();
 }

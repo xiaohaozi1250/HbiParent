@@ -18,8 +18,8 @@ public class HelloWsImpl implements HelloWs {
     private IMessagePublisher publisher;
 
     @Override
-    public String publishHello(@WebParam(name = "message") String message ,@WebParam(name = "name") String name) {
+    public String publishHello(@WebParam(name = "message") String message, @WebParam(name = "name") String name) {
         publisher.publish("com.hand.hap:hello", "hello " + message + " name " + name);
-        return "success";
+        return "Success";
     }
 }

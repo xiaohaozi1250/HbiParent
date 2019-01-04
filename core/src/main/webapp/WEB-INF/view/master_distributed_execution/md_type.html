@@ -165,6 +165,8 @@
                             <span class="btn btn-default" type="button" data-bind="click:reset"
                                   style="width: 75px;"><i class="fa fa-undo"
                                                           style="margin-right:3px;"></i><@spring.message "hap.reset"/></span>
+                            <span class="btn btn-default" type="button" onclick="invoke()"
+                                  style="width: 75px;">调用</span>
                         </div>
                         <div style="clear:both"></div>
                     </div>
@@ -388,6 +390,25 @@
         } else {
             editWin.center().open();
         }
+    }
+    function invoke() {
+        $.ajax({
+            /*附带参数的请求URL*/
+            url: '${base.contextPath}/hmdm/distribute/situation/invoke',
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json;charset=utf-8;",
+            success: function (result) {
+                $.each(result.rows, function (key, value) {
+                    console.log('第' + key + '行解析返回结果：');
+                    var data = result.rows[key];
+                    for (var i in data) {
+                        console.log(i + '-' + data[i]);
+                    }
+                })
+            }
+        });
+
     }
 </script>
 </body>

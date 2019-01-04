@@ -52,4 +52,18 @@ public class DistributeSituationController extends BaseController {
         service.batchDelete(dto);
         return new ResponseData();
     }
+
+    @RequestMapping(value = "/hmdm/distribute/situation/invoke")
+    @ResponseBody
+    public String invokeze() {
+        String msg = new String();
+        try {
+            //获取解析数据
+            msg = service.inAction();
+        } catch (Exception e) {
+            System.out.println("invoke Error");
+        }
+        //返回请求
+        return msg;
+    }
 }

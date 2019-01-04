@@ -11,4 +11,6 @@ public interface IDistributeSituationService extends IBaseService<DistributeSitu
 
     //获取查询数据
     List<DistributeSituation> selectDistributeSituation(DistributeSituation dto, IRequest request, int page, int pagesize);
+
+    String inAction() throws Exception;
 }

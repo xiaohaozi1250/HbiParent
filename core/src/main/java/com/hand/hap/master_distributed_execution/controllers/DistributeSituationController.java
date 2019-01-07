@@ -1,5 +1,6 @@
 package com.hand.hap.master_distributed_execution.controllers;
 
+import com.hand.hap.intergration.annotation.HapOutbound;
 import org.springframework.stereotype.Controller;
 import com.hand.hap.system.controllers.BaseController;
 import com.hand.hap.core.IRequest;
@@ -55,15 +56,17 @@ public class DistributeSituationController extends BaseController {
 
     @RequestMapping(value = "/hmdm/distribute/situation/invoke")
     @ResponseBody
-    public String invokeze() {
-        String msg = new String();
+    @HapOutbound(apiName = "DistributeWs")
+    public void invoke(@RequestBody List<DistributeSituation> distributeSituationList, @RequestParam(defaultValue = DEFAULT_PAGE) int page,
+                       @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int pageSize, HttpServletRequest request) {
         try {
-            //获取解析数据
-            msg = service.inAction();
+            for (DistributeSituation dto : distributeSituationList) {
+                //获取解析数据
+                service.invoke(dto);
+            }
         } catch (Exception e) {
             System.out.println("invoke Error");
         }
-        //返回请求
-        return msg;
+
     }
 }

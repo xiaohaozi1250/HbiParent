@@ -13,4 +13,6 @@ public interface IDistributeSituationService extends IBaseService<DistributeSitu
     List<DistributeSituation> selectDistributeSituation(DistributeSituation dto, IRequest request, int page, int pagesize);
 
     String inAction() throws Exception;
+
+    void invoke(DistributeSituation dto) throws Exception;
 }

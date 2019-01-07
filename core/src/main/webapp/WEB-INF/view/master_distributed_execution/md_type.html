@@ -392,12 +392,15 @@
         }
     }
     function invoke() {
+        var bMainGrid = $("#grid").data('kendoGrid');
+        var checked = bMainGrid.selectedDataItems();
         $.ajax({
             /*附带参数的请求URL*/
             url: '${base.contextPath}/hmdm/distribute/situation/invoke',
             type: "POST",
             dataType: "json",
             contentType: "application/json;charset=utf-8;",
+            data: JSON.stringify(checked),
             success: function (result) {
                 $.each(result.rows, function (key, value) {
                     console.log('第' + key + '行解析返回结果：');

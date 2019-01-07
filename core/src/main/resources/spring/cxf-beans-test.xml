@@ -31,4 +31,10 @@
         </jaxws:inInterceptors>
     </jaxws:endpoint>
 
+    <bean id="distributeService" class="com.hand.hap.ws.impl.WsDistributeImpl"/>
+    <jaxws:endpoint id="distributeWs" implementor="#distributeService" address="/distributeWs">
+        <jaxws:inInterceptors>
+            <ref bean="serverInInterceptor"></ref>
+        </jaxws:inInterceptors>
+    </jaxws:endpoint>
 </beans>

@@ -34,16 +34,6 @@ public class WsDistributeImpl implements WsDistribute {
 
     //获取查询数据
     @Override
-/*
-    public List<DistributeSituation> selectDistribute(List<DistributeSituation> distributeSituationList) {
-        List<DistributeSituation> distributeSituations = new ArrayList<>();
-        for (DistributeSituation distributeSituation : distributeSituationList) {
-            distributeSituations.add(distributeSituationMapper.selectOne(distributeSituation));
-        }
-        return distributeSituations;
-    }
-*/
-
     public List<DistributeSituation> selectDistribute(XmlDistributeSituationList dtoList) {
         List<XmlDistributeSituation> xmlDistributeSituationList = dtoList.getDistributeSituationList();
 
@@ -54,7 +44,6 @@ public class WsDistributeImpl implements WsDistribute {
             dto.setItemCode(xmlDistributeSituation.getItemCode());
             distributeSituations.add(distributeSituationMapper.selectOne(dto));
         }
-
         return distributeSituations;
     }
 }

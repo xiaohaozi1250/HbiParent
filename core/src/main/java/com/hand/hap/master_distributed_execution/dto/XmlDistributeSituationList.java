@@ -17,7 +17,7 @@ import java.util.List;
 @XmlRootElement(name = "distribute")
 public class XmlDistributeSituationList {
 
-    @XmlElement(name = "distributeSituation")
+    @XmlElement(name = "distributeSituationList")
     private List<XmlDistributeSituation> distributeSituationList;
 
     public List<XmlDistributeSituation> getDistributeSituationList() {

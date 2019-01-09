@@ -28,21 +28,6 @@ public class XmlDistributeSituation {
     @XmlElement(name = "itemCode")
     private String itemCode;
 
-    @XmlElement(name = "itemName")
-    private String itemName;
-
-    @XmlElement(name = "organizationCode")
-    private String organizationCode;
-
-    @XmlElement(name = "batchNum")
-    private String batchNum;
-
-    @XmlElement(name = "status")
-    private String status;
-
-    @XmlElement(name = "distributionDate")
-    private Date distributionDate;
-
     @XmlElement(name = "name")
     private String name;
 
@@ -60,46 +45,6 @@ public class XmlDistributeSituation {
 
     public String getItemCode() {
         return itemCode;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setOrganizationCode(String organizationCode) {
-        this.organizationCode = organizationCode;
-    }
-
-    public String getOrganizationCode() {
-        return organizationCode;
-    }
-
-    public void setBatchNum(String batchNum) {
-        this.batchNum = batchNum;
-    }
-
-    public String getBatchNum() {
-        return batchNum;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setDistributionDate(Date distributionDate) {
-        this.distributionDate = distributionDate;
-    }
-
-    public Date getDistributionDate() {
-        return distributionDate;
     }
 
     public String getName() {

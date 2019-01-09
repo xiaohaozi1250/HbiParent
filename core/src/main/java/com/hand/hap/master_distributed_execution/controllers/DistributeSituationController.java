@@ -57,13 +57,11 @@ public class DistributeSituationController extends BaseController {
     @RequestMapping(value = "/hmdm/distribute/situation/invoke")
     @ResponseBody
     @HapOutbound(apiName = "DistributeWs")
-    public void invoke(@RequestBody List<DistributeSituation> distributeSituationList, @RequestParam(defaultValue = DEFAULT_PAGE) int page,
+    public void invoke(@RequestBody List<DistributeSituation> dtoList, @RequestParam(defaultValue = DEFAULT_PAGE) int page,
                        @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int pageSize, HttpServletRequest request) {
         try {
-            for (DistributeSituation dto : distributeSituationList) {
-                //获取解析数据
-                service.invoke(dto);
-            }
+            //获取解析数据
+            service.invoke(dtoList);
         } catch (Exception e) {
             System.out.println("invoke Error");
         }

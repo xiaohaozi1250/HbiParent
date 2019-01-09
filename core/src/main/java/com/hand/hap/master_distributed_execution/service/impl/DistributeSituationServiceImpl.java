@@ -5,6 +5,8 @@ import com.hand.hap.core.IRequest;
 import com.hand.hap.intergration.dto.HapInterfaceHeader;
 import com.hand.hap.intergration.service.IHapApiService;
 import com.hand.hap.intergration.service.IHapInterfaceHeaderService;
+import com.hand.hap.master_distributed_execution.dto.XmlDistributeSituation;
+import com.hand.hap.master_distributed_execution.dto.XmlDistributeSituationList;
 import com.hand.hap.master_distributed_execution.mapper.DistributeSituationMapper;
 import com.hand.hap.system.service.impl.BaseServiceImpl;
 import net.sf.json.JSONArray;
@@ -42,6 +44,7 @@ public class DistributeSituationServiceImpl extends BaseServiceImpl<DistributeSi
         PageHelper.startPage(page, pagesize);
         return distributeSituationMapper.selectDistributionData(dto);
     }
+
     //事务回滚
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public String inAction() throws Exception {
@@ -75,20 +78,32 @@ public class DistributeSituationServiceImpl extends BaseServiceImpl<DistributeSi
         }
         return returnMsg;
     }
+
     //事务回滚
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-    public void invoke(DistributeSituation dto) throws Exception {
-        List<DistributeSituation> distributeSituationLsit = new ArrayList<>();
+    public void invoke(List<DistributeSituation> dtoList) throws Exception {
+
+        XmlDistributeSituationList xmlList = new XmlDistributeSituationList();
+        List<XmlDistributeSituation> xmlDistributeSituationList = new ArrayList<>();
+        for (DistributeSituation dto : dtoList) {
+            XmlDistributeSituation xmlDistributeSituation = new XmlDistributeSituation();
+            xmlDistributeSituation.setHeaderId(dto.getHeaderId());
+            xmlDistributeSituation.setItemCode(dto.getItemCode());
+            xmlDistributeSituation.setName(dto.getName());
+            xmlDistributeSituationList.add(xmlDistributeSituation);
+        }
+        xmlList.setDistributeSituationList(xmlDistributeSituationList);
 
         JSONObject Response_Json;
         JSONObject jsonObj;
-
+        JSONArray jsonArray;
         try {
             JsonConfig jsonConfig = new JsonConfig();
-            jsonObj = JSONObject.fromObject(dto, jsonConfig);
+            jsonArray = JSONArray.fromObject(xmlList, jsonConfig);
+            jsonObj = jsonArray.getJSONObject(0);
+            System.out.println("请求报文：" + jsonObj.toString());
             HapInterfaceHeader hapInterfaceHeader = this.headerService.getHeaderAndLine("DistributeWs", "DistributeWs");
             Response_Json = this.restService.invoke(hapInterfaceHeader, jsonObj);
-            System.out.println("请求报文：" + jsonObj);
             System.out.println("返回报文：" + Response_Json);
             if (Response_Json != null) {
                 logger.debug("返回报文 : ", Response_Json.toString());
@@ -101,7 +116,7 @@ public class DistributeSituationServiceImpl extends BaseServiceImpl<DistributeSi
             String publishHelloResponse = Response_Json.getString("ns2:selectDistributeResponse");
 
             Response_Json = JSONObject.fromObject(publishHelloResponse, jsonConfig);*/
-          //  returnMsg = Response_Json.getString("return");
+            //  returnMsg = Response_Json.getString("return");
         } catch (Exception e) {
             logger.error("SynRemotesInsertMainError : ", e);
             throw e;

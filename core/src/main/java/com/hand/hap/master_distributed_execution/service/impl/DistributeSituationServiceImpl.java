@@ -19,6 +19,8 @@ import com.hand.hap.master_distributed_execution.service.IDistributeSituationSer
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,6 +87,7 @@ public class DistributeSituationServiceImpl extends BaseServiceImpl<DistributeSi
 
         XmlDistributeSituationList xmlList = new XmlDistributeSituationList();
         List<XmlDistributeSituation> xmlDistributeSituationList = new ArrayList<>();
+        //获取参数值
         for (DistributeSituation dto : dtoList) {
             XmlDistributeSituation xmlDistributeSituation = new XmlDistributeSituation();
             xmlDistributeSituation.setHeaderId(dto.getHeaderId());
@@ -99,24 +102,26 @@ public class DistributeSituationServiceImpl extends BaseServiceImpl<DistributeSi
         JSONArray jsonArray;
         try {
             JsonConfig jsonConfig = new JsonConfig();
+            // List转换为Json数组
             jsonArray = JSONArray.fromObject(xmlList, jsonConfig);
             jsonObj = jsonArray.getJSONObject(0);
             System.out.println("请求报文：" + jsonObj.toString());
+            //获取接口信息
             HapInterfaceHeader hapInterfaceHeader = this.headerService.getHeaderAndLine("DistributeWs", "DistributeWs");
+            //调用Ws,并获取返回报文
             Response_Json = this.restService.invoke(hapInterfaceHeader, jsonObj);
             System.out.println("返回报文：" + Response_Json);
             if (Response_Json != null) {
-                logger.debug("返回报文 : ", Response_Json.toString());
+                logger.debug("返回报文1 : ", Response_Json.toString());
             }
-/*            String soapEnvelope = Response_Json.getString("soap:Envelope");
+            //解析报文
+            String soapEnvelope = Response_Json.getString("soap:Envelope");
             Response_Json = JSONObject.fromObject(soapEnvelope, jsonConfig);
             String soapBody = Response_Json.getString("soap:Body");
-
             Response_Json = JSONObject.fromObject(soapBody, jsonConfig);
-            String publishHelloResponse = Response_Json.getString("ns2:selectDistributeResponse");
-
-            Response_Json = JSONObject.fromObject(publishHelloResponse, jsonConfig);*/
-            //  returnMsg = Response_Json.getString("return");
+            String selectDistributeResponse = Response_Json.getString("ns2:selectDistributeResponse");
+            Response_Json = JSONObject.fromObject(selectDistributeResponse, jsonConfig);
+            JSONArray itemArray = Response_Json.getJSONArray("item");
         } catch (Exception e) {
             logger.error("SynRemotesInsertMainError : ", e);
             throw e;

@@ -1,25 +1,25 @@
-package hbi.core.empws.exception;
+package com.hand.hap.master_distributed_execution;
 
 import com.hand.hap.message.IMessageConsumer;
 import com.hand.hap.message.TopicMonitor;
 import com.hand.hap.message.websocket.CommandMessage;
 import com.hand.hap.message.websocket.WebSocketSessionManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.List;
 
-
 /**
- * Created by La on 2018/11/9.
+ * @autor by Val.Zhang
+ * @mail wei.zhang12@hand-china.com
+ * @date 2019/1/14
  */
 @Component
-@TopicMonitor(channel = {"pm:prep.websockt:test"})
-public class EmpWebSocketTest implements IMessageConsumer<CommandMessage> {
+@TopicMonitor(channel = {"pm:prep.websockt:hmdmtest"})
+public class HmdmWebSocketTest implements IMessageConsumer<CommandMessage> {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired

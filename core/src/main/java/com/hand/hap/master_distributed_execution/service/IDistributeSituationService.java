@@ -15,4 +15,6 @@ public interface IDistributeSituationService extends IBaseService<DistributeSitu
     String inAction() throws Exception;
 
     void invoke(List<DistributeSituation> dtoList) throws Exception;
+
+    void WebSocketTest(IRequest requestCtx);
 }

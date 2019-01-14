@@ -34,7 +34,6 @@ public class MdTypeController extends BaseController {
     @RequestMapping(value = "/mdTypeTree", method = RequestMethod.POST)
     @ResponseBody
     public List<TreeView> orgTypeTreeView(@RequestBody Long id) {
-        System.out.println("id:" + id);
         List<TreeView> treeViews = new ArrayList<>();
         TreeView treeViewRoot = new TreeView();
         treeViewRoot.setText("主数据类型");

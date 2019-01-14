@@ -29,9 +29,6 @@ public class EmpController extends BaseController {
     @Autowired
     private IEmpService service;
 
-    @Autowired
-    private IRestApiService iRestApiService;
-
     private final Logger logger = LoggerFactory.getLogger(EmpController.class);
 
     @RequestMapping(value = "/demo/emp/query")

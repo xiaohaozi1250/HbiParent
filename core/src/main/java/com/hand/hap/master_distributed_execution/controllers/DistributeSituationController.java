@@ -1,6 +1,7 @@
 package com.hand.hap.master_distributed_execution.controllers;
 
 import com.hand.hap.intergration.annotation.HapOutbound;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import com.hand.hap.system.controllers.BaseController;
 import com.hand.hap.core.IRequest;
@@ -17,7 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.validation.BindingResult;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 public class DistributeSituationController extends BaseController {
@@ -66,5 +69,37 @@ public class DistributeSituationController extends BaseController {
             System.out.println("invoke Error");
         }
 
+    }
+
+    @RequestMapping(value = "/hmdm/distribute/situation/webSocketTest")
+    @ResponseBody
+    public ResponseData invoke1(@RequestBody List<DistributeSituation> dto, @RequestParam(defaultValue = DEFAULT_PAGE) int page,
+                                @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int pageSize, HttpServletRequest request) {
+        IRequest requestContext = createRequestContext(request);
+        //ResponseData responseData = new ResponseData();
+        List<DistributeSituation> employees = new ArrayList<>();
+        System.out.println("SessionId2：" + request.getRequestedSessionId());
+        requestContext.setAttribute("SessionId", request.getRequestedSessionId());
+        service.WebSocketTest(requestContext);
+        return new ResponseData(employees);
+    }
+
+    @RequestMapping(value = "/hmdm/distribute/situation/redistest")
+    @ResponseBody
+    public ResponseData redisTest(HttpServletRequest request) {
+        IRequest requestContext = createRequestContext(request);
+        ResponseData responseData = new ResponseData();
+        RedisTemplate redisTemplate = new RedisTemplate();
+        String redisKey = "LIMIT_COUNT";
+        Long count = redisTemplate.opsForValue().increment(redisKey, 1);
+        if (count == 1) {
+            //设置有效期为一分钟
+            redisTemplate.expire(redisKey, 60, TimeUnit.SECONDS);
+        }
+        if (count > 1) {
+            responseData.setSuccess(false);
+            responseData.setMessage("每分钟发送一次!");
+        }
+        return responseData;
     }
 }

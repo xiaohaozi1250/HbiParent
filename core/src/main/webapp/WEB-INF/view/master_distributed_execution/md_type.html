@@ -1,5 +1,7 @@
 <#include "../include/header.html"/>
 <body>
+<script src="${base.contextPath}/lib/websocket/sockjs.js"></script>
+<script>var _baseContext = '${base.contextPath}'</script>
 <script type="text/javascript">
     var viewModel = Hap.createGridViewModel("#grid");
 </script>
@@ -167,6 +169,10 @@
                                                           style="margin-right:3px;"></i><@spring.message "hap.reset"/></span>
                             <span class="btn btn-default" type="button" onclick="invoke()"
                                   style="width: 75px;">调用</span>
+                            <span class="btn btn-default" type="button" onclick="sendMessage()"
+                                  style="width: 75px;">websoket</span>
+                            <span class="btn btn-default" type="button" onclick="redisTest()"
+                                  style="width: 75px;">redisTest</span>
                         </div>
                         <div style="clear:both"></div>
                     </div>
@@ -412,6 +418,46 @@
             }
         });
 
+    }
+    function sendMessage() {
+        //var _baseContext = "${base.contextPath}";
+        var bMainGrid = $("#grid").data('kendoGrid');
+        var checked = bMainGrid.selectedDataItems();
+        Hap.initWebSocket();
+        console.log("1111");
+        Hap.onMessage("HMDMTest", function (date, socket) {
+            console.log("2222-" + data.parameter["MSG"]);
+            socket.close();
+            $.ajax({
+                url: "${base.contextPath}/hmdm/distribute/situation/webSocketTest",
+                data: JSON.stringify(checked),
+                type: "POST"
+            });
+            if (data.parameter["MSG"]) {
+                Hap.showToast({
+                    type: "info",
+                    message: data.parameter["MSG"]
+                });
+                kendo.ui.showInfoDialog({
+                    message: data.parameter["MSG"]
+                })
+            }
+        });
+    }
+    function redisTest() {
+        $.ajax({
+            url: '${base.contextPath}/hmdm/distribute/situation/redistest',
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json;charset=UTF-8",
+            success: function (result) {
+                console.log("11111--" + result);
+            },
+            error: function (data) {
+                alert(data.responseText);
+            }
+        })
+        ;
     }
 </script>
 </body>

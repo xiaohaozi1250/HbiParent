@@ -8,6 +8,8 @@ import com.hand.hap.intergration.service.IHapInterfaceHeaderService;
 import com.hand.hap.master_distributed_execution.dto.XmlDistributeSituation;
 import com.hand.hap.master_distributed_execution.dto.XmlDistributeSituationList;
 import com.hand.hap.master_distributed_execution.mapper.DistributeSituationMapper;
+import com.hand.hap.message.IMessagePublisher;
+import com.hand.hap.message.websocket.CommandMessage;
 import com.hand.hap.system.service.impl.BaseServiceImpl;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -22,7 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,5 +131,24 @@ public class DistributeSituationServiceImpl extends BaseServiceImpl<DistributeSi
             throw e;
         }
         //return distributeSituationLsit;
+    }
+
+    @Autowired
+    private IMessagePublisher messagePublisher;
+
+    public void WebSocketTest(IRequest requestCtx) {
+        //HttpSession session =requestCtx.getAttribute()
+        CommandMessage commandMessage = new CommandMessage();
+        commandMessage.setUserName(requestCtx.getUserName());
+        commandMessage.setAction("HMDMTest");
+
+        String wSid = requestCtx.getAttribute("SessionId");
+        for (int i = 1; i <= 3; i++) {
+            Map<String, Object> map = new HashMap<>();
+            commandMessage.setSessionId(wSid);
+            ((Map) map).put("MSG", "VAl:" + i);
+            commandMessage.setParameter(map);
+            messagePublisher.publish("pm:prep.websockt:hmdmtest", commandMessage);
+        }
     }
 }

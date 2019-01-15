@@ -1,5 +1,6 @@
 package com.hand.hap.master_distributed_execution.service;
 
+import com.hand.hap.code.rule.exception.CodeRuleException;
 import com.hand.hap.core.IRequest;
 import com.hand.hap.core.ProxySelf;
 import com.hand.hap.system.service.IBaseService;
@@ -16,5 +17,5 @@ public interface IDistributeSituationService extends IBaseService<DistributeSitu
 
     void invoke(List<DistributeSituation> dtoList) throws Exception;
 
-    void WebSocketTest(IRequest requestCtx);
+    void WebSocketTest(IRequest requestCtx) throws CodeRuleException;
 }

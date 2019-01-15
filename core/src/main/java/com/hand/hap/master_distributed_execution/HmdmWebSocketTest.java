@@ -29,6 +29,7 @@ public class HmdmWebSocketTest implements IMessageConsumer<CommandMessage> {
     public void onMessage(CommandMessage commandMessage, String channel) {
         List<WebSocketSession> sessions = webSocketSessionManager.getSession(commandMessage.getSessionId());
         //List<WebSocketSession> sessions = webSocketSessionManager.getSession("lyf");
+        System.out.println("222");
         logger.info("WebSocket Test:{}", commandMessage.getParameter().get("MSG"));
         sessions.stream().forEach(webSocketSession -> {
             if (webSocketSession.isOpen()) {

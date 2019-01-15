@@ -1,6 +1,7 @@
 package com.hand.hap.master_distributed_execution.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.hand.hap.code.rule.exception.CodeRuleException;
 import com.hand.hap.core.IRequest;
 import com.hand.hap.intergration.dto.HapInterfaceHeader;
 import com.hand.hap.intergration.service.IHapApiService;
@@ -136,17 +137,19 @@ public class DistributeSituationServiceImpl extends BaseServiceImpl<DistributeSi
     @Autowired
     private IMessagePublisher messagePublisher;
 
-    public void WebSocketTest(IRequest requestCtx) {
+    public void WebSocketTest(IRequest requestCtx) throws CodeRuleException {
         //HttpSession session =requestCtx.getAttribute()
         CommandMessage commandMessage = new CommandMessage();
         commandMessage.setUserName(requestCtx.getUserName());
         commandMessage.setAction("HMDMTest");
 
         String wSid = requestCtx.getAttribute("SessionId");
+        System.out.println("wSid:" + wSid);
         for (int i = 1; i <= 3; i++) {
             Map<String, Object> map = new HashMap<>();
             commandMessage.setSessionId(wSid);
             ((Map) map).put("MSG", "VAl:" + i);
+            System.out.println("i:" + i);
             commandMessage.setParameter(map);
             messagePublisher.publish("pm:prep.websockt:hmdmtest", commandMessage);
         }

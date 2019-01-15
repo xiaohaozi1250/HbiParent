@@ -1,5 +1,6 @@
 package com.hand.hap.master_distributed_execution.controllers;
 
+import com.hand.hap.code.rule.exception.CodeRuleException;
 import com.hand.hap.intergration.annotation.HapOutbound;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,8 @@ public class DistributeSituationController extends BaseController {
 
     @Autowired
     private IDistributeSituationService service;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @RequestMapping(value = "/hmdm/distribute/situation/query")
     @ResponseBody
@@ -73,27 +76,32 @@ public class DistributeSituationController extends BaseController {
 
     @RequestMapping(value = "/hmdm/distribute/situation/webSocketTest")
     @ResponseBody
-    public ResponseData invoke1(@RequestBody List<DistributeSituation> dto, @RequestParam(defaultValue = DEFAULT_PAGE) int page,
-                                @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int pageSize, HttpServletRequest request) {
+    public ResponseData webSocketTest(@RequestBody List<DistributeSituation> dto, @RequestParam(defaultValue = DEFAULT_PAGE) int page,
+                                      @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int pageSize, HttpServletRequest request) {
         IRequest requestContext = createRequestContext(request);
         //ResponseData responseData = new ResponseData();
         List<DistributeSituation> employees = new ArrayList<>();
         System.out.println("SessionId2：" + request.getRequestedSessionId());
         requestContext.setAttribute("SessionId", request.getRequestedSessionId());
-        service.WebSocketTest(requestContext);
+        try {
+            service.WebSocketTest(requestContext);
+        } catch (CodeRuleException e) {
+            System.out.println("SessionId3：" + request.getRequestedSessionId());
+        }
         return new ResponseData(employees);
     }
 
     @RequestMapping(value = "/hmdm/distribute/situation/redistest")
     @ResponseBody
+    //计时器测试
     public ResponseData redisTest(HttpServletRequest request) {
-        IRequest requestContext = createRequestContext(request);
         ResponseData responseData = new ResponseData();
-        RedisTemplate redisTemplate = new RedisTemplate();
+        // 定义Key值
         String redisKey = "LIMIT_COUNT";
+        //以增量的方式将long值存储在变量中
         Long count = redisTemplate.opsForValue().increment(redisKey, 1);
         if (count == 1) {
-            //设置有效期为一分钟
+            //设置有效期为一分钟，1分钟后删除该key值
             redisTemplate.expire(redisKey, 60, TimeUnit.SECONDS);
         }
         if (count > 1) {

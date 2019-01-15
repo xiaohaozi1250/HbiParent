@@ -419,28 +419,48 @@
         });
 
     }
+    /*    $(document).ready(function () {
+     Hap.initWebSocket();
+     console.log("ready");
+     Hap.onMessage("HMDMTest", function (date, socket) {
+     console.log("2222-" + data.parameter["MSG"]);
+     socket.close();
+     if (data.parameter["MSG"]) {
+     Hap.showToast({
+     type: "info",
+     message: data.parameter["MSG"]
+     });
+     kendo.ui.showInfoDialog({
+     message: data.parameter["MSG"]
+     })
+     }
+     });
+     });*/
     function sendMessage() {
         //var _baseContext = "${base.contextPath}";
         var bMainGrid = $("#grid").data('kendoGrid');
         var checked = bMainGrid.selectedDataItems();
-        Hap.initWebSocket();
-        console.log("1111");
-        Hap.onMessage("HMDMTest", function (date, socket) {
-            console.log("2222-" + data.parameter["MSG"]);
-            socket.close();
-            $.ajax({
-                url: "${base.contextPath}/hmdm/distribute/situation/webSocketTest",
-                data: JSON.stringify(checked),
-                type: "POST"
-            });
-            if (data.parameter["MSG"]) {
-                Hap.showToast({
-                    type: "info",
-                    message: data.parameter["MSG"]
+        $.ajax({
+            url: "${base.contextPath}/hmdm/distribute/situation/webSocketTest",
+            data: JSON.stringify(checked),
+            type: "POST",
+            contentType: "application/json;charset=UTF-8",
+            success: function (e) {
+                Hap.initWebSocket();
+                console.log("1111");
+                Hap.onMessage("HMDMTest", function (date, socket) {
+                    console.log("2222-" + data.parameter["MSG"]);
+                    socket.close();
+                    if (data.parameter["MSG"]) {
+                        Hap.showToast({
+                            type: "info",
+                            message: data.parameter["MSG"]
+                        });
+                        kendo.ui.showInfoDialog({
+                            message: data.parameter["MSG"]
+                        })
+                    }
                 });
-                kendo.ui.showInfoDialog({
-                    message: data.parameter["MSG"]
-                })
             }
         });
     }
@@ -451,7 +471,10 @@
             dataType: "json",
             contentType: "application/json;charset=UTF-8",
             success: function (result) {
-                console.log("11111--" + result);
+                alert(result.message);
+                /*                $.each(result, function (i, val) {  //遍历二维数组
+                 console.log(i + '`````' + val);
+                 })*/
             },
             error: function (data) {
                 alert(data.responseText);

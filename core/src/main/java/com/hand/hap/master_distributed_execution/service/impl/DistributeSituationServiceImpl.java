@@ -16,14 +16,13 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import com.hand.hap.master_distributed_execution.dto.DistributeSituation;
 import com.hand.hap.master_distributed_execution.service.IDistributeSituationService;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,8 +32,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 @Service
+@Component
 @Transactional(rollbackFor = Exception.class)
 public class DistributeSituationServiceImpl extends BaseServiceImpl<DistributeSituation> implements IDistributeSituationService {
     @Autowired
@@ -137,21 +138,20 @@ public class DistributeSituationServiceImpl extends BaseServiceImpl<DistributeSi
     @Autowired
     private IMessagePublisher messagePublisher;
 
-    public void WebSocketTest(IRequest requestCtx) throws CodeRuleException {
+    public void WedSocketDemo(IRequest requestCtx, HttpSession session) throws CodeRuleException {
         //HttpSession session =requestCtx.getAttribute()
         CommandMessage commandMessage = new CommandMessage();
         commandMessage.setUserName(requestCtx.getUserName());
-        commandMessage.setAction("HMDMTest");
-
+        commandMessage.setAction("WedSocketDemo");
         String wSid = requestCtx.getAttribute("SessionId");
-        System.out.println("wSid:" + wSid);
+        //发布消息
         for (int i = 1; i <= 3; i++) {
             Map<String, Object> map = new HashMap<>();
             commandMessage.setSessionId(wSid);
+            //commandMessage.setSessionId(session.getId());
             ((Map) map).put("MSG", "VAl:" + i);
-            System.out.println("i:" + i);
             commandMessage.setParameter(map);
-            messagePublisher.publish("pm:prep.websockt:hmdmtest", commandMessage);
+            messagePublisher.publish(HmdmWebSocketDemo.CHANNEL_WEB_SOCKET, commandMessage);
         }
     }
 }

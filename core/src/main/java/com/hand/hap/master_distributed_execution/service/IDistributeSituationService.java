@@ -6,6 +6,8 @@ import com.hand.hap.core.ProxySelf;
 import com.hand.hap.system.service.IBaseService;
 import com.hand.hap.master_distributed_execution.dto.DistributeSituation;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 public interface IDistributeSituationService extends IBaseService<DistributeSituation>, ProxySelf<IDistributeSituationService> {
@@ -17,5 +19,5 @@ public interface IDistributeSituationService extends IBaseService<DistributeSitu
 
     void invoke(List<DistributeSituation> dtoList) throws Exception;
 
-    void WebSocketTest(IRequest requestCtx) throws CodeRuleException;
+    void WedSocketDemo(IRequest requestCtx, HttpSession session) throws CodeRuleException;
 }

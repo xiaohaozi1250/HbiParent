@@ -212,6 +212,23 @@
 </div>
 <script type="text/javascript">
     baseUrl = "${base.contextPath}";
+    $(document).ready(function () {
+        Hap.initWebSocket();
+        Hap.onMessage("HMDMTest", function (data, socket) {
+            console.log(data);
+            //关闭连接
+            //socket.close();
+            if (data.parameter["MSG"]) {
+                Hap.showToast({
+                    type: "info",
+                    message: data.parameter["MSG"]
+                });
+                kendo.ui.showInfoDialog({
+                    message: data.parameter["MSG"]
+                })
+            }
+        });
+    });
     var MdTreeDataSource = new kendo.data.HierarchicalDataSource({
         transport: {
             read: {
@@ -446,21 +463,22 @@
             type: "POST",
             contentType: "application/json;charset=UTF-8",
             success: function (e) {
-                Hap.initWebSocket();
-                console.log("1111");
-                Hap.onMessage("HMDMTest", function (date, socket) {
-                    console.log("2222-" + data.parameter["MSG"]);
-                    socket.close();
-                    if (data.parameter["MSG"]) {
-                        Hap.showToast({
-                            type: "info",
-                            message: data.parameter["MSG"]
-                        });
-                        kendo.ui.showInfoDialog({
-                            message: data.parameter["MSG"]
-                        })
-                    }
-                });
+                console.log("333");
+                /*                Hap.initWebSocket();
+                 console.log("1111");
+                 Hap.onMessage("HMDMTest", function (date, socket) {
+                 console.log("2222-" + data.parameter["MSG"]);
+                 socket.close();
+                 if (data.parameter["MSG"]) {
+                 Hap.showToast({
+                 type: "info",
+                 message: data.parameter["MSG"]
+                 });
+                 kendo.ui.showInfoDialog({
+                 message: data.parameter["MSG"]
+                 })
+                 }
+                 });*/
             }
         });
     }

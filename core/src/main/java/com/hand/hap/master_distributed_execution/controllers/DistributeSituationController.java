@@ -10,12 +10,10 @@ import com.hand.hap.system.dto.ResponseData;
 import com.hand.hap.master_distributed_execution.dto.DistributeSituation;
 import com.hand.hap.master_distributed_execution.service.IDistributeSituationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.validation.BindingResult;
 
@@ -60,7 +58,7 @@ public class DistributeSituationController extends BaseController {
         return new ResponseData();
     }
 
-    @RequestMapping(value = "/hmdm/distribute/situation/invoke")
+    @RequestMapping(value = "/hmdm/distribute/situation/invoke", method = {RequestMethod.POST})
     @ResponseBody
     @HapOutbound(apiName = "DistributeWs")
     public void invoke(@RequestBody List<DistributeSituation> dtoList, @RequestParam(defaultValue = DEFAULT_PAGE) int page,
@@ -79,12 +77,12 @@ public class DistributeSituationController extends BaseController {
     public ResponseData webSocketTest(@RequestBody List<DistributeSituation> dto, @RequestParam(defaultValue = DEFAULT_PAGE) int page,
                                       @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int pageSize, HttpServletRequest request) {
         IRequest requestContext = createRequestContext(request);
+        HttpSession session = request.getSession(true);
         //ResponseData responseData = new ResponseData();
         List<DistributeSituation> employees = new ArrayList<>();
-        System.out.println("SessionId2：" + request.getRequestedSessionId());
         requestContext.setAttribute("SessionId", request.getRequestedSessionId());
         try {
-            service.WebSocketTest(requestContext);
+            service.WedSocketDemo(requestContext, session);
         } catch (CodeRuleException e) {
             System.out.println("SessionId3：" + request.getRequestedSessionId());
         }

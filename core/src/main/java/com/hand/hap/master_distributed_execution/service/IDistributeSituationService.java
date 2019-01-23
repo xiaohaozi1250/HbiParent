@@ -19,5 +19,7 @@ public interface IDistributeSituationService extends IBaseService<DistributeSitu
 
     void invoke(List<DistributeSituation> dtoList) throws Exception;
 
-    void WedSocketDemo(IRequest requestCtx, HttpSession session) throws CodeRuleException;
+    void WebSocketDemo(IRequest requestCtx, HttpSession session) throws CodeRuleException;
+
+    void poiExport(HttpServletRequest request, List<DistributeSituation> dtoList);
 }

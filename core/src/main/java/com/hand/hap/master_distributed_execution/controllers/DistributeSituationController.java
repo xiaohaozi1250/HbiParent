@@ -82,7 +82,7 @@ public class DistributeSituationController extends BaseController {
         List<DistributeSituation> employees = new ArrayList<>();
         requestContext.setAttribute("SessionId", request.getRequestedSessionId());
         try {
-            service.WedSocketDemo(requestContext, session);
+            service.WebSocketDemo(requestContext, session);
         } catch (CodeRuleException e) {
             System.out.println("SessionId3：" + request.getRequestedSessionId());
         }
@@ -107,5 +107,13 @@ public class DistributeSituationController extends BaseController {
             responseData.setMessage("每分钟发送一次!");
         }
         return responseData;
+    }
+
+    @RequestMapping(value = "/hmdm/distribute/situation/poitest")
+    @ResponseBody
+    //计时器测试
+    public ResponseData poi(HttpServletRequest request, @RequestBody List<DistributeSituation> dtoList) {
+        service.poiExport(request, dtoList);
+        return new ResponseData();
     }
 }

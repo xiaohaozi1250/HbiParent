@@ -170,9 +170,11 @@
                             <span class="btn btn-default" type="button" onclick="invoke()"
                                   style="width: 75px;">调用</span>
                             <span class="btn btn-default" type="button" onclick="sendMessage()"
-                                  style="width: 75px;">websoket</span>
+                                  style="width: 130px;">websoket</span>
                             <span class="btn btn-default" type="button" onclick="redisTest()"
-                                  style="width: 75px;">redisTest</span>
+                                  style="width: 130px;">redisTest</span>
+                            <span class="btn btn-default" type="button" onclick="poiExport()"
+                                  style="width: 130px;">poiExport</span>
                         </div>
                         <div style="clear:both"></div>
                     </div>
@@ -214,8 +216,8 @@
     baseUrl = "${base.contextPath}";
     $(document).ready(function () {
         Hap.initWebSocket();
-        Hap.onMessage("HMDMTest", function (data, socket) {
-            console.log(data);
+        Hap.onMessage("WedSocketDemo", function (data, socket) {
+            console.log("222-" + data);
             //关闭连接
             //socket.close();
             if (data.parameter["MSG"]) {
@@ -453,8 +455,8 @@
      }
      });
      });*/
+    //websocket测试
     function sendMessage() {
-        //var _baseContext = "${base.contextPath}";
         var bMainGrid = $("#grid").data('kendoGrid');
         var checked = bMainGrid.selectedDataItems();
         $.ajax({
@@ -462,26 +464,9 @@
             data: JSON.stringify(checked),
             type: "POST",
             contentType: "application/json;charset=UTF-8",
-            success: function (e) {
-                console.log("333");
-                /*                Hap.initWebSocket();
-                 console.log("1111");
-                 Hap.onMessage("HMDMTest", function (date, socket) {
-                 console.log("2222-" + data.parameter["MSG"]);
-                 socket.close();
-                 if (data.parameter["MSG"]) {
-                 Hap.showToast({
-                 type: "info",
-                 message: data.parameter["MSG"]
-                 });
-                 kendo.ui.showInfoDialog({
-                 message: data.parameter["MSG"]
-                 })
-                 }
-                 });*/
-            }
         });
     }
+    //计时器测试
     function redisTest() {
         $.ajax({
             url: '${base.contextPath}/hmdm/distribute/situation/redistest',
@@ -498,7 +483,17 @@
                 alert(data.responseText);
             }
         })
-        ;
+    }
+    //POI报表测试
+    function poiExport() {
+        var bMainGrid = $("#grid").data('kendoGrid');
+        var checked = bMainGrid.selectedDataItems();
+        $.ajax({
+            url: "${base.contextPath}/hmdm/distribute/situation/poitest",
+            data: JSON.stringify(checked),
+            type: "POST",
+            contentType: "application/json;charset=UTF-8",
+        });
     }
 </script>
 </body>

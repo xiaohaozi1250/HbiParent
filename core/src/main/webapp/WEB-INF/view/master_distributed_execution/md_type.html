@@ -150,6 +150,10 @@
                                    data-role="datetimepicker"
                                    placeholder='<@spring.message "创建时间至"/>' style="width: 150px"
                                    data-bind="value:model.creationDateTo" class="k-datetimepicker">
+                            <span class="btn btn-default" type="button" onclick="openAttachMentWindow()"
+                                  style="width: 130px;">附件上传</span>
+
+
                         </div>
                         <div class="rows" style="margin-top:5px;margin-left: 10px;">
                             <input id="lastUpdateDateFrom" type="text"
@@ -211,6 +215,7 @@
     </div>
 </div>
 <div id="openWindow"></div>
+<div id="openAttachMentWindow"></div>
 </div>
 <script type="text/javascript">
     baseUrl = "${base.contextPath}";
@@ -373,6 +378,12 @@
                 title: '分发申请人',
                 width: 120
             },
+            {
+                title: '附件下载',
+                template: function (e) {
+                    return '<a target="_blank" href="${base.contextPath}/sys/attach/file/download?fileId=' + 4 + '&token=' + e._token + '"><@spring.message "hap.download"/></a>';
+                }, width: 30
+            }
         ],
         editable: true
     });
@@ -438,23 +449,6 @@
         });
 
     }
-    /*    $(document).ready(function () {
-     Hap.initWebSocket();
-     console.log("ready");
-     Hap.onMessage("HMDMTest", function (date, socket) {
-     console.log("2222-" + data.parameter["MSG"]);
-     socket.close();
-     if (data.parameter["MSG"]) {
-     Hap.showToast({
-     type: "info",
-     message: data.parameter["MSG"]
-     });
-     kendo.ui.showInfoDialog({
-     message: data.parameter["MSG"]
-     })
-     }
-     });
-     });*/
     //websocket测试
     function sendMessage() {
         var bMainGrid = $("#grid").data('kendoGrid');
@@ -494,6 +488,23 @@
             type: "POST",
             contentType: "application/json;charset=UTF-8",
         });
+    }
+    //附件上传测试
+    function openAttachMentWindow() {
+        var url = '${base.contextPath}/master_distributed_execution/attachment.html';
+        var editWin = Hap.createWindow('#openAttachMentWindow', {
+            width: '90%',
+            height: 745,
+            title: '附件上传',
+            url: url
+        })
+        if (parent.autoResizeIframe) {
+            parent.autoResizeIframe('${RequestParameters.functionCode!}', 870, function () {
+                editWin.center().open();
+            })
+        } else {
+            editWin.center().open();
+        }
     }
 </script>
 </body>

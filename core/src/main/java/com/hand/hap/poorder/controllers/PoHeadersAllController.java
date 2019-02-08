@@ -13,11 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.validation.BindingResult;
+
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller
 public class PoHeadersAllController extends BaseController {
+    private final Logger logger = LoggerFactory.getLogger(PoHeadersAllController.class);
     //test
     @Autowired
     private IPoHeadersAllService service;
@@ -62,7 +68,7 @@ public class PoHeadersAllController extends BaseController {
         return new ResponseData(serviceLine.select(requestContext, dto, page, pageSize));
     }
 
-    @RequestMapping(value = "/cux/po/lines/all/submit")
+/*    @RequestMapping(value = "/cux/po/lines/all/submit")
     @ResponseBody
     public ResponseData updateLine(@RequestBody List<PoLinesAll> dto, BindingResult result, HttpServletRequest request) {
         getValidator().validate(dto, result);
@@ -73,7 +79,7 @@ public class PoHeadersAllController extends BaseController {
         }
         IRequest requestCtx = createRequestContext(request);
         return new ResponseData(serviceLine.batchUpdate(requestCtx, dto));
-    }
+    }*/
 
     @RequestMapping(value = "/cux/po/lines/all/remove")
     @ResponseBody
@@ -96,5 +102,24 @@ public class PoHeadersAllController extends BaseController {
         //return new ResponseData(service.selectOptions(requestContext, dto, criteria));
         //return new ResponseData(service.select(requestContext, dto, page, pageSize));
         return new ResponseData(service.selectDataWs(requestContext, dto, page, pageSize));
+    }
+
+    @RequestMapping(value = "/cux/po/lines/all/submit")
+    @ResponseBody
+    public ResponseData supportSumit1(@RequestBody List<PoLinesAll> dto, BindingResult result, HttpServletRequest request) {
+        ResponseData responseData = new ResponseData(false);
+        getValidator().validate(dto, result);
+        if (result.hasErrors()) {
+            responseData.setMessage(getErrorMessage(result, request));
+            return responseData;
+        }
+        IRequest requestCtx = createRequestContext(request);
+        try {
+            return new ResponseData(serviceLine.submitSupport(requestCtx, dto));
+        } catch (Exception e) {
+            logger.error("SynRemotesInsertMainError : ", e);
+            responseData.setMessage(e.getMessage());
+            return responseData;
+        }
     }
 }

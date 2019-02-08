@@ -23,5 +23,4 @@ public interface IEmpService extends IBaseService<Emp>, ProxySelf<IEmpService> {
 
     void inAction2(IRequest request) throws Exception;
 
-    void WebSocketDemo(IRequest requestCtx);
 }

@@ -47,7 +47,6 @@ public class EmpController extends BaseController {
         IRequest requestContext = createRequestContext(request);
         System.out.println("SessionId：" + request.getRequestedSessionId());
         requestContext.setAttribute("SessionId", request.getRequestedSessionId());
-        service.WebSocketDemo(requestContext);
         if (result.hasErrors()) {
             ResponseData responseData = new ResponseData(false);
             responseData.setMessage(getErrorMessage(result, request));
@@ -202,17 +201,4 @@ public class EmpController extends BaseController {
         return new ResponseData(employees);
     }
 
-    @RequestMapping(value = "/demo/emp/invoke1")
-    @ResponseBody
-    public ResponseData invoke1(@RequestBody List<Emp> dto, @RequestParam(defaultValue = DEFAULT_PAGE) int page,
-                                @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int pageSize, HttpServletRequest request) {
-        IRequest requestContext = createRequestContext(request);
-        ResponseData responseData = new ResponseData();
-        List<Emp> employees = new ArrayList<>();
-        System.out.println("SessionId：" + request.getRequestedSessionId());
-        requestContext.setAttribute("SessionId", request.getRequestedSessionId());
-        service.WebSocketDemo(requestContext);
-        //返回请求
-        return new ResponseData(employees);
-    }
 }

@@ -18,4 +18,14 @@
         DELETE FROM cux_po_lines_all
         WHERE PO_HEADER_ID= #{PO_HEADER_ID,jdbcType=DECIMAL}
     </delete>
+    <update id="updateQuantity" parameterType="com.hand.hap.poorder.dto.PoLinesAll">
+        update cux_po_lines_all
+        set QUANTITY=#{quantity,jdbcType=DECIMAL}
+        WHERE PO_LINE_ID= #{poLineId,jdbcType=DECIMAL}
+    </update>
+    <update id="updateUnitPrice" parameterType="com.hand.hap.poorder.dto.PoLinesAll">
+        update cux_po_lines_all
+        set UNIT_PRICE=#{unitPrice,jdbcType=DECIMAL}
+        WHERE PO_LINE_ID= #{poLineId,jdbcType=DECIMAL}
+    </update>
 </mapper>

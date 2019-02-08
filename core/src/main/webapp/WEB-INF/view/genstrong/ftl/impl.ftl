@@ -16,7 +16,6 @@ import java.util.Iterator;
 import java.util.List;
 
 @Service
-@Transactional(rollbackFor = Exception.class)
 public class ${headerImplName} extends BaseServiceImpl<${headerDtoName}> implements ${headerServiceName} {
 
     @Autowired
@@ -24,7 +23,7 @@ public class ${headerImplName} extends BaseServiceImpl<${headerDtoName}> impleme
     @Autowired
     private ${lineMapperName} lineMapper;
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public boolean batchDeleteHeaders(List<${headerDtoName}> headers) {
         Iterator var2 = headers.iterator();
 
@@ -37,7 +36,7 @@ public class ${headerImplName} extends BaseServiceImpl<${headerDtoName}> impleme
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public List<${headerDtoName}> batchUpdate(IRequest request, List<${headerDtoName}> headers) {
         for (${headerDtoName} header : headers) {
             if (header.get${columnsInfoHeader[0].tableColumnsName?cap_first}() == null) {
@@ -50,7 +49,7 @@ public class ${headerImplName} extends BaseServiceImpl<${headerDtoName}> impleme
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public ${headerDtoName} create${headerDtoName}(${headerDtoName} header) {
         headerMapper.insertSelective(header);
         if (header.getLines() != null) {
@@ -63,7 +62,7 @@ public class ${headerImplName} extends BaseServiceImpl<${headerDtoName}> impleme
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public ${headerDtoName} update${headerDtoName}(${headerDtoName} header) {
         int updateCount = headerMapper.updateByPrimaryKeySelective(header);
         checkOvn(updateCount, header);
@@ -85,7 +84,7 @@ import ${package}.dto.${lineDtoName};
 import ${package}.service.${lineServiceName};
 
 @Service
-@Transactional(rollbackFor = Exception.class)
+@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 public class ${lineImplName} extends BaseServiceImpl<${lineDtoName}> implements ${lineServiceName} {
 
 }

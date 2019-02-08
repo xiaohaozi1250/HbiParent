@@ -4,8 +4,6 @@ import com.hand.hap.core.IRequest;
 import com.hand.hap.intergration.dto.HapInterfaceHeader;
 import com.hand.hap.intergration.service.IHapApiService;
 import com.hand.hap.intergration.service.IHapInterfaceHeaderService;
-import com.hand.hap.message.IMessagePublisher;
-import com.hand.hap.message.websocket.CommandMessage;
 import com.hand.hap.system.service.impl.BaseServiceImpl;
 import hbi.core.empws.dto.Emp;
 import hbi.core.empws.dto.EmpBaseResponse;
@@ -190,26 +188,4 @@ public class EmpServiceImpl extends BaseServiceImpl<Emp> implements IEmpService 
         }
 
     }
-
-    @Autowired
-    private IMessagePublisher messagePublisher;
-
-    public void WebSocketDemo(IRequest requestCtx) {
-        //HttpSession session =requestCtx.getAttribute()
-        CommandMessage commandMessage = new CommandMessage();
-        commandMessage.setUserName(requestCtx.getUserName());
-        commandMessage.setAction("EmpTest");
-
-        String wSid = requestCtx.getAttribute("SessionId");
-        for (int i = 1; i <= 3; i++) {
-            Map<String, Object> map = new HashMap<>();
-            commandMessage.setSessionId(wSid);
-            ((Map) map).put("MSG", "VAl:" + i);
-            commandMessage.setParameter(map);
-            messagePublisher.publish("pm:prep.websockt:test", commandMessage);
-        }
-    }
-
-
-
 }

@@ -12,19 +12,6 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <label class="col-md-3 control-label"><@spring.message
-                        "poheadersall.poheaderid"/></label>
-                    <div class="col-md-7">
-                        <input name="poHeaderId" id="poHeaderId"
-                               data-label='<@spring.message "poheadersall.poheaderid"/>'
-                               data-role="maskedtextbox"
-                               type="text" style="width: 100%" data-bind="value:model.poHeaderId"
-                               class="k-textbox" required>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <label class="col-md-3 control-label"><@spring.message
                         "poheadersall.segment1"/></label>
                     <div class="col-md-7">
                         <input name="segment1" id="segment1"
@@ -36,19 +23,19 @@
                 </div>
             </div>
             <div class="row">
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <label class="col-md-3 control-label"><@spring.message
-                        "poheadersall.vendorid"/></label>
-                    <div class="col-md-7">
-                        <input name="vendorId" id="vendorId"
-                               data-label='<@spring.message "poheadersall.vendorid"/>'
-                               data-role="maskedtextbox"
-                               type="text" style="width: 100%" data-bind="value:model.vendorId"
-                               class="k-textbox" required>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label"><@spring.message
+                            "poheadersall.vendorid"/></label>
+                        <div class="col-md-7">
+                            <input name="vendorId" id="vendorId"
+                                   data-label='<@spring.message "poheadersall.vendorid"/>'
+                                   data-role="maskedtextbox"
+                                   type="text" style="width: 100%" data-bind="value:model.vendorId"
+                                   class="k-textbox" required>
+                        </div>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
     </form>
@@ -62,6 +49,8 @@
             <span data-bind="click:remove" class="btn btn-danger" style="float:left;margin-right:5px"><i
                     class="fa fa-trash-o"
                     style="margin-right:3px;"></i><@spring.message "hap.delete"/></span>
+            <span class="btn btn-default" type="button" data-bind="click:save"
+                  style="width: 170px;">Submit.Support</span>
         </div>
 
         <div class="pull-right" style="padding-right:20px;">
@@ -145,6 +134,9 @@
                 id: "poLineId",
                 fields: {}
             }
+        },
+        error: function (data) {
+            alert(data.errors);
         }
     });
 
@@ -169,26 +161,16 @@
         },
         columns: [
             {
-                field: "poLineId",
-                title: '<@spring.message "polinesall.polineid"/>',
-                width: 120
-            },
-                    {
-                field: "poHeaderId",
-                title: '<@spring.message "polinesall.poheaderid"/>',
-                width: 120
-            },
-                    {
                 field: "inventoryItemId",
                 title: '<@spring.message "polinesall.inventoryitemid"/>',
                 width: 120
             },
-                    {
+            {
                 field: "quantity",
                 title: '<@spring.message "polinesall.quantity"/>',
                 width: 120
             },
-                    {
+            {
                 field: "unitPrice",
                 title: '<@spring.message "polinesall.unitprice"/>',
                 width: 120
@@ -223,7 +205,6 @@
             }
         });
     }
-
 </script>
 </body>
 </html>

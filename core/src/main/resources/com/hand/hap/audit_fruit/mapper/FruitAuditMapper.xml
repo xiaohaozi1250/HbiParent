@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hand.hap.audit_fruit.mapper.FruitAuditMapper">
+    <resultMap id="BaseResultMap" type="com.hand.hap.audit_fruit.dto.FruitAudit">
+        <result column="id" property="id" jdbcType="DECIMAL" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="price" property="price" jdbcType="DECIMAL" />
+        <result column="producing_area" property="producingArea" jdbcType="VARCHAR" />
+        <result column="region_id" property="regionId" jdbcType="DECIMAL" />
+        <result column="active_date" property="activeDate" jdbcType="DATE" />
+        <result column="color" property="color" jdbcType="VARCHAR" />
+        <result column="AUDIT_ID" property="auditId" jdbcType="VARCHAR" />
+        <result column="AUDIT_TRANSACTION_TYPE" property="auditTransactionType" jdbcType="VARCHAR" />
+        <result column="AUDIT_TIMESTAMP" property="auditTimestamp" jdbcType="DATE" />
+        <result column="AUDIT_SESSION_ID" property="auditSessionId" jdbcType="VARCHAR" />
+        <result column="AUDIT_TAG" property="auditTag" jdbcType="DECIMAL" />
+        <result column="LANG" property="lang" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="common">
+        SELECT
+        (SELECT CASE
+        WHEN COUNT(0) = 0 THEN
+        'Y'
+        ELSE
+        'N'
+        END
+        FROM   FRUIT DE
+        WHERE  DE.ID = A.ID) DELETE_FLAG
+        ,A.AUDIT_ID
+        ,A.AUDIT_TIMESTAMP
+        ,A.AUDIT_TRANSACTION_TYPE
+        ,A.LANG
+        ,A.OBJECT_VERSION_NUMBER
+        ,C.USER_NAME
+        ,B.NAME
+    </sql>
+
+
+    <sql id="details">
+        ,A.ID
+        ,A.NAME
+        ,A.PRICE
+        ,A.PRODUCING_AREA
+        ,A.REQUEST_ID
+        ,A.COLOR
+        ,A.CREATED_BY
+        ,A.CREATION_DATE
+        ,A.LAST_UPDATED_BY
+        ,A.LAST_UPDATE_DATE
+        ,A.LAST_UPDATE_LOGIN
+
+        FROM   fruit_a  A
+        ,HR_EMPLOYEE B
+        ,SYS_USER    C
+        WHERE  A.LAST_UPDATED_BY = B.EMPLOYEE_ID
+        AND    C.EMPLOYEE_ID = B.EMPLOYEE_ID
+    </sql>
+
+    <select id="selectAuditRecord" resultType="java.util.Map">
+        <include refid="common"/>
+        <include refid="details"/>
+        AND A.AUDIT_TAG = 1
+        ORDER BY A.AUDIT_TIMESTAMP DESC
+    </select>
+
+    <select id="selectAuditRecordDetail" resultType="java.util.Map" parameterType="com.hand.hap.audit_fruit.dto.FruitAudit">
+        <include refid="common"/>
+        <include refid="details"/>
+        AND A.ID = ${id}
+        ORDER BY A.AUDIT_TIMESTAMP DESC
+    </select>
+
+
+
+</mapper>

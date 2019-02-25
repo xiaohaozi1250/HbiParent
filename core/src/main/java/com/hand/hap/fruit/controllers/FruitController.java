@@ -9,7 +9,6 @@ import com.hand.hap.excel.service.IExportService;
 import com.hand.hap.fruit.dto.Fruit;
 import com.hand.hap.fruit.dto.FruitVendor;
 import com.hand.hap.fruit.service.IFruitService;
-import com.hand.hap.intergration.annotation.HapInbound;
 import com.hand.hap.system.controllers.BaseController;
 import com.hand.hap.system.dto.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ import java.util.List;
  * Created by zhihao.dai on 2017/4/21.
  */
 @RestController
-//@RequestMapping(path = "/demo/fruit")
+@RequestMapping(path = "/demo/fruit")
 public class FruitController extends BaseController {
     @Autowired
     private IFruitService fruitService;

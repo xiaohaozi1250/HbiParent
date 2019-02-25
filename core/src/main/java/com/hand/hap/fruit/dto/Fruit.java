@@ -1,5 +1,6 @@
 package com.hand.hap.fruit.dto;
 
+import com.hand.hap.core.annotation.AuditEnabled;
 import com.hand.hap.core.annotation.Children;
 import com.hand.hap.mybatis.annotation.Condition;
 import com.hand.hap.mybatis.annotation.ExtensionAttribute;
@@ -13,6 +14,7 @@ import java.util.List;
  * Created by liuneng on 2017/2/21.
  */
 @Table(name = "fruit")
+@AuditEnabled(auditTable = "fruit_a")
 @ExtensionAttribute(disable = true)
 public class Fruit extends BaseDTO{
     @Id

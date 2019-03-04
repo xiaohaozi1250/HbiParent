@@ -16,9 +16,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.validation.BindingResult;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Controller
@@ -111,9 +114,31 @@ public class DistributeSituationController extends BaseController {
 
     @RequestMapping(value = "/hmdm/distribute/situation/poitest")
     @ResponseBody
-    //计时器测试
+    //poi报表生成
     public ResponseData poi(HttpServletRequest request, @RequestBody List<DistributeSituation> dtoList) {
         service.poiExport(request, dtoList);
         return new ResponseData();
+    }
+
+    /**
+     * excel导入属性
+     *
+     * @param request
+     * @param file
+     * @return
+     * @Date 2016/10/13
+     */
+    @RequestMapping(value = "/hmdm/distribute/situation/uploadExcel", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData uploadExcel(HttpServletRequest request, MultipartFile file) {
+        IRequest iRequest = createRequestContext(request);
+        ResponseData responseData = new ResponseData();
+        try {
+            service.importExcel(iRequest, file);
+        } catch (Exception e) {
+            responseData.setSuccess(false);
+            responseData.setMessage(e.getLocalizedMessage());
+        }
+        return responseData;
     }
 }

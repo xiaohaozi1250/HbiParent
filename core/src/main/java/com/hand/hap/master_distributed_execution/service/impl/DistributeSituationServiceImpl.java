@@ -11,6 +11,7 @@ import com.hand.hap.master_distributed_execution.dto.XmlDistributeSituationList;
 import com.hand.hap.master_distributed_execution.mapper.DistributeSituationMapper;
 import com.hand.hap.message.IMessagePublisher;
 import com.hand.hap.message.websocket.CommandMessage;
+import com.hand.hap.system.dto.DTOStatus;
 import com.hand.hap.system.dto.ResponseData;
 import com.hand.hap.system.service.impl.BaseServiceImpl;
 import net.sf.json.JSONArray;
@@ -18,6 +19,7 @@ import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
@@ -34,6 +37,8 @@ import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -52,6 +57,8 @@ public class DistributeSituationServiceImpl extends BaseServiceImpl<DistributeSi
     private IHapInterfaceHeaderService headerService;
     @Resource(name = "soapBean")
     private IHapApiService restService;
+    @Autowired
+    private IDistributeSituationService service;
 
     //获取查询数据
     public List<DistributeSituation> selectDistributeSituation(DistributeSituation dto, IRequest request, int page, int pagesize) {
@@ -319,5 +326,104 @@ public class DistributeSituationServiceImpl extends BaseServiceImpl<DistributeSi
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * 导入excel
+     *
+     * @param iRequest
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    public boolean importExcel(IRequest iRequest, MultipartFile file)
+            throws Exception {
+        CommonsMultipartFile commonsMultipartFile = (CommonsMultipartFile) file;
+        try {
+            InputStream inputStream = commonsMultipartFile.getInputStream();
+            //创建工作簿
+            Workbook workbook = WorkbookFactory.create(inputStream);
+            //插入数据到表中
+            insertDisData(iRequest, workbook.getSheetAt(0));
+        } catch (Exception e) {
+            String error = String.format("导入数据错误: %s", e.getMessage());
+            throw new RuntimeException(error);
+        }
+        return true;
+    }
+
+    //插入数据到表中
+    void insertDisData(IRequest iRequest, Sheet sheet) {
+        //从第2行开始读取
+        int totalRows = sheet.getLastRowNum() + 1;
+        int totalCells = 0;
+        //获取最大列数
+        if (totalRows >= 1 && sheet.getRow(0) != null) {
+            totalCells = sheet.getRow(0).getPhysicalNumberOfCells();
+        }
+        List<DistributeSituation> distributeSituationList = new ArrayList<>();
+        //循环行
+        for (int i = 1; i < totalRows; i++) {
+            DistributeSituation distributeSituation = new DistributeSituation();
+            Row row = sheet.getRow(i);
+            if (row == null) {
+                continue;
+            }
+            //循环列
+            for (int c = 0; c < totalCells; c++) {
+                Cell cell = row.getCell(c);
+                if (cell != null) {
+                    cell.setCellType(CellType.STRING);
+                } else {
+                    continue;
+                }
+                switch (c) {
+                    case 0:
+                        distributeSituation.setItemCode(cell.getStringCellValue());
+                        System.out.println("ItemCode" + cell.getStringCellValue());
+                        break;
+                    case 1:
+                        distributeSituation.setItemName(cell.getStringCellValue());
+                        System.out.println("ItemName" + cell.getStringCellValue());
+                        break;
+                    case 2:
+                        if (cell.getStringCellValue().trim().equals("A01")) {
+                            distributeSituation.setOrganizationCode("A01");
+                        } else if (cell.getStringCellValue().trim().equals("B01")) {
+                            distributeSituation.setOrganizationCode("B01");
+                        } else {
+                            distributeSituation.setOrganizationCode("C01");
+                        }
+                        System.out.println("OrganizationCode" + cell.getStringCellValue());
+                        break;
+                    case 3:
+                        try {
+                            String date = cell.getStringCellValue();
+                            if (cell.getStringCellValue() != null) {
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                distributeSituation.setDistributionDate(sdf.parse(date));
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        System.out.println("DistributionDate" + distributeSituation.getDistributionDate());
+                        break;
+                    default:
+                        break;
+                }
+            }
+            int count;
+            Long headerId = distributeSituationMapper.getHeaderId(distributeSituation.getItemCode());
+            if (headerId == null) {
+                distributeSituation.set__status("add");
+            } else {
+                distributeSituation.set__status("update");
+                distributeSituation.setHeaderId(headerId);
+            }
+            distributeSituationList.add(distributeSituation);
+        }
+        service.batchUpdate(iRequest, distributeSituationList);
     }
 }

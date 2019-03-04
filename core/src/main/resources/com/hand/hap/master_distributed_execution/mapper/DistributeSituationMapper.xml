@@ -84,4 +84,8 @@
 		              WHERE hds.created_by = he.employee_id
 	)
     </select>
+    <select id="getHeaderId" resultType="long">
+        SELECT  header_id FROM hmdm_distribute_situation
+        where item_code=#{itemCode}
+    </select>
 </mapper>

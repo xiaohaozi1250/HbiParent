@@ -179,6 +179,8 @@
                                   style="width: 130px;">redisTest</span>
                             <span class="btn btn-default" type="button" onclick="poiExport()"
                                   style="width: 130px;">poiExport</span>
+                            <span class="btn btn-default" type="button" onclick="poiExport()"
+                                  style="width: 130px;">导入</span>
                         </div>
                         <div style="clear:both"></div>
                     </div>
@@ -216,6 +218,7 @@
 </div>
 <div id="openWindow"></div>
 <div id="openAttachMentWindow"></div>
+<div id="excelWindow" style="clear: both"></div>
 </div>
 <script type="text/javascript">
     baseUrl = "${base.contextPath}";
@@ -505,6 +508,24 @@
         } else {
             editWin.center().open();
         }
+    }
+
+    function importExcel() {
+        var excelWindow = $("#excelWindow").kendoWindow({
+            width: "500px",
+            height: "330px",
+            title: '属性导入',
+            actions: [
+                "Pin",
+                "Close"
+            ],
+            modal: true,
+            visible: false,
+            iframe: true
+        }).data("kendoWindow");
+        excelWindow.refresh("excel_omport.html");
+        excelWindow.toggleMaximization();
+        excelWindow.center().open();
     }
 </script>
 </body>

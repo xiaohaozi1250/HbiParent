@@ -2,6 +2,7 @@ package com.hand.hap.master_distributed_execution.mapper;
 
 import com.hand.hap.mybatis.common.Mapper;
 import com.hand.hap.master_distributed_execution.dto.DistributeSituation;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,4 +24,6 @@ public interface DistributeSituationMapper extends Mapper<DistributeSituation> {
 
     //获取分发申请人
     List<DistributeSituation> selectCreatedBy();
+
+    Long getHeaderId(@Param("itemCode") String itemCode);
 }

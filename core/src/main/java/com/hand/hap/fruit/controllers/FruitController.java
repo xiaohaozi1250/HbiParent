@@ -13,6 +13,7 @@ import com.hand.hap.system.controllers.BaseController;
 import com.hand.hap.system.dto.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import practice.annotation.userlog.UserLog;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,6 +37,7 @@ public class FruitController extends BaseController {
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ResponseBody
+    @UserLog(menuName = "fruit",menuDesc = "query")
     public ResponseData query(HttpServletRequest request,
                               Fruit fruit,
                               @RequestParam(required = false, defaultValue = "1") int page,

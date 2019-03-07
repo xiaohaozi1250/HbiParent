@@ -38,11 +38,7 @@
             <classifier>classes</classifier>
             <scope>provided</scope>
         </dependency>
-        <!-- <dependency>
-            <groupId>com.hand</groupId>
-            <artifactId>hap-db</artifactId>
-            <version>${hap.version}</version>
-        </dependency> -->
+
     </dependencies>
     <build>
         <finalName>core</finalName>

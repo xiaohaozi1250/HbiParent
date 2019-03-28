@@ -12,6 +12,7 @@ import com.hand.hap.fruit.service.IFruitService;
 import com.hand.hap.system.controllers.BaseController;
 import com.hand.hap.system.dto.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import practice.annotation.userlog.UserLog;
 
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by zhihao.dai on 2017/4/21.
@@ -30,9 +32,10 @@ public class FruitController extends BaseController {
     private IFruitService fruitService;
     @Autowired
     IExportService excelService;
-
     @Autowired
     ObjectMapper objectMapper;
+    @Autowired
+    RedisTemplate<String,Object> redisTemplate;
 
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
@@ -43,6 +46,19 @@ public class FruitController extends BaseController {
                               @RequestParam(required = false, defaultValue = "1") int page,
                               @RequestParam(required = false, defaultValue = "10") int pageSize) {
         //return new ResponseData(fruitService.select(createRequestContext(request),fruit,page,pageSize));
+        //查询计数器
+        ResponseData rd = new ResponseData();
+        String redisKey = "LIMIT_COUNT";
+        Long count = redisTemplate.opsForValue().increment(redisKey,1);
+        if(count == 1){
+            redisTemplate.expire(redisKey,4, TimeUnit.SECONDS);
+        }
+        if (count>  1){
+            rd.setSuccess(false);
+            rd.setMessage("4 秒种只能查询一次！");
+            return rd;
+        }
+
         return new ResponseData(fruitService.queryList(fruit, page, pageSize));
     }
 

@@ -5,20 +5,69 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 
-    <!-- aop 测试注解-->
+    <!--IOC 包扫描-->
     <context:component-scan base-package="practice"/>
-    <bean id="servant" class="practice.aop.Servant"/>
-    <!-- aop 自定义注解-->
-    <bean id="userLogAspect" class="practice.annotation.userlog.UserLogAdvice"/>
+    <!--aop -->
     <aop:aspectj-autoproxy/>
 
 
-    <!--
-    <bean id="selectMdTypeCode" class="com.hand.hap.master_distributed_execution.dto.MdType"/>
-    <bean id="selectItemCode" class="com.hand.hap.master_distributed_execution.dto.DistributeSituation"/>
-    <bean id="selectStatus" class="com.hand.hap.master_distributed_execution.dto.DistributeSituation"/>
-    <bean id="selectBatchNum" class="com.hand.hap.master_distributed_execution.dto.DistributeSituation"/>
-    <bean id="selectOrganizationCode" class="com.hand.hap.master_distributed_execution.dto.DistributeSituation"/>
-    <bean id="selectCreatedBy" class="com.hand.hap.master_distributed_execution.dto.DistributeSituation"/>
-    -->
+    <!-- 引入config.properties属性文件 -->
+    <context:property-placeholder location="classpath:config.properties"/>
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <!-- 最大空闲数 -->
+        <property name="maxIdle" value="999" />
+        <!-- 最大空连接数 -->
+        <property name="maxTotal" value="9999" />
+        <!-- 最大等待时间 -->
+        <property name="maxWaitMillis" value="2000" />
+    </bean>
+
+
+    <!-- Spring-redis连接池管理工厂 -->
+    <bean id="jedisConnectionFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <!-- IP地址 -->
+        <property name="hostName" value="${redis.ip}" />
+        <!-- 端口号 -->
+        <property name="port" value="${redis.port}" />
+        <!-- 超时时间 默认2000 -->
+        <property name="timeout" value="2000" />
+        <!-- 连接池配置引用 -->
+        <property name="poolConfig" ref="poolConfig" />
+        <!-- usePool：是否使用连接池 -->
+        <property name="usePool" value="true" />
+
+        <property name="password" value="" />
+    </bean>
+
+    <!-- redis template definition -->
+    <!-- 可分别配置key、value、hashKey、hashValue的序列化方式， 默认为JDK序列化，还支持OxmSerializer（XML序列化）、Jackson2JsonRedisSerializer（JSON序列化，需指明对象类型）、
+        GenericJackson2JsonRedisSerializer（JSON序列化，无需指明但对象类型） -->
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="jedisConnectionFactory" />
+        <property name="keySerializer">
+            <bean	class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+        </property>
+        <property name="valueSerializer">
+            <!--  <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
+             <bean class="org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer" >
+                  <constructor-arg type="java.lang.Class" value="java.lang.Object"></constructor-arg>
+            </bean>  -->
+            <bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer" />
+
+        </property>
+        <property name="hashKeySerializer">
+            <bean	class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+        </property>
+        <property name="hashValueSerializer">
+            <!-- <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
+             <bean class="org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer">
+                <constructor-arg type="java.lang.Class" value="java.lang.Object"></constructor-arg>
+           </bean>  -->
+            <bean	class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer" />
+
+        </property>
+        <property name="enableTransactionSupport" value="false"></property>
+    </bean>
+
 </beans>

@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by zhihao.dai on 2017/4/21.
@@ -49,16 +48,7 @@ public class FruitController extends BaseController {
         //查询计数器
         ResponseData rd = new ResponseData();
         String redisKey = "LIMIT_COUNT";
-        Long count = redisTemplate.opsForValue().increment(redisKey,1);
-        if(count == 1){
-            redisTemplate.expire(redisKey,4, TimeUnit.SECONDS);
-        }
-        if (count>  1){
-            rd.setSuccess(false);
-            rd.setMessage("4 秒种只能查询一次！");
-            return rd;
-        }
-
+        //Long count = JSONArray.fromObject(fruitService.queryList(fruit, page, pageSize));
         return new ResponseData(fruitService.queryList(fruit, page, pageSize));
     }
 

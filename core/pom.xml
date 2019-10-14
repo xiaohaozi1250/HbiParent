@@ -36,7 +36,7 @@
             <artifactId>hap</artifactId>
             <version>${hap.version}</version>
             <classifier>classes</classifier>
-            <!--<scope>provided</scope>-->
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

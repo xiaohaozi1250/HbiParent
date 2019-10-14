@@ -1,0 +1,49 @@
+<#include "../include/header.html">
+
+    <body>
+    <script src="${base.contextPath}/lib/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+
+    <div id="treeList"></div>
+
+    <script type="text/javascript">
+        var BaseUrl = _basePath;
+
+        var dataSource = new kendo.data.TreeListDataSource({
+            transport: {
+                read: {
+                    url: _basePath+"/tree/orgTree/queryall",
+                    type: "POST",
+                    dataType: "json"
+                }
+            },
+            schema: {
+                data: 'rows',
+                model: {
+                    id:'unitId',
+                    parentId: "parentId",
+                    fields: {
+                        unitId: { type: "number", nullable: false },
+                        parentId:{field:'parentId',nullable:true}
+                    },
+                    expanded: true
+                }
+            }
+        });
+
+        $("#treeList").kendoTreeList({
+            dataSource: dataSource,
+            selectable: true,
+            columns: [
+                {field: "name", title: '<@spring.message "hrorgunit.name"/>'},
+                {field: "unitCode", title: '<@spring.message "hrorgunit.unitcode"/>'},
+                {field: "description", title: '<@spring.message "hrorgunit.description"/>'}
+            ]
+
+        });
+
+
+    </script>
+
+
+    </body>
+    </html>

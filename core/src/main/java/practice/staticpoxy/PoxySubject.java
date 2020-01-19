@@ -3,11 +3,11 @@ package practice.staticpoxy;
 /**
  * Created by xiaohaozi on 2018/12/21.
  */
-public class StaticSubject implements Subject{
+public class PoxySubject implements ISubject {
 
-    private Subject subject;
+    private ISubject subject;
 
-    public StaticSubject(Subject subject) {
+    public PoxySubject(ISubject subject) {
         this.subject = subject;
     }
 
@@ -18,8 +18,4 @@ public class StaticSubject implements Subject{
         subject.request();
         System.out.println("subject end");
     }
-
-
-
-
 }

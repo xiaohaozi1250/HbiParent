@@ -13,13 +13,12 @@ public class Client {
     public static void main(String[] args) throws Throwable{
         // TODO Auto-generated method stub
 
-        Subject rs=new RealSubject();//这里指定被代理类
+        ISubject rs=new RealISubject();//这里指定被代理类
         InvocationHandler ds=new DynamicSubject(rs);
         Class<?> cls=rs.getClass();
 
         //以下是一次性生成代理
-
-        Subject subject=(Subject) Proxy.newProxyInstance(
+        ISubject subject=(ISubject) Proxy.newProxyInstance(
                 cls.getClassLoader(),cls.getInterfaces(), ds);
 
         //这里可以通过运行结果证明subject是Proxy的一个实例，这个实例实现了Subject接口
@@ -52,6 +51,7 @@ public class Client {
         for(Class<?> i:interfaces){
             System.out.print(i.getName()+", ");
         }
+
 
         System.out.println("\n\n"+"运行结果为：");
         subject.request();

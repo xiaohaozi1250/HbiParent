@@ -25,18 +25,25 @@
             <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
+        <!-- hap全模块依赖 -->
         <dependency>
             <groupId>com.hand</groupId>
             <artifactId>hap</artifactId>
             <type>war</type>
             <version>${hap.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.hand</groupId>
-            <artifactId>hap</artifactId>
-            <version>${hap.version}</version>
-            <classifier>classes</classifier>
+            <artifactId>hap-pom</artifactId>
+            <type>pom</type>
             <scope>provided</scope>
+            <version>${hap.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-solrj</artifactId>
+            <version>6.5.1</version>
         </dependency>
 
     </dependencies>
